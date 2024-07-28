@@ -1,14 +1,15 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 import { ISkills, ISkillsProps } from '../interfaces/ISkills';
 import SkillsCards from './SkillsCard';
+import Heading from './Heading';
 
-const Skills: React.FC<ISkillsProps> = ({ skills }) => {
+const Skills: React.FC<ISkillsProps> = ({ skills }): ReactNode => {
   return (
-    <div className='bg-slate-50'>
-      <h1 className='text-4xl sm:text-center lg:text-start font-bold p-6 mb-3 font-cookie tracking-wider'>Skills</h1>
+    <div>
+      <Heading headingName='Skills' className='m-6' />
       <div className='flex flex-wrap items-center justify-center mb-5'>
         {skills.map((project: ISkills) => (
-          <SkillsCards name={project.name} text={project.text} picture={project.picture} />
+          <SkillsCards name={project.name} text={project.text} picture={project.picture} key={project.name} />
         ))}
       </div>
     </div>
