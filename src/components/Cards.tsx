@@ -11,7 +11,9 @@ const Cards: React.FC<IProjects> = ({ name, text, tech_stack, disabled, codeLink
         className='min-h-[200px] w-full rounded-t-md object-cover'
       />
       <div className='p-4'>
-        <h1 className='inline-flex items-center text-xl font-bold font-roboto'>{name}</h1>
+        <h1 className='inline-flex items-center font-bold font-roboto text-lg border-r-2 border-b-2 border-blue-950 p-2 shadow-sm shadow-blue-600 rounded-md italic'>
+          {name}
+        </h1>
         <p className='mt-3 text-sm lg:text-lg text-gray-800 text-justify min-h-[100px]'>{text}</p>
 
         <div className='my-4 text-center font-semibold border border-b-2 border-blue-300 ring-1 ring-offset-1 ring-blue-400 bg-blue-800 shadow-inner shadow-blue-300 text-white rounded-sm px-2 py-2 w-1/3'>

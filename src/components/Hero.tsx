@@ -49,20 +49,20 @@ function Hero({ url }: IHeroProps): ReactNode {
               Hello, I am
               <span className='text-blue-800 font-bold'> Gaurav Sahitya.</span>
             </h1>
-            <p className='mt-6 text-lg leading-8 text-gray-600'>
+            <p className='mt-6 text-lg leading-8 text-gray-600 text-justify lg:text-center font-roboto'>
               I am a backend developer having almost 2 years of experience in the same. I also possess a good knowledge
-              and 5+ months of experience of front-end technology as well.
+              and 6 months of experience of front-end technology as well.
             </p>
-            <div className='mt-10 flex items-center justify-center gap-x-2'>
+            <div className='mt-10 flex items-center justify-center gap-x-2 flex-wrap'>
               <a
                 href='#contact'
-                className='rounded-md transition-all bg-blue-800 p-4 text-md font-semibold text-white shadow-sm shadow-blue-200 ring-2 ring-offset-1 ring-blue-500 mx-4 scale-95 hover:scale-105 hover:bg-white hover:text-blue-800 outline-none'
+                className='rounded-md transition-all bg-blue-800 p-4 text-md font-semibold text-white shadow-sm shadow-blue-200 ring-2 ring-offset-1 ring-blue-500 mx-4 scale-95 hover:scale-105 hover:bg-white hover:text-blue-800 outline-none mb-4 min-w-44'
               >
                 Contact Me
               </a>
               <a
                 href='#projects'
-                className='rounded-md transition-all bg-orange-100 p-4 text-md font-semibold text-orange-800 shadow-sm shadow-orange-400 ring-2 ring-offset-1 ring-orange-400 focus-within:scale-95 hover:bg-orange-800 hover:text-white scale-95 hover:scale-105'
+                className='rounded-md transition-all bg-orange-100 p-4 text-md font-semibold text-orange-800 shadow-sm shadow-orange-400 ring-2 ring-offset-1 ring-orange-400 focus-within:scale-95 hover:bg-orange-800 hover:text-white scale-95 hover:scale-105 mb-4 min-w-44'
               >
                 View my projects
               </a>
