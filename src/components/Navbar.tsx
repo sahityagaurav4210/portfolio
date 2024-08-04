@@ -1,13 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { DollarSign, Download, Menu, X } from 'lucide-react';
 import { INavbarProps } from '../interfaces/INavbar';
 import Logo from './Logo';
-import { Client, Storage } from 'appwrite';
-
-const Navbar: React.FC<INavbarProps> = ({ menuItems }) => {
+const Navbar: React.FC<INavbarProps> = ({ menuItems, url }) => {
   const [isMenuOpen, setIsMenuOpen] = React.useState<boolean>(false);
   const [size, setSize] = useState<number>(window.innerWidth);
-  const [url, setUrl] = useState<string>('');
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -21,46 +18,11 @@ const Navbar: React.FC<INavbarProps> = ({ menuItems }) => {
 
   onResize();
 
-  useEffect(() => {
-    async function getFilePreviewAsync(bucketId: string, fileId: string): Promise<URL> {
-      return new Promise((resolve, reject) => {
-        const client = new Client();
-
-        client.setEndpoint(import.meta.env.VITE_APPWRITE_URL);
-        client.setProject(import.meta.env.VITE_APPWRITE_PROJECT_ID);
-
-        const storage = new Storage(client);
-
-        const filePreview = storage.getFileDownload(bucketId, fileId);
-
-        if (filePreview) {
-          resolve(filePreview);
-        } else reject('An error ocurred');
-      });
-    }
-    async function getFile(fileId: string) {
-      const filePreview = await getFilePreviewAsync(import.meta.env.VITE_APPWRITE_BUCKET_ID, fileId);
-      if (filePreview && typeof filePreview === 'object') {
-        const src =
-          filePreview.protocol +
-          '//' +
-          filePreview.hostname +
-          filePreview.pathname +
-          filePreview.search +
-          '&mode=admin';
-
-        setUrl(src);
-      }
-    }
-
-    getFile(import.meta.env.VITE_APPWRITE_CV_ID);
-  }, []);
-
   return (
     <div className='sticky top-0 left-0 z-10 w-full bg-slate-100'>
       <div className='mx-auto flex container items-center justify-between p-4 sm:px-6 lg:px-8'>
         <Logo logoSize={size} />
-        <div className='hidden lg:block'>
+        <div className='hidden xl:block'>
           <ul className='inline-flex space-x-4'>
             {menuItems.map((item) => (
               <li key={item.name}>
@@ -74,7 +36,7 @@ const Navbar: React.FC<INavbarProps> = ({ menuItems }) => {
             ))}
           </ul>
         </div>
-        <div className='hidden lg:flex'>
+        <div className='hidden xl:flex'>
           <a
             href='tel:+91-8837573143'
             className='rounded-md mx-4 flex transition-all scale-95 hover:scale-105 bg-blue-800 hover:bg-slate-100 p-4 text-md text-white hover:text-blue-800 shadow-md shadow-blue-200 font-bold ring-2 ring-blue-400 ring-offset-1'
@@ -84,13 +46,13 @@ const Navbar: React.FC<INavbarProps> = ({ menuItems }) => {
 
           <a
             href={url}
-            className='rounded-md flex transition-all scale-95 hover:scale-105 bg-orange-50 hover:bg-orange-600 p-4 text-md text-orange-600 hover:text-white shadow-md shadow-orange-200 font-bold ring-2 ring-orange-400 ring-offset-1'
+            className='rounded-md flex transition-all scale-95 hover:scale-105 bg-orange-50 hover:bg-orange-600 p-4 text-md text-orange-600 hover:text-white shadow-md shadow-orange-200 font-bold ring-2 ring-orange-400 ring-offset-2'
             download={'Gaurav_Sahitya_2YOE_Backend_CV.pdf'}
           >
             <Download className='mx-1' /> Resume
           </a>
         </div>
-        <div className='lg:hidden'>
+        <div className='xl:hidden'>
           <Menu onClick={toggleMenu} className='h-6 w-6 cursor-pointer' />
         </div>
         {isMenuOpen && (

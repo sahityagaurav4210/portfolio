@@ -1,45 +1,8 @@
-import { useEffect, useState } from 'react';
+import { ReactNode } from 'react';
 import User from '../assets/user.png';
-import { Client, Storage } from 'appwrite';
+import { IHeroProps } from '../interfaces';
 
-function Hero() {
-  const [url, setUrl] = useState<string>('');
-
-  useEffect(() => {
-    async function getFilePreviewAsync(bucketId: string, fileId: string): Promise<URL> {
-      return new Promise((resolve, reject) => {
-        const client = new Client();
-
-        client.setEndpoint(import.meta.env.VITE_APPWRITE_URL);
-        client.setProject(import.meta.env.VITE_APPWRITE_PROJECT_ID);
-
-        const storage = new Storage(client);
-
-        const filePreview = storage.getFilePreview(bucketId, fileId);
-
-        if (filePreview) {
-          resolve(filePreview);
-        } else reject('An error ocurred');
-      });
-    }
-    async function getFile(fileId: string) {
-      const filePreview = await getFilePreviewAsync(import.meta.env.VITE_APPWRITE_BUCKET_ID, fileId);
-      if (filePreview && typeof filePreview === 'object') {
-        const src =
-          filePreview.protocol +
-          '//' +
-          filePreview.hostname +
-          filePreview.pathname +
-          filePreview.search +
-          '&mode=admin';
-          
-        setUrl(src);
-      }
-    }
-
-    getFile(import.meta.env.VITE_APPWRITE_FILE_ID);
-  }, []);
-
+function Hero({ url }: IHeroProps): ReactNode {
   return (
     <>
       <div className='relative isolate z-0 bg-white px-6 pt-14 lg:px-8'>
@@ -92,8 +55,8 @@ function Hero() {
             </p>
             <div className='mt-10 flex items-center justify-center gap-x-2'>
               <a
-                href='tel:+91-8837573143'
-                className='rounded-md transition-all bg-blue-800 p-4 text-md font-semibold text-white shadow-sm shadow-blue-200 ring-2 ring-offset-1 ring-blue-500 mx-4 scale-95 hover:scale-105 hover:bg-white hover:text-blue-800'
+                href='#contact'
+                className='rounded-md transition-all bg-blue-800 p-4 text-md font-semibold text-white shadow-sm shadow-blue-200 ring-2 ring-offset-1 ring-blue-500 mx-4 scale-95 hover:scale-105 hover:bg-white hover:text-blue-800 outline-none'
               >
                 Contact Me
               </a>

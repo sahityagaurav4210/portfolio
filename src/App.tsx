@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import { ReactNode, useEffect, useState } from 'react';
 import Education from './components/Education';
 import Experience from './components/Experience';
 import Footer from './components/Footer';
@@ -6,6 +6,10 @@ import Hero from './components/Hero';
 import Navbar from './components/Navbar';
 import Projects from './components/Projects';
 import Skills from './components/Skills';
+import Loader from './components/Loader';
+import { Client, Storage } from 'appwrite';
+import { Resources } from './constants';
+import Contact from './components/Contact';
 
 const menuItems = [
   {
@@ -175,34 +179,134 @@ const skills = [
     picture:
       'data:image/jpeg;base64,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',
   },
+  {
+    name: 'MongoDB',
+    text: 'It is a No-SQL type of database which provides semi-schema and schemaless feature. I have almost 2 years of experience in it.',
+    picture: 'https://mechomotive.com/wp-content/uploads/2021/06/MongoDB_Logo.jpg',
+  },
+  {
+    name: 'Microsoft SQL Server (MSSQL)',
+    text: 'It is a relational database management server provided by microsoft. I have 4 months of experience in it.',
+    picture: 'https://th.bing.com/th/id/OIP.mX80OeHFDQaUkgPYM6d_XAHaEK?rs=1&pid=ImgDetMain',
+  },
+  {
+    name: 'PostgreSQL',
+    text: 'Postgres, is a free and open-source relational database management system (RDBMS) emphasizing extensibility and SQL compliance. I have 1 year of experience in it.',
+    picture:
+      'https://assets.website-files.com/61b7127e64746d558d27873a/63989d2be9bf53daaa03eea9_Blog_PostgreSQL%20CDC.png',
+  },
 ];
 
 function App(): ReactNode {
+  const [isLoaded, setIsLoaded] = useState<boolean>(false);
+  const [photoUrl, setPhotoUrl] = useState<string>('');
+  const [resumeUrl, setResumeUrl] = useState<string>('');
+  const [apiSignal, setApiSignal] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    async function getFilePreviewAsync(bucketId: string, fileId: string, resource: Resources): Promise<URL> {
+      return new Promise((resolve, reject) => {
+        const client = new Client();
+
+        client.setEndpoint(import.meta.env.VITE_APPWRITE_URL);
+        client.setProject(import.meta.env.VITE_APPWRITE_PROJECT_ID);
+
+        const storage = new Storage(client);
+
+        const filePreview =
+          resource === Resources.PHOTO
+            ? storage.getFilePreview(bucketId, fileId)
+            : storage.getFileDownload(bucketId, fileId);
+
+        if (filePreview) {
+          resolve(filePreview);
+        } else reject('An error ocurred');
+      });
+    }
+
+    async function getFile(fileId: string, resourceType: Resources) {
+      const filePreview = await getFilePreviewAsync(import.meta.env.VITE_APPWRITE_BUCKET_ID, fileId, resourceType);
+      if (filePreview && typeof filePreview === 'object') {
+        const src =
+          filePreview.protocol +
+          '//' +
+          filePreview.hostname +
+          filePreview.pathname +
+          filePreview.search +
+          '&mode=admin';
+
+        if (resourceType === Resources.PHOTO) setPhotoUrl(src);
+        else {
+          setResumeUrl(src);
+        }
+      }
+    }
+
+    async function ping() {
+      const controller = new AbortController();
+
+      try {
+        const timerId = setTimeout(() => {
+          controller.abort('Ping api timeout');
+        }, parseInt(import.meta.env.VITE_BACKEND_API_TIMEOUT) || 1000);
+
+        const rawPingResponse = await fetch(`${import.meta.env.VITE_BACKEND_BASE_URL}/ping`, {
+          signal: controller.signal,
+        });
+        clearTimeout(timerId);
+        const pingResponse = await rawPingResponse.json();
+
+        if (rawPingResponse.ok && pingResponse.message === 'Pong') {
+          setApiSignal(true);
+          setIsLoaded(true);
+        } else {
+          setApiSignal(false);
+        }
+      } catch (error: any) {
+        setApiSignal(false);
+      }
+    }
+
+    getFile(import.meta.env.VITE_APPWRITE_FILE_ID, Resources.PHOTO);
+    getFile(import.meta.env.VITE_APPWRITE_CV_ID, Resources.CV);
+    ping();
+  }, []);
+
   return (
     <>
-      <Navbar menuItems={menuItems} />
+      {!isLoaded && apiSignal === null ? (
+        <Loader />
+      ) : (
+        <>
+          <Navbar menuItems={menuItems} url={resumeUrl} />
 
-      <section id='home'>
-        <Hero />
-      </section>
+          <section id='home'>
+            <Hero url={photoUrl} />
+          </section>
 
-      <section id='projects'>
-        <Projects projects={projects} personal_projects={personal_projects} />
-      </section>
+          <section id='projects'>
+            <Projects projects={projects} personal_projects={personal_projects} />
+          </section>
 
-      <section id='experience'>
-        <Experience />
-      </section>
+          <section id='experience'>
+            <Experience />
+          </section>
 
-      <section id='education'>
-        <Education />
-      </section>
+          <section id='education'>
+            <Education />
+          </section>
 
-      <section id='skills'>
-        <Skills skills={skills} />
-      </section>
+          <section id='skills'>
+            <Skills skills={skills} />
+          </section>
 
-      <Footer />
+          <section id='contact'>
+            <Contact apiSignal={apiSignal} />
+          </section>
+
+          <Footer />
+        </>
+      )}
     </>
   );
 }

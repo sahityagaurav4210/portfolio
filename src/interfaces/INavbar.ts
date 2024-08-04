@@ -5,6 +5,7 @@ export interface INavbar {
 
 export interface INavbarProps {
   menuItems: INavbar[];
+  url: string;
 }
 
 export interface ILogo {

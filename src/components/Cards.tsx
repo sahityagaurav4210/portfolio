@@ -4,7 +4,7 @@ import { ArrowUpRight } from 'lucide-react';
 
 const Cards: React.FC<IProjects> = ({ name, text, tech_stack, disabled, codeLink, liveLink }) => {
   return (
-    <div className='hover:scale-105 transition-all w-96 min-h-[700px] rounded-md border mx-2 mb-3'>
+    <div className='transition-all w-96 min-h-[700px] rounded-md border mx-2 mb-3'>
       <img
         src='https://images.unsplash.com/photo-1522199755839-a2bacb67c546?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTF8fGJsb2d8ZW58MHx8MHx8&auto=format&fit=crop&w=800&q=60'
         alt='Laptop'
@@ -14,14 +14,14 @@ const Cards: React.FC<IProjects> = ({ name, text, tech_stack, disabled, codeLink
         <h1 className='inline-flex items-center text-xl font-bold font-roboto'>{name}</h1>
         <p className='mt-3 text-sm lg:text-lg text-gray-800 text-justify min-h-[100px]'>{text}</p>
 
-        <div className='mt-4 text-center font-semibold bg-blue-800 text-white rounded-sm px-2 py-2 w-1/3'>
+        <div className='my-4 text-center font-semibold border border-b-2 border-blue-300 ring-1 ring-offset-1 ring-blue-400 bg-blue-800 shadow-inner shadow-blue-300 text-white rounded-sm px-2 py-2 w-1/3'>
           <p className='text-sm'>TECH STACK</p>
         </div>
         <div className='mt-2'>
           {tech_stack.map((stack, index) => (
             <span
               key={index}
-              className='mb-2 mr-2 inline-block rounded-full bg-gray-700 text-white px-4 py-3 text-sm font-semibold'
+              className='mb-2 mr-2 inline-block rounded-full bg-gray-700 text-white px-4 py-3 text-sm font-semibold text-center'
             >
               {stack}
             </span>
