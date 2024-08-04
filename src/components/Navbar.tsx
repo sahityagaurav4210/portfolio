@@ -86,7 +86,7 @@ const Navbar: React.FC<INavbarProps> = ({ menuItems, url }) => {
                   </nav>
                 </div>
                 <a
-                  href='tel:+91-8837573143'
+                  href='mailto:works.sahitya@gmail.com'
                   className='flex items-center justify-center lg:w-24 text-center mt-4 w-full rounded-md bg-blue-800 px-3 py-2 text-xl font-semibold text-white shadow-sm ring-2 ring-offset-2 ring-blue-400'
                 >
                   <DollarSign className='mx-1' />
