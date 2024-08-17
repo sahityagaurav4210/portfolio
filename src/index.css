@@ -6,7 +6,7 @@
 @tailwind utilities;
 
 ::-webkit-scrollbar {
-  width: 0.50rem;
+  width: 0.5rem;
 }
 
 ::-webkit-scrollbar-track {
@@ -17,4 +17,12 @@
   background-color: #1e40af;
   border-radius: 10px;
   border: 1px solid #f1f1f1;
+}
+
+.text-align-center {
+  text-align-last: center;
+}
+
+::-webkit-progress-bar {
+  background-color: #34d399;
 }

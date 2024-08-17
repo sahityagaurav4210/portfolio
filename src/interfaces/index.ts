@@ -5,3 +5,7 @@ export interface IHeadingProps {
 export interface IHeroProps {
   url?: string;
 }
+export enum HiringType {
+  PART_TIME = 'part time',
+  FULL_TIME = 'full time',
+}

@@ -4,7 +4,7 @@ import { Mail } from 'lucide-react';
 
 function Footer() {
   return (
-    <section className='relative overflow-hidden bg-black py-8'>
+    <section className='relative overflow-hidden bg-gradient-to-tr from-indigo-950 to-blue-950 py-8'>
       <div className=' z-10 flex items-center justify-evenly'>
         <Github
           className='text-white cursor-pointer'
@@ -14,7 +14,12 @@ function Footer() {
           className='text-white cursor-pointer'
           onClick={() => window.open('https://www.linkedin.com/in/sahityagaurav4210')}
         />
-        <Mail className='text-white cursor-pointer' onClick={()=>{window.open("mailto:sahityagaurav.41125@gmail.com")}}/>
+        <Mail
+          className='text-white cursor-pointer'
+          onClick={() => {
+            window.open('mailto:sahityagaurav.41125@gmail.com');
+          }}
+        />
       </div>
     </section>
   );

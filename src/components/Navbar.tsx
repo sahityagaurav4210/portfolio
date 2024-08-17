@@ -38,7 +38,7 @@ const Navbar: React.FC<INavbarProps> = ({ menuItems, url }) => {
         </div>
         <div className='hidden xl:flex'>
           <a
-            href='tel:+91-8837573143'
+            href='#hireme'
             className='rounded-md mx-4 flex transition-all scale-95 hover:scale-105 bg-blue-800 hover:bg-slate-100 p-4 text-md text-white hover:text-blue-800 shadow-md shadow-blue-200 font-bold ring-2 ring-blue-400 ring-offset-1'
           >
             <DollarSign className='mx-1' /> Hire Me
@@ -86,7 +86,7 @@ const Navbar: React.FC<INavbarProps> = ({ menuItems, url }) => {
                   </nav>
                 </div>
                 <a
-                  href='mailto:works.sahitya@gmail.com'
+                  href='#hireme'
                   className='flex items-center justify-center lg:w-24 text-center mt-4 w-full rounded-md bg-blue-800 px-3 py-2 text-xl font-semibold text-white shadow-sm ring-2 ring-offset-2 ring-blue-400'
                 >
                   <DollarSign className='mx-1' />

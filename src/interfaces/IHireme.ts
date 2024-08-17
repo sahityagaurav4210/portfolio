@@ -1,0 +1,9 @@
+export interface IHireme {
+  client_name: string;
+  client_project_name: string;
+  hiring_type: string;
+  budget: string;
+  tenure?: number;
+  client_email: string;
+  message: string;
+}

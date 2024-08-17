@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { IContract, IContractProps } from '../interfaces/IContact';
 import { toast } from 'react-toastify';
 import Notes from './Notes';
+import Progress from './Progressbar';
 
 function Contact({ apiSignal }: IContractProps) {
   const [contractDetails, setContractDetails] = useState<IContract>({
@@ -75,7 +76,8 @@ function Contact({ apiSignal }: IContractProps) {
       <Heading headingName='Contact' className='mb-5 text-3xl lg:text-7xl' />
 
       <section className='container mx-auto min-h-96'>
-        <form className='p-4 mb-2 shadow-sm' onSubmit={(event) => handleSubmit(event)}>
+        <p className='text-sm lg:text-lg'>Have something in mind, contact me</p>
+        <form className='p-4 mb-2 shadow-sm border-2 my-2 border-dashed' onSubmit={(event) => handleSubmit(event)}>
           <div className='grid lg:grid-cols-2 gap-6 mb-4'>
             <fieldset className='border rounded-sm border-blue-400 outline-none px-2 text-sm lg:text-lg ring-2 ring-offset-1 ring-blue-200 transistion-all focus-within:scale-105 min-w-full placeholder:text-orange-400 placeholder:font-bold'>
               <legend className='px-2 text-blue-800 bg-white font-bold'>
@@ -155,22 +157,26 @@ function Contact({ apiSignal }: IContractProps) {
             <Notes note={<p className='text-xs text-justify'>Please do not send unnecessary and clumsy messages.</p>} />
           </div>
 
-          <div className='flex items-center justify-center mt-4'>
-            <button
-              disabled={isLoading}
-              type='submit'
-              className='border transition-all scale-95 inline-flex p-4 outline-none bg-blue-800 text-white rounded-lg font-bold focus:scale-105 shadow-lg shadow-blue-300 border-blue-200 ring-2 ring-offset-1 ring-blue-300'
-            >
-              {!isLoading ? (
-                <>
-                  <Contact2 className='mx-2' /> Contact Me
-                </>
-              ) : (
-                <>
-                  <Loader2 className='mx-2' /> Loading, please wait...
-                </>
-              )}
-            </button>
+          <div className='flex items-center mt-4'>
+            {!isLoading ? (
+              <button
+                disabled={isLoading}
+                type='submit'
+                className='border transition-all scale-95 inline-flex p-4 outline-none bg-blue-800 text-white rounded-lg font-bold focus:scale-105 shadow-lg shadow-blue-300 border-blue-200 ring-2 ring-offset-1 ring-blue-300'
+              >
+                {!isLoading ? (
+                  <>
+                    <Contact2 className='mx-2' /> Contact Me
+                  </>
+                ) : (
+                  <>
+                    <Loader2 className='mx-2' /> Loading, please wait...
+                  </>
+                )}
+              </button>
+            ) : (
+              <Progress />
+            )}
           </div>
         </form>
       </section>

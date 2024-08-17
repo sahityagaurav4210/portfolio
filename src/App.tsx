@@ -10,6 +10,7 @@ import Loader from './components/Loader';
 import { Client, Storage } from 'appwrite';
 import { Resources } from './constants';
 import Contact from './components/Contact';
+import HireMe from './components/HireMe';
 
 const menuItems = [
   {
@@ -302,6 +303,10 @@ function App(): ReactNode {
 
           <section id='contact'>
             <Contact apiSignal={apiSignal} />
+          </section>
+
+          <section id='hireme'>
+            <HireMe />
           </section>
 
           <Footer />
