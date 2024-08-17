@@ -25,8 +25,9 @@ function HireMe(): ReactNode {
     setLoading(true);
 
     if (!hiremeDetails.tenure && hiremeDetails.hiring_type === HiringType.PART_TIME) {
-      toast.warning('Please enter valid contract period.');
+      toast.warning('Please enter valid contract period.', { autoClose: 2000, theme: 'dark' });
       setLoading(false);
+      return;
     }
 
     let message = '';
@@ -46,8 +47,7 @@ function HireMe(): ReactNode {
       message = message.replace(/:tenure/, hiremeDetails.tenure?.toString() || '');
     }
 
-    setHiremeDetails({ ...hiremeDetails, message });
-
+    const payload = { ...hiremeDetails, message };
     const abortController = new AbortController();
     const timerId = setTimeout(() => {
       abortController.abort('Timeout');
@@ -61,7 +61,7 @@ function HireMe(): ReactNode {
           x_api_key: import.meta.env.VITE_BACKEND_TOKEN,
           Accept: '*/*',
         },
-        body: JSON.stringify(hiremeDetails),
+        body: JSON.stringify(payload),
         signal: abortController.signal,
       });
       clearTimeout(timerId);
@@ -71,13 +71,20 @@ function HireMe(): ReactNode {
       if (apiRawResponse.ok) {
         toast.success(response.message, { autoClose: 2000, theme: 'dark' });
       } else {
-        toast.error(response.data.message, { autoClose: 2000, theme: 'dark' });
+        toast.error(response.message, { autoClose: 2000, theme: 'dark' });
       }
     } catch (error: any) {
-      console.log(error);
-
-      toast.error(error.message || 'An error occured', { autoClose: 2000, theme: 'dark' });
+      toast.error(error?.message || 'An error occured', { autoClose: 2000, theme: 'dark' });
     } finally {
+      setHiremeDetails({
+        client_email: '',
+        client_name: '',
+        client_project_name: '',
+        budget: '',
+        hiring_type: HiringType.PART_TIME,
+        message: '',
+        tenure: 0,
+      });
       setLoading(false);
     }
   }
@@ -100,7 +107,10 @@ function HireMe(): ReactNode {
               required
               id='client_name'
               value={hiremeDetails.client_name}
-              onChange={(event) => setHiremeDetails({ ...hiremeDetails, [event.target.id]: event.target.value })}
+              onChange={(event) =>
+                setHiremeDetails({ ...hiremeDetails, [event.target.id]: event.target.value?.toLowerCase() })
+              }
+              autoComplete='off'
             />{' '}
             <sup className='mr-2 text-red-500'>*</sup>. I have seen your portfolio and found that you would be a great
             fit for my project,{' '}
@@ -112,6 +122,7 @@ function HireMe(): ReactNode {
               id='client_project_name'
               value={hiremeDetails.client_project_name}
               onChange={(event) => setHiremeDetails({ ...hiremeDetails, [event.target.id]: event.target.value })}
+              autoComplete='off'
             />{' '}
             <sup className='mr-2 text-red-500'>*</sup>
             and would like to hire you as a{' '}
@@ -133,8 +144,11 @@ function HireMe(): ReactNode {
               className='border-b-2 m-2 p-2 outline-none bg-transparent border-blue-800 text-center font-bold text-blue-800'
               placeholder='price'
               id='budget'
+              autoComplete='off'
               value={hiremeDetails.budget}
-              onChange={(event) => setHiremeDetails({ ...hiremeDetails, [event.target.id]: event.target.value })}
+              onChange={(event) =>
+                setHiremeDetails({ ...hiremeDetails, [event.target.id]: event.target.value?.toLowerCase() })
+              }
             />{' '}
             <sup className='mr-2 text-red-500'>*</sup>
             USD.
@@ -147,6 +161,7 @@ function HireMe(): ReactNode {
                   placeholder='tenure in months'
                   required
                   id='tenure'
+                  autoComplete='off'
                   value={hiremeDetails.tenure}
                   onChange={(event) => setHiremeDetails({ ...hiremeDetails, [event.target.id]: event.target.value })}
                 />{' '}
@@ -163,8 +178,11 @@ function HireMe(): ReactNode {
               placeholder='your email'
               required
               id='client_email'
+              autoComplete='off'
               value={hiremeDetails.client_email}
-              onChange={(event) => setHiremeDetails({ ...hiremeDetails, [event.target.id]: event.target.value })}
+              onChange={(event) =>
+                setHiremeDetails({ ...hiremeDetails, [event.target.id]: event.target.value?.toLowerCase() })
+              }
             />{' '}
             <sup className='mr-2 text-red-500'>*</sup>
             to discuss more about this project.
