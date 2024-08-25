@@ -7,7 +7,6 @@ import { BookUser, BriefcaseBusiness } from 'lucide-react';
 
 import HackerrankLogo from '../assets/hackerrank.avif';
 import LinkedinLogo from '../assets/linkedin.png';
-import InstaLogo from '../assets/insta.png';
 import GithubLogo from '../assets/github.png';
 
 function Hero({ url }: IHeroProps): ReactNode {
