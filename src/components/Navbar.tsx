@@ -110,4 +110,4 @@ const Navbar: React.FC<INavbarProps> = ({ menuItems, url }) => {
   );
 };
 
-export default Navbar;
+export default React.memo(Navbar);

@@ -184,4 +184,4 @@ function Contact({ apiSignal }: IContractProps) {
   );
 }
 
-export default Contact;
+export default React.memo(Contact);

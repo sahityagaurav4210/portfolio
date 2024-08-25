@@ -16,4 +16,4 @@ const Skills: React.FC<ISkillsProps> = ({ skills }): ReactNode => {
   );
 };
 
-export default Skills;
+export default React.memo(Skills);

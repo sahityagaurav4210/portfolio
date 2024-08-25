@@ -1,4 +1,4 @@
-import { ReactNode, useState } from 'react';
+import React, { ReactNode, useState } from 'react';
 import Heading from './Heading';
 import { Send } from 'lucide-react';
 import Notes from './Notes';
@@ -47,7 +47,7 @@ function HireMe(): ReactNode {
       message = message.replace(/:tenure/, hiremeDetails.tenure?.toString() || '');
     }
 
-    const payload = { ...hiremeDetails, message };
+    const payload = { ...hiremeDetails, message, budget: `${hiremeDetails.budget}USD` };
     const abortController = new AbortController();
     const timerId = setTimeout(() => {
       abortController.abort('Timeout');
@@ -98,6 +98,9 @@ function HireMe(): ReactNode {
           fill up this form to hire me.
         </p>
         <form className='p-4 mb-4 border-2 font-roboto border-dashed rounded-md min-h-[30rem] flex flex-col justify-center mx-1 lg:mx-0'>
+          <h1 className='text-center text-4xl font-bold underline underline-offset-4 decoration-dashed text-orange-500'>
+            Form
+          </h1>
           <p className='text-sm lg:text-xl text-justify leading-10 font-bold mb-2'>
             Hello my name is{' '}
             <input
@@ -217,4 +220,4 @@ function HireMe(): ReactNode {
   );
 }
 
-export default HireMe;
+export default React.memo(HireMe);

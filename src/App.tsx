@@ -12,6 +12,12 @@ import { Resources } from './constants';
 import Contact from './components/Contact';
 import HireMe from './components/HireMe';
 
+import DigiLogo from './assets/digilogo.webp';
+import CreativeLogo from './assets/creativelogo.png';
+import RockyLogo from './assets/rockylogo.jpeg';
+import GneLogo from './assets/gndeclogo.jpeg';
+import SchoolLogo from './assets/uspclogo.png';
+
 const menuItems = [
   {
     name: 'Home',
@@ -203,6 +209,149 @@ const skills = [
   },
 ];
 
+const experience = [
+  {
+    companyLogo: RockyLogo,
+    tags: [
+      {
+        labelName: 'Company Name',
+        content: 'Rocky Mountain Technologies India Pvt Ltd',
+      },
+      {
+        labelName: 'Designation',
+        content: 'Backend developer',
+      },
+      {
+        labelName: 'Department',
+        content: 'Software development',
+      },
+      {
+        labelName: 'From',
+        content: 'Apr 2024',
+      },
+      { labelName: 'To', content: 'Present' },
+    ],
+    description:
+      'I am working as a backend developer for more that 4 months now. During this, i have worked upon 2 projects. ',
+    isCurrent: true,
+  },
+  {
+    companyLogo: CreativeLogo,
+    tags: [
+      {
+        labelName: 'Company Name',
+        content: 'Creative Line International Private Limited',
+      },
+      {
+        labelName: 'Designation',
+        content: 'Full stack developer',
+      },
+      {
+        labelName: 'Department',
+        content: 'Software development',
+      },
+      {
+        labelName: 'From',
+        content: 'Nov 2023',
+      },
+      { labelName: 'To', content: 'Mar 2024' },
+    ],
+    description:
+      'I have worked here as a full stack developer for more than 3 months. During this period, i have developed the inventory and stock management website from scratch by myself only. Apart from this I have setup and maintained the linux server from scratch.',
+  },
+  {
+    companyLogo: DigiLogo,
+    tags: [
+      {
+        labelName: 'Company Name',
+        content: 'Digimantra Labs',
+      },
+      {
+        labelName: 'Designation',
+        content: 'Associate Web Developer',
+      },
+      {
+        labelName: 'Department',
+        content: 'Backend development',
+      },
+      {
+        labelName: 'From',
+        content: 'Aug 2022',
+      },
+      { labelName: 'To', content: 'Nov 2023' },
+    ],
+    description:
+      'I have worked here as a backend developer for more that a year. During this, i have worked upon more than 2 projects. I have also worked on a live project called EarthLink.',
+  },
+];
+
+const education = [
+  {
+    companyLogo: GneLogo,
+    tags: [
+      {
+        labelName: 'School/College Name',
+        content: 'Guru Nanak Dev Engineering College',
+      },
+      {
+        labelName: 'Course Name',
+        content: 'BTech in Electronics and Communication Engineering',
+      },
+      {
+        labelName: 'Passing Year',
+        content: 'July 2022',
+      },
+      {
+        labelName: 'Score',
+        content: '7.38 CGPA',
+      },
+    ],
+    isCurrent: true,
+  },
+  {
+    companyLogo: SchoolLogo,
+    tags: [
+      {
+        labelName: 'School/College Name',
+        content: 'U.S.P.C Jain Public School',
+      },
+      {
+        labelName: 'Course Name',
+        content: 'All India Senior School Secondary Examination (12th) from CBSE',
+      },
+      {
+        labelName: 'Passing Year',
+        content: 'May 2018',
+      },
+      {
+        labelName: 'Score',
+        content: '63.4%',
+      },
+    ],
+  },
+  {
+    companyLogo: SchoolLogo,
+    tags: [
+      {
+        labelName: 'School/College Name',
+        content: 'U.S.P.C Jain Public School',
+      },
+      {
+        labelName: 'Course Name',
+        content: 'Senior School Examination (10th) from CBSE',
+      },
+      {
+        labelName: 'Passing Year',
+        content: 'May 2016',
+      },
+      {
+        labelName: 'Score',
+        content: '8.60 CGPA',
+      },
+    ],
+  },
+];
+
 function App(): ReactNode {
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
   const [photoUrl, setPhotoUrl] = useState<string>('');
@@ -295,11 +444,11 @@ function App(): ReactNode {
           </section>
 
           <section id='experience'>
-            <Experience />
+            <Experience experience={experience} />
           </section>
 
           <section id='education'>
-            <Education />
+            <Education education={education} />
           </section>
 
           <section id='skills'>

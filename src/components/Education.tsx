@@ -1,78 +1,10 @@
-import { ReactNode } from 'react';
+import React, { ReactNode } from 'react';
 import Heading from './Heading';
 
-import GneLogo from '../assets/gndeclogo.jpeg';
-import SchoolLogo from '../assets/uspclogo.png';
 import ExperienceCard from './ExperienceCard';
+import { IEducationProps } from '../interfaces/IProps';
 
-function Education(): ReactNode {
-  const education = [
-    {
-      companyLogo: GneLogo,
-      tags: [
-        {
-          labelName: 'School/College Name',
-          content: 'Guru Nanak Dev Engineering College',
-        },
-        {
-          labelName: 'Course Name',
-          content: 'BTech in Electronics and Communication Engineering',
-        },
-        {
-          labelName: 'Passing Year',
-          content: 'July 2022',
-        },
-        {
-          labelName: 'Score',
-          content: '7.38 CGPA',
-        },
-      ],
-      isCurrent: true,
-    },
-    {
-      companyLogo: SchoolLogo,
-      tags: [
-        {
-          labelName: 'School/College Name',
-          content: 'U.S.P.C Jain Public School',
-        },
-        {
-          labelName: 'Course Name',
-          content: 'All India Senior School Secondary Examination (12th) from CBSE',
-        },
-        {
-          labelName: 'Passing Year',
-          content: 'May 2018',
-        },
-        {
-          labelName: 'Score',
-          content: '63.4%',
-        },
-      ],
-    },
-    {
-      companyLogo: SchoolLogo,
-      tags: [
-        {
-          labelName: 'School/College Name',
-          content: 'U.S.P.C Jain Public School',
-        },
-        {
-          labelName: 'Course Name',
-          content: 'Senior School Examination (10th) from CBSE',
-        },
-        {
-          labelName: 'Passing Year',
-          content: 'May 2016',
-        },
-        {
-          labelName: 'Score',
-          content: '8.60 CGPA',
-        },
-      ],
-    },
-  ];
-
+function Education({ education }: IEducationProps): ReactNode {
   return (
     <>
       <Heading headingName='Education' />
@@ -120,4 +52,4 @@ function Education(): ReactNode {
   );
 }
 
-export default Education;
+export default React.memo(Education);

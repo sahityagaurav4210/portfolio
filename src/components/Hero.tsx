@@ -1,15 +1,31 @@
-import { ReactNode } from 'react';
+import React, { ReactNode, useEffect, useState } from 'react';
 import User from '../assets/user.png';
-import { IHeroProps } from '../interfaces';
+import { IAnalytics, IHeroProps } from '../interfaces';
 import { SKILLS } from '../constants';
 import Typewriter from 'typewriter-effect';
 import { BookUser, BriefcaseBusiness } from 'lucide-react';
 
-import HackerrankLogo from '../assets/hackerrank.avif';
+import HackerrankLogo from '../assets/hackerrank.png';
 import LinkedinLogo from '../assets/linkedin.png';
 import GithubLogo from '../assets/github.png';
 
 function Hero({ url }: IHeroProps): ReactNode {
+  const [analytics, setAnalytics] = useState<IAnalytics>({
+    totalGithubContributions: 0,
+    questionSolved: 0,
+    experience: 0,
+    projects: 0,
+  });
+
+  useEffect(() => {
+    setAnalytics((previous) => ({
+      totalGithubContributions: previous.totalGithubContributions < 352 ? previous.totalGithubContributions + 1 : 352,
+      questionSolved: previous.questionSolved < 300 ? previous.questionSolved + 1 : 300,
+      experience: previous.experience < 2 ? previous.experience + 1 : 2,
+      projects: previous.projects < 5 ? previous.projects + 1 : 5,
+    }));
+  }, [analytics.questionSolved, analytics.totalGithubContributions, analytics.experience]);
+
   return (
     <>
       <div className='container mx-auto py-10'>
@@ -41,6 +57,29 @@ function Hero({ url }: IHeroProps): ReactNode {
                 <Typewriter options={{ strings: SKILLS, autoStart: true, loop: true }} />
               </span>
             </p>
+            <div className='flex items-center justify-center md:hidden'>
+              <p className='font-roboto p-2'>Find me on </p>
+              <span className='flex items-center gap-x-2 cursor-pointer'>
+                <img
+                  src={HackerrankLogo}
+                  className='rounded-full'
+                  title='Hackerrank'
+                  onClick={(_) => window.open('https://hackerrank.com/sahityagaurav_41', '_blank')}
+                />
+                <img
+                  src={LinkedinLogo}
+                  className='rounded-full'
+                  title='Linkedin'
+                  onClick={(_) => window.open('https://linkedin.com/in/sahityagaurav4210', '_blank')}
+                />
+                <img
+                  src={GithubLogo}
+                  className='rounded-full'
+                  title='Github'
+                  onClick={(_) => window.open('https://github.com/sahityagaurav4210', '_blank')}
+                />
+              </span>
+            </div>
             <div className='mt-5 flex items-center justify-center gap-x-2 flex-wrap'>
               <a
                 href='#contact'
@@ -61,39 +100,45 @@ function Hero({ url }: IHeroProps): ReactNode {
             <div className='flex gap-4 flex-wrap items-center justify-center w-full'>
               <div className='flex items-center'>
                 <div className='min-h-16 min-w-10 border-2 border-dashed ring-1 ring-offset-2 ring-orange-400 p-4 bg-orange-800 rounded-xl shadow-md shadow-orange-500'>
-                  <p className='text-center text-9xl font-roboto font-extrabold text-white'>2</p>
+                  <p className='text-center text-9xl font-roboto font-extrabold text-white'>{analytics.experience}</p>
                   <p className='text-white font-bold font-roboto text-center'> years of experience</p>
                 </div>
               </div>
 
               <div className='flex items-center flex-wrap'>
                 <div className='min-h-16 min-w-10 border-2 border-dashed ring-1 ring-offset-2 ring-orange-400 p-4 bg-orange-800 rounded-xl shadow-md shadow-orange-500'>
-                  <p className='text-center text-9xl font-roboto font-extrabold text-white'>5+</p>
+                  <p className='text-center text-9xl font-roboto font-extrabold text-white'>
+                    {analytics.projects === 5 ? '5+' : analytics.projects}
+                  </p>
                   <p className='text-white font-bold font-roboto text-center'> projects delivered</p>
                 </div>
               </div>
 
               <div className='flex items-center'>
                 <div className='min-h-16 min-w-10 border-2 border-dashed ring-1 ring-offset-2 ring-orange-400 p-4 bg-orange-800 rounded-xl shadow-md shadow-orange-500'>
-                  <p className='text-center text-9xl font-roboto font-extrabold text-white'>300+</p>
+                  <p className='text-center text-9xl font-roboto font-extrabold text-white'>
+                    {analytics.questionSolved === 300 ? '300+' : analytics.questionSolved}
+                  </p>
                   <p className='text-white font-bold font-roboto text-center'> coding questions solved</p>
                 </div>
               </div>
 
               <div className='flex items-center'>
                 <div className='min-h-16 min-w-10 border-2 border-dashed ring-1 ring-offset-2 ring-orange-400 p-4 bg-orange-800 rounded-xl shadow-md shadow-orange-500'>
-                  <p className='text-center text-9xl font-roboto font-extrabold text-white'>352</p>
+                  <p className='text-center text-9xl font-roboto font-extrabold text-white'>
+                    {analytics.totalGithubContributions}
+                  </p>
                   <p className='text-white font-bold font-roboto text-center'> active github contributions</p>
                 </div>
               </div>
             </div>
 
-            <div className='flex mt-4 items-center justify-center text-gray-700'>
+            <div className='hidden lg:flex mt-4 items-center justify-center text-gray-700'>
               <p className='font-roboto p-2'>Find me on </p>
-              <span className='flex items-center gap-x-2 aspect-square object-cover cursor-pointer'>
+              <span className='flex items-center gap-x-2 cursor-pointer'>
                 <img
                   src={HackerrankLogo}
-                  className='w-8 h-8 rounded-full'
+                  className='rounded-full'
                   title='Hackerrank'
                   onClick={(_) => window.open('https://hackerrank.com/sahityagaurav_41', '_blank')}
                 />
@@ -117,4 +162,5 @@ function Hero({ url }: IHeroProps): ReactNode {
     </>
   );
 }
-export default Hero;
+
+export default React.memo(Hero);

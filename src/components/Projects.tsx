@@ -46,4 +46,4 @@ const Projects: React.FC<IProjectsProps> = ({ projects, personal_projects }) => 
   );
 };
 
-export default Projects;
+export default React.memo(Projects);

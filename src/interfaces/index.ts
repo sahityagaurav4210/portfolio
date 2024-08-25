@@ -23,3 +23,10 @@ export interface IExperienceCardProps {
   description?: string;
   isCurrent?: boolean;
 }
+
+export interface IAnalytics {
+  totalGithubContributions: number;
+  questionSolved: number;
+  experience: number;
+  projects: number;
+}
