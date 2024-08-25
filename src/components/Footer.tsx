@@ -1,26 +1,8 @@
-import { Github } from 'lucide-react';
-import { LinkedinIcon } from 'lucide-react';
-import { Mail } from 'lucide-react';
-
 function Footer() {
   return (
-    <section className='relative overflow-hidden bg-gradient-to-tr from-indigo-950 to-blue-950 py-8'>
-      <div className=' z-10 flex items-center justify-evenly'>
-        <Github
-          className='text-white cursor-pointer'
-          onClick={() => window.open('https://www.github.com/sahityagaurav4210')}
-        />
-        <LinkedinIcon
-          className='text-white cursor-pointer'
-          onClick={() => window.open('https://www.linkedin.com/in/sahityagaurav4210')}
-        />
-        <Mail
-          className='text-white cursor-pointer'
-          onClick={() => {
-            window.open('mailto:sahityagaurav.41125@gmail.com');
-          }}
-        />
-      </div>
+    <section className='relative overflow-hidden bg-gradient-to-tr from-indigo-950 to-blue-950 py-4 text-white text-xs lg:text-lg text-center px-1 font-bold font-roboto'>
+      <p>Made with ❤️ by Gaurav Sahitya in India 🇮🇳.</p>
+      <p className='mt-1'>Content of this website is being owned and maintained by Gaurav Sahitya.</p>
     </section>
   );
 }

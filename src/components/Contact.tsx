@@ -73,11 +73,11 @@ function Contact({ apiSignal }: IContractProps) {
 
   return (
     <>
-      <Heading headingName='Contact' className='mb-5 text-3xl lg:text-7xl' />
+      <Heading headingName='Contact Me' className='mb-5 text-3xl lg:text-7xl' />
 
       <section className='container mx-auto min-h-96'>
-        <p className='text-sm lg:text-lg'>Have something in mind, contact me</p>
-        <form className='p-4 mb-2 shadow-sm border-2 my-2 border-dashed' onSubmit={(event) => handleSubmit(event)}>
+        <p className='text-sm lg:text-lg px-2'>Have something in mind, contact me</p>
+        <form className='p-4 mb-2 shadow-sm border-2 my-2 mx-1 border-dashed' onSubmit={(event) => handleSubmit(event)}>
           <div className='grid lg:grid-cols-2 gap-6 mb-4'>
             <fieldset className='border rounded-sm border-blue-400 outline-none px-2 text-sm lg:text-lg ring-2 ring-offset-1 ring-blue-200 transistion-all focus-within:scale-105 min-w-full placeholder:text-orange-400 placeholder:font-bold'>
               <legend className='px-2 text-blue-800 bg-white font-bold'>

@@ -189,7 +189,13 @@ function HireMe(): ReactNode {
           </p>
 
           <p className='text-sm lg:text-xl text-justify leading-10 font-bold mb-2'>
-            <Notes note={<p className='text-xs my-1'>All fields marked with asterik are mandatory to fill.</p>} />
+            <Notes
+              note={
+                <p className='text-xs my-1'>
+                  All fields marked with asterik <span className='text-red-500'>(*)</span> are mandatory to fill.
+                </p>
+              }
+            />
           </p>
 
           {!loading ? (

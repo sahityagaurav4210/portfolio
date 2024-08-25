@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { DollarSign, Download, Menu, X } from 'lucide-react';
 import { INavbarProps } from '../interfaces/INavbar';
 import Logo from './Logo';
+
 const Navbar: React.FC<INavbarProps> = ({ menuItems, url }) => {
   const [isMenuOpen, setIsMenuOpen] = React.useState<boolean>(false);
   const [size, setSize] = useState<number>(window.innerWidth);
@@ -19,7 +20,7 @@ const Navbar: React.FC<INavbarProps> = ({ menuItems, url }) => {
   onResize();
 
   return (
-    <div className='sticky top-0 left-0 z-10 w-full bg-slate-100'>
+    <div className='sticky top-0 left-0 z-20 w-full bg-slate-100'>
       <div className='mx-auto flex container items-center justify-between p-4 sm:px-6 lg:px-8'>
         <Logo logoSize={size} />
         <div className='hidden xl:block'>

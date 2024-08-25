@@ -4,7 +4,7 @@ import { ArrowUpRight } from 'lucide-react';
 
 const Cards: React.FC<IProjects> = ({ name, text, tech_stack, disabled, codeLink, liveLink }) => {
   return (
-    <div className='transition-all w-96 min-h-[700px] rounded-md border mx-2 mb-3'>
+    <div className='transition-all w-96 min-h-[700px] rounded-md border-2 border-dashed border-blue-500 ring-1 ring-offset-1 ring-blue-400 mx-2 mb-3'>
       <img
         src='https://images.unsplash.com/photo-1522199755839-a2bacb67c546?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTF8fGJsb2d8ZW58MHx8MHx8&auto=format&fit=crop&w=800&q=60'
         alt='Laptop'
@@ -30,25 +30,27 @@ const Cards: React.FC<IProjects> = ({ name, text, tech_stack, disabled, codeLink
           ))}
         </div>
 
-        <div className='flex flex-col'>
-          <button
-            type='button'
-            disabled={disabled}
-            onClick={() => codeLink && window.open(codeLink)}
-            className='mt-4 w-full rounded-sm bg-black px-2 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-black/80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black'
-          >
-            View code <ArrowUpRight className='inline-block font-bold' />
-          </button>
+        {!disabled && (
+          <div className='flex flex-col'>
+            <button
+              type='button'
+              disabled={disabled}
+              onClick={() => codeLink && window.open(codeLink)}
+              className='transistion-all mt-4 w-full rounded-sm bg-orange-800 px-2 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-orange-800/65 outline-none ring-1 ring-offset-1 ring-orange-500 border border-dashed border-orange-400 scale-95 focus-visible:scale-100'
+            >
+              View code <ArrowUpRight className='inline-block font-bold' />
+            </button>
 
-          <button
-            type='button'
-            disabled={disabled}
-            onClick={() => liveLink && window.open(liveLink)}
-            className='mt-4 w-full rounded-sm bg-slate-950 px-2 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-black/80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black'
-          >
-            Preview <ArrowUpRight className='inline-block font-bold' />
-          </button>
-        </div>
+            <button
+              type='button'
+              disabled={disabled}
+              onClick={() => liveLink && window.open(liveLink)}
+              className='transistion-all mt-4 w-full rounded-sm bg-orange-800 px-2 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-orange-800/65 outline-none ring-1 ring-offset-1 ring-orange-500 border border-dashed border-orange-400 scale-95 focus-visible:scale-100'
+            >
+              Preview <ArrowUpRight className='inline-block font-bold' />
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );

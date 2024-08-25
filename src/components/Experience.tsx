@@ -1,27 +1,84 @@
 import { ReactNode } from 'react';
 import Heading from './Heading';
+import ExperienceCard from './ExperienceCard';
 
-const people = [
+import DigiLogo from '../assets/digilogo.webp';
+import CreativeLogo from '../assets/creativelogo.png';
+import RockyLogo from '../assets/rockylogo.jpeg';
+
+const experience = [
   {
-    name: 'Rocky Mountain Technologies India Pvt Ltd',
-    title: 'Software Developer',
-    department: 'Backend development',
-    duration: 'Apr 2024 - Present',
-    role: 'Backend Developer',
+    companyLogo: RockyLogo,
+    tags: [
+      {
+        labelName: 'Company Name',
+        content: 'Rocky Mountain Technologies India Pvt Ltd',
+      },
+      {
+        labelName: 'Designation',
+        content: 'Backend developer',
+      },
+      {
+        labelName: 'Department',
+        content: 'Software development',
+      },
+      {
+        labelName: 'From',
+        content: 'Apr 2024',
+      },
+      { labelName: 'To', content: 'Present' },
+    ],
+    description:
+      'I am working as a backend developer for more that 4 months now. During this, i have worked upon 2 projects. ',
+    isCurrent: true,
   },
   {
-    name: 'Creative Line International Pvt Ltd',
-    title: 'Software Developer',
-    department: 'Software development',
-    duration: 'Dec 2023 - Mar 2024',
-    role: 'Full Stack Developer',
+    companyLogo: CreativeLogo,
+    tags: [
+      {
+        labelName: 'Company Name',
+        content: 'Creative Line International Private Limited',
+      },
+      {
+        labelName: 'Designation',
+        content: 'Full stack developer',
+      },
+      {
+        labelName: 'Department',
+        content: 'Software development',
+      },
+      {
+        labelName: 'From',
+        content: 'Nov 2023',
+      },
+      { labelName: 'To', content: 'Mar 2024' },
+    ],
+    description:
+      'I have worked here as a full stack developer for more than 3 months. During this period, i have developed the inventory and stock management website from scratch by myself only. Apart from this I have setup and maintained the linux server from scratch.',
   },
   {
-    name: 'Digimantra Labs',
-    title: 'Associate Web Developer',
-    department: 'Backend development',
-    duration: 'Aug 2022 - Nov 2023',
-    role: 'Backend Developer',
+    companyLogo: DigiLogo,
+    tags: [
+      {
+        labelName: 'Company Name',
+        content: 'Digimantra Labs',
+      },
+      {
+        labelName: 'Designation',
+        content: 'Associate Web Developer',
+      },
+      {
+        labelName: 'Department',
+        content: 'Backend development',
+      },
+      {
+        labelName: 'From',
+        content: 'Aug 2022',
+      },
+      { labelName: 'To', content: 'Nov 2023' },
+    ],
+    description:
+      'I have worked here as a backend developer for more that a year. During this, i have worked upon more than 2 projects. I have also worked on a live project called EarthLink.',
   },
 ];
 
@@ -29,8 +86,25 @@ function Experience(): ReactNode {
   return (
     <>
       <Heading headingName='Experience' className='mt-4 mb-1' />
-      <section className='container mx-auto px-4 py-4 overflow-x-auto divide-y-2'>
-        <table className='border border-b-2 border-black w-full mt-4'>
+      <section className='container mx-auto p-4'>
+        <p className='px-2 text-sm lg:text-lg my-2 font-roboto text-justify'>
+          I have almost 2 years of experience in backend development and 6 months of experience in full stack
+          development. Following are my experience details in reverse chronological manner i.e., starting from latest to
+          previous one.
+        </p>
+        <div className='flex items-center justify-center flex-wrap gap-2'>
+          {experience.map((item) => (
+            <ExperienceCard
+              companyLogo={item.companyLogo}
+              tags={item.tags}
+              description={item.description}
+              isCurrent={item.isCurrent}
+              key={item.companyLogo}
+            />
+          ))}
+        </div>
+
+        {/* <table className='border border-b-2 border-black w-full mt-4'>
           <thead>
             <tr className='text-xl bg-black text-white h-20'>
               <th className='p-2 min-w-96'>Company Name</th>
@@ -54,7 +128,7 @@ function Experience(): ReactNode {
               </tr>
             ))}
           </tbody>
-        </table>
+        </table> */}
       </section>
     </>
   );

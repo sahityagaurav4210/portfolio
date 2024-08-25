@@ -13,7 +13,10 @@ function Logo({ logoSize }: ILogo) {
         <span>
           <Code size={handleIconSize(logoSize)} color='#1e40af' />
         </span>
-        <span className='font-bold font-roboto italic text-3xl md:text-5xl text-blue-800'>
+        <span
+          className='font-bold font-roboto italic text-3xl md:text-5xl text-blue-800 cursor-pointer'
+          onClick={(e) => (window.location.href = '#home')}
+        >
           Gaurav <span className='text-blue-800/75'>S.</span>
         </span>
         <span>

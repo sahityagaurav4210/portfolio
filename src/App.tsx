@@ -39,9 +39,11 @@ const projects = [
   {
     name: 'EarthLink',
     disabled: true,
-    text: 'It is the second-largest telecommunications company in the US. I worked as a backend developer on their live project for over a year, interacting with the project manager, developers, and testers via calls and chats.',
+    text: 'It is the second-largest telecommunications company in the US. I worked as a full stack developer on their live project for over a year, interacting with the project manager, developers, and testers via calls and chats.',
     tech_stack: [
       'Node.js',
+      'Nest.js',
+      'React.js',
       'GraphQL',
       'Microservices',
       'Unit testing',
@@ -50,12 +52,15 @@ const projects = [
       'Git',
       'Bitbucket',
       'CI/CD Pipelines',
+      'OData',
+      'API Gateways',
+      'Typescript',
     ],
   },
   {
     name: 'Creative Ease Web',
     disabled: true,
-    text: `I developed the web version of Creative Line International Pvt Ltd's ERP software from scratch, single-handedly.`,
+    text: 'It is an inventory and stock management website. I have worked on it as a full stack developer and developed it from scratch by myself only. Apart from this I have also maintained the production server of it.',
     tech_stack: [
       'Node.js',
       'React.js',
@@ -73,7 +78,7 @@ const projects = [
   {
     name: 'Fast Tracking',
     disabled: true,
-    text: `I worked as a backend developer on a website that provides truck driving training services to drivers in Canada.`,
+    text: 'It is a truck driving training services website. I have worked as a backend developer on it.',
     tech_stack: ['Nest.js', 'Typescript', 'Mongodb', 'Git', 'GitHub', 'Unit testing', 'Caprover', 'Express.js'],
   },
 ];
