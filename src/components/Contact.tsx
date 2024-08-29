@@ -5,6 +5,7 @@ import { IContract, IContractProps } from '../interfaces/IContact';
 import { toast } from 'react-toastify';
 import Notes from './Notes';
 import Progress from './Progressbar';
+import { API_BASE_URL, HTTP_VERBS } from '../api';
 
 function Contact({ apiSignal }: IContractProps) {
   const [contractDetails, setContractDetails] = useState<IContract>({
@@ -39,11 +40,11 @@ function Contact({ apiSignal }: IContractProps) {
       }, parseInt(import.meta.env.VITE_BACKEND_API_TIMEOUT) || 1000);
 
       try {
-        const apiRawResponse = await fetch(`${import.meta.env.VITE_BACKEND_BASE_URL}/baas/contract/create`, {
-          method: 'POST',
+        const apiRawResponse = await fetch(`${API_BASE_URL}/baas/contract/create`, {
+          method: HTTP_VERBS.POST,
           headers: {
             'Content-Type': 'application/json',
-            x_api_key: import.meta.env.VITE_BACKEND_TOKEN,
+            "X-Api-Key": import.meta.env.VITE_BACKEND_TOKEN,
             Accept: '*/*',
           },
           body: JSON.stringify(contractDetails),

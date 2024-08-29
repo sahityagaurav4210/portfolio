@@ -17,6 +17,7 @@ import CreativeLogo from './assets/creativelogo.png';
 import RockyLogo from './assets/rockylogo.jpeg';
 import GneLogo from './assets/gndeclogo.jpeg';
 import SchoolLogo from './assets/uspclogo.png';
+import { API_BASE_URL } from './api';
 
 const menuItems = [
   {
@@ -405,7 +406,7 @@ function App(): ReactNode {
           controller.abort('Ping api timeout');
         }, parseInt(import.meta.env.VITE_BACKEND_API_TIMEOUT) || 1000);
 
-        const rawPingResponse = await fetch(`${import.meta.env.VITE_BACKEND_BASE_URL}/ping`, {
+        const rawPingResponse = await fetch(`${API_BASE_URL}/ping`, {
           signal: controller.signal,
         });
         clearTimeout(timerId);

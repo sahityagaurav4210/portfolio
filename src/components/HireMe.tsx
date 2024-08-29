@@ -7,6 +7,7 @@ import { HiringType } from '../interfaces';
 import Progress from './Progressbar';
 import { toast } from 'react-toastify';
 import { HIRING_FULL_TIME_MSG, HIRING_PART_TIME_MSG } from '../constants';
+import { API_BASE_URL, HTTP_VERBS } from '../api';
 
 function HireMe(): ReactNode {
   const [hiremeDetails, setHiremeDetails] = useState<IHireme>({
@@ -54,11 +55,11 @@ function HireMe(): ReactNode {
     }, parseInt(import.meta.env.VITE_BACKEND_API_TIMEOUT) || 1000);
 
     try {
-      const apiRawResponse = await fetch(`${import.meta.env.VITE_BACKEND_BASE_URL}/baas/hiring/add`, {
-        method: 'POST',
+      const apiRawResponse = await fetch(`${API_BASE_URL}/baas/hiring/add`, {
+        method: HTTP_VERBS.POST,
         headers: {
           'Content-Type': 'application/json',
-          x_api_key: import.meta.env.VITE_BACKEND_TOKEN,
+          'X-Api-Key': import.meta.env.VITE_BACKEND_TOKEN,
           Accept: '*/*',
         },
         body: JSON.stringify(payload),
