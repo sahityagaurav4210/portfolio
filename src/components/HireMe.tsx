@@ -216,13 +216,26 @@ function HireMe(): ReactNode {
             to discuss more about this project.
           </p>
 
-          <p className='text-sm lg:text-xl text-justify leading-10 font-bold mb-2'>
+          <p className='text-sm lg:text-xl text-justify leading-10 mb-2'>
             <Notes
               note={
                 <p className='text-xs my-1'>
                   All fields marked with asterik <span className='text-red-500'>(*)</span> are mandatory to fill.
                 </p>
               }
+            />
+            <Notes note={<p className='text-xs my-1'>Project name must be atleast 2 characters long.</p>} />
+
+            <Notes
+              note={
+                <p className='text-xs my-1'>
+                  Please provide a valid email address as it would be used for further communication purposes.
+                </p>
+              }
+            />
+
+            <Notes
+              note={<p className='text-xs my-1'>You will be contacted within 48 hours after filling up this form.</p>}
             />
           </p>
 
