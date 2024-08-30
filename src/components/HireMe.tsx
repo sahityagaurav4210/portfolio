@@ -23,11 +23,9 @@ function HireMe(): ReactNode {
 
   async function handleSubmit(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
     event.preventDefault();
-    setLoading(true);
 
     if (!hiremeDetails.tenure && hiremeDetails.hiring_type === HiringType.PART_TIME) {
       toast.warning('Please enter valid contract period.', { autoClose: 2000, theme: 'dark' });
-      setLoading(false);
       return;
     }
 
@@ -49,6 +47,32 @@ function HireMe(): ReactNode {
     }
 
     const payload = { ...hiremeDetails, message, budget: `${hiremeDetails.budget}USD` };
+
+    if (payload.client_name.length < 2) {
+      toast.warning('Client name is too short. It must be atleast 2 characters long.', {
+        autoClose: 2000,
+        theme: 'dark',
+      });
+      return;
+    }
+
+    if (payload.client_email.length < 5) {
+      toast.warning('Client email address is too short. It must be atleast 5 characters long.', {
+        autoClose: 2000,
+        theme: 'dark',
+      });
+      return;
+    }
+
+    if (payload.client_project_name.length < 2) {
+      toast.warning('Client project name is too short. It must be atleast 2 characters long.', {
+        autoClose: 2000,
+        theme: 'dark',
+      });
+      return;
+    }
+
+    setLoading(true);
     const abortController = new AbortController();
     const timerId = setTimeout(() => {
       abortController.abort('Timeout');
