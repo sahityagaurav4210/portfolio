@@ -1,4 +1,4 @@
-import React, { ReactNode, useEffect, useState } from 'react';
+import React, { ReactNode, useEffect, useRef, useState } from 'react';
 import User from '../assets/user.png';
 import { IAnalytics, IHeroProps } from '../interfaces';
 import { SKILLS } from '../constants';
@@ -9,7 +9,12 @@ import HackerrankLogo from '../assets/hackerrank.png';
 import LinkedinLogo from '../assets/linkedin.png';
 import GithubLogo from '../assets/github.png';
 
+import gsap from 'gsap';
+import { useGSAP } from '@gsap/react';
+
 function Hero({ url }: IHeroProps): ReactNode {
+  const nameRef = useRef<HTMLHeadingElement | null>(null);
+  const { contextSafe } = useGSAP({ scope: nameRef });
   const [analytics, setAnalytics] = useState<IAnalytics>({
     totalGithubContributions: 0,
     questionSolved: 0,
@@ -17,13 +22,32 @@ function Hero({ url }: IHeroProps): ReactNode {
     projects: 0,
   });
 
+  const animateName = contextSafe(() => {
+    gsap.from('#name', { y: -1000, opacity: 0, delay: 0.218, duration: 1, stagger: 0.3 });
+  });
+
+  const animateHand = contextSafe(() => {
+    gsap.from('.hand', { rotate: 45, delay: 0.218, duration: 1 });
+  });
+
   useEffect(() => {
-    setAnalytics((previous) => ({
-      totalGithubContributions: previous.totalGithubContributions < 352 ? previous.totalGithubContributions + 1 : 352,
-      questionSolved: previous.questionSolved < 300 ? previous.questionSolved + 1 : 300,
-      experience: previous.experience < 2 ? previous.experience + 1 : 2,
-      projects: previous.projects < 5 ? previous.projects + 1 : 5,
-    }));
+    animateName();
+    animateHand();
+  }, []);
+
+  useEffect(() => {
+    if (
+      analytics.experience <= 2 ||
+      analytics.projects <= 5 ||
+      analytics.questionSolved <= 300 ||
+      analytics.totalGithubContributions <= 352
+    )
+      setAnalytics((previous) => ({
+        totalGithubContributions: previous.totalGithubContributions < 352 ? previous.totalGithubContributions + 1 : 352,
+        questionSolved: previous.questionSolved < 300 ? previous.questionSolved + 1 : 300,
+        experience: previous.experience < 2 ? previous.experience + 1 : 2,
+        projects: previous.projects < 5 ? previous.projects + 1 : 5,
+      }));
   }, [analytics.questionSolved, analytics.totalGithubContributions, analytics.experience]);
 
   return (
@@ -47,9 +71,15 @@ function Hero({ url }: IHeroProps): ReactNode {
                 />
               )}
             </div>
-            <h1 className='text-3xl lg:text-6xl font-bold font-roboto text-black sm:text-6xl text-center lg:leading-relaxed leading-snug'>
-              Hello 👋, I am
-              <span className='text-blue-800 font-bold'> Gaurav Sahitya.</span>
+            <h1
+              className='text-3xl lg:text-6xl font-bold font-roboto text-black sm:text-6xl text-center lg:leading-relaxed leading-snug'
+              ref={nameRef}
+            >
+              Hello <span className='hand inline-block'>👋</span> , I am
+              <span className='text-blue-800 font-bold tracking-tighter' id='name'>
+                {' '}
+                Gaurav Sahitya{' '}
+              </span>
             </h1>
             <p className='flex justify-center text-lg lg:text-2xl my-2 font-roboto'>
               skilled in{' '}
