@@ -1,6 +1,6 @@
 import React, { ReactNode, useState } from 'react';
 import Heading from './Heading';
-import { Send } from 'lucide-react';
+import { DollarSign } from 'lucide-react';
 import Notes from './Notes';
 import { IHireme } from '../interfaces/IHireme';
 import { HiringType } from '../interfaces';
@@ -116,13 +116,13 @@ function HireMe(): ReactNode {
 
   return (
     <>
-      <Heading headingName='Hire Me' className='mb-4' />
+      <Heading headingName='Hire Me' className='m-4' />
       <div className='container mx-auto'>
         <p className='text-sm lg:text-lg my-2 mx-2 lg:mx-0 font-roboto text-justify'>
           I hope you have liked my skills and experience. If in case you have a project for me in your mind then kindly
           fill up this form to hire me.
         </p>
-        <form className='p-4 mb-4 border-2 font-roboto border-dashed rounded-md min-h-[30rem] flex flex-col justify-center mx-1 lg:mx-0'>
+        <form className='p-4 mb-4 border-2 font-roboto border-dashed rounded-md min-h-[30rem] flex flex-col justify-center mx-2 lg:mx-0 shadow-md shadow-gray-400'>
           <h1 className='text-center text-4xl font-bold underline underline-offset-4 decoration-dashed text-orange-500'>
             Form
           </h1>
@@ -161,9 +161,7 @@ function HireMe(): ReactNode {
               onChange={(event) => setHiremeDetails({ ...hiremeDetails, [event.target.id]: event.target.value })}
             >
               <option value={HiringType.FULL_TIME}>Full time</option>
-              <option value={HiringType.PART_TIME} selected>
-                Part time
-              </option>
+              <option value={HiringType.PART_TIME}>Part time</option>
             </select>{' '}
             <sup className='mr-2 text-red-500'>*</sup>
             freelance developer. My budget is{' '}
@@ -216,41 +214,37 @@ function HireMe(): ReactNode {
             to discuss more about this project.
           </p>
 
-          <p className='text-sm lg:text-xl text-justify leading-10 mb-2'>
-            <Notes
-              note={
-                <p className='text-xs text-justify'>
-                  All fields marked with asterik <span className='text-red-500'>(*)</span> are mandatory to fill.
-                </p>
-              }
-            />
-            <Notes note={<p className='text-xs text-justify'>Project name must be atleast 2 characters long.</p>} />
+          <Notes
+            note={
+              <p className='text-xs text-justify'>
+                All fields marked with asterik <span className='text-red-500'>(*)</span> are mandatory to fill.
+              </p>
+            }
+          />
+          <Notes note={<p className='text-xs text-justify'>Project name must be atleast 2 characters long.</p>} />
 
-            <Notes
-              note={
-                <p className='text-xs text-justify'>
-                  Please provide a valid email address as it would be used for further communication purposes.
-                </p>
-              }
-            />
+          <Notes
+            note={
+              <p className='text-xs text-justify'>
+                Please provide a valid email address as it would be used for further communication purposes.
+              </p>
+            }
+          />
 
-            <Notes
-              note={
-                <p className='text-xs text-justify'>
-                  You will be contacted within 48 hours after filling up this form.
-                </p>
-              }
-            />
-          </p>
+          <Notes
+            note={
+              <p className='text-xs text-justify'>You will be contacted within 48 hours after filling up this form.</p>
+            }
+          />
 
           {!loading ? (
             <>
               <button
                 type='submit'
-                className='w-40 lg:w-48 transition-all mt-2 inline-flex items-center p-4 border border-blue-800 font-bold text-white bg-blue-800 rounded-lg ring-2 ring-offset-1 ring-blue-400 scale-95 focus:scale-105 outline-none text-sm lg:text-lg shadow-md shadow-blue-800'
+                className='w-36 transition-transform duration-500 mt-2 inline-flex items-center p-4 border-2 border-dashed border-blue-400 border-spacing-2 justify-center font-bold text-white bg-blue-800 rounded-lg ring-2 ring-offset-1 ring-blue-400 scale-95 focus:scale-100 outline-none text-sm lg:text-lg shadow-md shadow-blue-800'
                 onClick={handleSubmit}
               >
-                <Send className='mx-2' size={24} /> Submit form
+                <DollarSign /> Hire Me
               </button>
             </>
           ) : (

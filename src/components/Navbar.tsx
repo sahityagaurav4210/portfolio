@@ -20,8 +20,8 @@ const Navbar: React.FC<INavbarProps> = ({ menuItems, url }) => {
   onResize();
 
   return (
-    <div className='sticky top-0 left-0 z-20 w-full bg-slate-100'>
-      <div className='mx-auto flex container items-center justify-between p-4 sm:px-6 lg:px-8'>
+    <div className='sticky top-0 left-0 z-20 w-full bg-zinc-50/55 backdrop-blur-md backdrop-brightness-100 border-b-2 border-dashed border-blue-200'>
+      <div className='mx-auto flex container items-center justify-between p-4 sm:px-6 lg:px-8  '>
         <Logo logoSize={size} />
         <div className='hidden xl:block'>
           <ul className='inline-flex space-x-4'>

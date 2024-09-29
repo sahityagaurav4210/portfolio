@@ -11,7 +11,7 @@ const ExperienceCard: React.FC<IExperienceCardProps> = ({ companyLogo, tags, des
 
       <div className='p-4 text-black'>
         <div className='flex items-center justify-between gap-2'>
-          <fieldset className='border-2 p-2 text-xl border-dashed border-gray-400'>
+          <fieldset className='border-2 p-2 text-xl border-dashed border-gray-400 rounded-md'>
             <legend className='text-blue-800 font-bold font-roboto'>Overview</legend>
 
             <div className='flex items-center gap-4 flex-wrap'>

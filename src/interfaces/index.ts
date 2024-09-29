@@ -30,3 +30,10 @@ export interface IAnalytics {
   experience: number;
   projects: number;
 }
+
+export interface IApiResponse {
+  status: string;
+  message: string;
+  entry_by: string;
+  data: any;
+}

@@ -36,19 +36,25 @@ function Hero({ url }: IHeroProps): ReactNode {
   }, []);
 
   useEffect(() => {
-    if (
-      analytics.experience <= 2 ||
-      analytics.projects <= 5 ||
-      analytics.questionSolved <= 300 ||
-      analytics.totalGithubContributions <= 352
-    )
-      setAnalytics((previous) => ({
-        totalGithubContributions: previous.totalGithubContributions < 352 ? previous.totalGithubContributions + 1 : 352,
-        questionSolved: previous.questionSolved < 300 ? previous.questionSolved + 1 : 300,
-        experience: previous.experience < 2 ? previous.experience + 1 : 2,
-        projects: previous.projects < 5 ? previous.projects + 1 : 5,
-      }));
-  }, [analytics.questionSolved, analytics.totalGithubContributions, analytics.experience]);
+    const intervalHandle = setInterval(() => {
+      if (
+        analytics.experience <= 2 ||
+        analytics.projects <= 5 ||
+        analytics.questionSolved <= 300 ||
+        analytics.totalGithubContributions <= 352
+      )
+        setAnalytics((previous) => ({
+          totalGithubContributions:
+            previous.totalGithubContributions < 352 ? previous.totalGithubContributions + 1 : 352,
+          questionSolved: previous.questionSolved < 300 ? previous.questionSolved + 1 : 300,
+          experience: previous.experience < 2 ? previous.experience + 1 : 2,
+          projects: previous.projects < 5 ? previous.projects + 1 : 5,
+        }));
+      else clearInterval(intervalHandle);
+    }, 10);
+
+    return () => clearInterval(intervalHandle);
+  }, []);
 
   return (
     <>
@@ -72,21 +78,21 @@ function Hero({ url }: IHeroProps): ReactNode {
               )}
             </div>
             <h1
-              className='text-3xl lg:text-6xl font-bold font-roboto text-black sm:text-6xl text-center lg:leading-relaxed leading-snug'
+              className='text-3xl lg:text-6xl font-bold font-roboto text-black sm:text-6xl text-center lg:leading-relaxed leading-snug tracking-tighter'
               ref={nameRef}
             >
               Hello <span className='hand inline-block'>👋</span> , I am
-              <span className='text-blue-800 font-bold tracking-tighter' id='name'>
+              <span className='text-blue-800 font-bold' id='name'>
                 {' '}
-                Gaurav Sahitya{' '}
+                Gaurav Sahitya.{' '}
               </span>
             </h1>
-            <p className='flex justify-center text-lg lg:text-2xl my-2 font-roboto'>
-              skilled in{' '}
+            <div className='flex justify-center text-lg lg:text-2xl my-2 font-roboto'>
+              <p>skilled in</p>
               <span className='mx-2 font-bold italic'>
                 <Typewriter options={{ strings: SKILLS, autoStart: true, loop: true }} />
               </span>
-            </p>
+            </div>
             <div className='flex items-center justify-center md:hidden'>
               <p className='font-roboto p-2'>Find me on </p>
               <span className='flex items-center gap-x-2 cursor-pointer'>

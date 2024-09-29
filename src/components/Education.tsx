@@ -14,12 +14,7 @@ function Education({ education }: IEducationProps): ReactNode {
         </p>
         <div className='flex items-center justify-center gap-2 flex-wrap'>
           {education.map((item) => (
-            <ExperienceCard
-              companyLogo={item.companyLogo}
-              tags={item.tags}
-              key={item.companyLogo}
-              isCurrent={item.isCurrent}
-            />
+            <ExperienceCard companyLogo={item.companyLogo} tags={item.tags} key={item.id} isCurrent={item.isCurrent} />
           ))}
         </div>
         {/* <table className='border border-b-2 border-black w-full mt-4'>

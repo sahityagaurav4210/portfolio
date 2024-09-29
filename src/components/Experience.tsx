@@ -12,7 +12,11 @@ function Experience({ experience }: IExperienceProps): ReactNode {
         <p className='px-2 text-sm lg:text-lg my-2 font-roboto text-justify'>
           I have almost 2 years of experience in backend development and 6 months of experience in full stack
           development. Following are my experience details in reverse chronological manner i.e., starting from latest to
-          previous one.
+          previous one. Please note that this section shows my overall work experience, for skill-wise experience go{' '}
+          <a href='#skills' className='text-blue-500 underline underline-offset-4 decoration-dashed'>
+            SKILL
+          </a>{' '}
+          section.
         </p>
         <div className='flex items-center justify-center flex-wrap gap-2'>
           {experience.map((item) => (
