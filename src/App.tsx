@@ -48,7 +48,7 @@ const projects = [
   {
     name: 'EarthLink',
     disabled: true,
-    text: 'It is the second-largest telecommunications company in the US. I worked as a full stack developer on their live project for over a year, interacting with the project manager, developers, and testers via calls and chats.',
+    text: 'EarthLink is a telecommunication company in the US which provides internet services to 90% of US households and buisnesses. I worked as a full stack developer on their live project for over a year, interacting with the project manager, developers, and testers via calls and chats.',
     tech_stack: [
       'Node.js',
       'Nest.js',
@@ -64,7 +64,30 @@ const projects = [
       'OData',
       'API Gateways',
       'Typescript',
+      'Docker',
+      'Docker Compose',
     ],
+  },
+  {
+    name: 'LOOPos',
+    disabled: true,
+    text: 'It is a food ordering app, a product of Rocky Mountain Technology India Pvt Ltd that provides POS to restraunt owners and mobile apps and website like platforms to customer by which customer order their food and restraunt receives them through POS. It also provides dining facility at available restraunts. I am working on this project as a backend developer.',
+    tech_stack: [
+      'Nest.js',
+      'Express.js',
+      'Redis',
+      'Microservices',
+      'Bullmq',
+      'MongoDB',
+      'Git',
+      'GitHub',
+      'Typescript',
+      'Websockets',
+      'Socket.io',
+      'Caprover',
+      'Docker',
+    ],
+    ongoing: true,
   },
   {
     name: 'Creative Ease Web',
@@ -85,10 +108,11 @@ const projects = [
     ],
   },
   {
-    name: 'Fast Tracking',
+    name: 'Fastrack',
     disabled: true,
-    text: 'It is a truck driving training services website. I have worked as a backend developer on it.',
-    tech_stack: ['Nest.js', 'Typescript', 'Mongodb', 'Git', 'GitHub', 'Unit testing', 'Caprover', 'Express.js'],
+    text: 'It is a truck driving training services website which gives a portal to users wherein they can manage everything related to their business like from  admission of a student to creation of government driving records and sheets, instructors attendance etc. I am working on it as a backend developer.',
+    tech_stack: ['Nest.js', 'Typescript', 'Mongodb', 'Git', 'GitHub', 'Caprover', 'Express.js', 'Docker'],
+    ongoing: true,
   },
 ];
 
@@ -98,15 +122,18 @@ const personal_projects = [
     disabled: false,
     liveLink: 'https://www.npmjs.com/package/@book-junction/clipboard',
     codeLink: 'https://github.com/sahityagaurav4210/book-junction-clipboard',
+    documentation_link: 'https://sahityagaurav4210.github.io/book-junction-clipboard/',
     text: `It's an npm package that automatically pastes content onto the system's clipboard.`,
     tech_stack: ['Node.js', 'Typescript', 'Unit testing', 'Git', 'GitHub', 'GitHub Actions', 'Powershell'],
   },
   {
-    name: 'Login system',
+    name: 'ENV Loader',
+    text: "It is an npm package that helps developers load their environment variables from a given list of files. It can also load all the variables into a custom variable provided or add them to Node's global variables, among other capabilities.",
+    tech_stack: ['Nodejs', 'Git', 'GitHub', 'Agile development'],
+    liveLink: 'https://www.npmjs.com/package/@book-junction/env-loader',
+    codeLink: 'https://github.com/sahityagaurav4210/env-loader',
+    documentation_link: 'https://env-loader-docs.netlify.app/',
     disabled: false,
-    codeLink: 'https://github.com/sahityagaurav4210/tws',
-    text: `It's a JWT-based backend system allowing session-based login without storing user sessions on the server.`,
-    tech_stack: ['Node.js', 'PostgreSQL', 'Git', 'GitHub', 'JWT', 'OAuth', 'Cryptography'],
   },
 ];
 
@@ -395,6 +422,7 @@ function App(): ReactNode {
   const [resumeUrl, setResumeUrl] = useState<string>('');
   const [apiSignal, setApiSignal] = useState<boolean | null>(null);
   const [captcha, setCaptcha] = useState<IApiResponse>();
+  const [lastModifiedDate, setLastModifiedDate] = useState<string | number>();
 
   useEffect(() => {
     async function getFilePreviewAsync(bucketId: string, fileId: string, resource: Resources): Promise<URL> {
@@ -478,10 +506,37 @@ function App(): ReactNode {
       } catch (error: any) {}
     }
 
+    async function getWebsiteUpdateDetails() {
+      const controller = new AbortController();
+      try {
+        const timerId = setTimeout(() => {
+          controller.abort('Ping api timeout');
+        }, parseInt(import.meta.env.VITE_BACKEND_API_TIMEOUT) || 1000);
+
+        const rawWebsiteUpdatesResponse = await fetch(
+          `${API_BASE_URL}/baas/website/last-modified-date?portfolio_url=https://gaurav-sahitya.netlify.app`,
+          {
+            signal: controller.signal,
+            headers: {
+              'x-api-key': import.meta.env.VITE_BACKEND_TOKEN,
+            },
+          }
+        );
+        clearTimeout(timerId);
+        const websiteUpdateResponse = (await rawWebsiteUpdatesResponse.json()) as IApiResponse;
+
+        if (rawWebsiteUpdatesResponse.ok) setLastModifiedDate(websiteUpdateResponse.data?.lastModifiedAt);
+        else setLastModifiedDate(Date.now());
+      } catch (error: any) {
+        setLastModifiedDate(Date.now());
+      }
+    }
+
     getFile(import.meta.env.VITE_APPWRITE_FILE_ID, Resources.PHOTO);
     getFile(import.meta.env.VITE_APPWRITE_CV_ID, Resources.CV);
     ping();
     captcha();
+    getWebsiteUpdateDetails();
   }, []);
 
   return (
@@ -521,7 +576,7 @@ function App(): ReactNode {
           </section>
 
           <section id='support'>
-            <Support />
+            <Support lastModifiedDate={lastModifiedDate || Date.now()} />
           </section>
 
           <Footer />

@@ -37,3 +37,7 @@ export interface IApiResponse {
   entry_by: string;
   data: any;
 }
+
+export interface ISupport {
+  lastModifiedDate: string | number;
+}

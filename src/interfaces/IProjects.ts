@@ -5,6 +5,8 @@ export interface IProjects {
   disabled?: boolean;
   codeLink?: string;
   liveLink?: string;
+  documentation_link?: string;
+  ongoing?: boolean;
 }
 
 export interface IProjectsProps {

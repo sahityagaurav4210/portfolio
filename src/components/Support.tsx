@@ -1,7 +1,8 @@
 import { BadgeHelp } from 'lucide-react';
 import React, { ReactNode } from 'react';
+import { ISupport } from '../interfaces';
 
-function Support(): ReactNode {
+function Support({ lastModifiedDate }: ISupport): ReactNode {
   return (
     <div className='container mx-auto font-roboto'>
       <div className='flex p-1 items-center'>
@@ -20,7 +21,7 @@ function Support(): ReactNode {
       </div>
 
       <div className='flex justify-end p-1'>
-        <p className='font-roboto text-xs'>Last modified at : {new Date().toLocaleString('hi-In')}</p>
+        <p className='font-roboto text-xs'>Last modified at : {new Date(lastModifiedDate).toLocaleString('hi-In')}</p>
       </div>
     </div>
   );

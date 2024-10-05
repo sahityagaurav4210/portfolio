@@ -21,6 +21,8 @@ const Projects: React.FC<IProjectsProps> = ({ projects, personal_projects }) => 
               disabled={project.disabled}
               codeLink={project.codeLink}
               liveLink={project.liveLink}
+              documentation_link={project.documentation_link}
+              ongoing={project.ongoing}
             />
           ))}
         </div>
@@ -38,6 +40,7 @@ const Projects: React.FC<IProjectsProps> = ({ projects, personal_projects }) => 
               codeLink={project.codeLink}
               liveLink={project.liveLink}
               key={project.name}
+              ongoing={project.ongoing}
             />
           ))}
         </div>
