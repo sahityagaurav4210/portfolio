@@ -35,6 +35,29 @@ function Contact({ apiSignal, captchaData, setCaptchaData }: IContractProps) {
     setContractDetails({ ...contractDetails, [event.target.id]: event.target.value });
   }
 
+  async function loadCaptcha() {
+    const controller = new AbortController();
+
+    setIsLoading(true);
+    try {
+      const timerId = setTimeout(() => {
+        controller.abort('Captcha api timeout');
+      }, parseInt(import.meta.env.VITE_BACKEND_API_TIMEOUT) || 1000);
+
+      const rawCaptchaResponse = await fetch(`${API_BASE_URL}/captcha`, {
+        signal: controller.signal,
+      });
+      clearTimeout(timerId);
+      const { data } = (await rawCaptchaResponse.json()) as IApiResponse;
+
+      setCaptchaData(data);
+    } catch (error: any) {
+      toast.warning('Failed to refresh the data', { autoClose: 2000, theme: 'dark' });
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
@@ -113,6 +136,8 @@ function Contact({ apiSignal, captchaData, setCaptchaData }: IContractProps) {
         else console.error('An error occured');
       } finally {
         setIsLoading(false);
+        setIsValidated(false);
+        await loadCaptcha();
       }
     }
   }
@@ -144,26 +169,7 @@ function Contact({ apiSignal, captchaData, setCaptchaData }: IContractProps) {
 
   async function refreshCaptcha(event: any) {
     event.preventDefault();
-    const controller = new AbortController();
-
-    setIsLoading(true);
-    try {
-      const timerId = setTimeout(() => {
-        controller.abort('Captcha api timeout');
-      }, parseInt(import.meta.env.VITE_BACKEND_API_TIMEOUT) || 1000);
-
-      const rawCaptchaResponse = await fetch(`${API_BASE_URL}/captcha`, {
-        signal: controller.signal,
-      });
-      clearTimeout(timerId);
-      const { data } = (await rawCaptchaResponse.json()) as IApiResponse;
-
-      setCaptchaData(data);
-    } catch (error: any) {
-      toast.warning('Failed to refresh the data', { autoClose: 2000, theme: 'dark' });
-    } finally {
-      setIsLoading(false);
-    }
+    await loadCaptcha();
   }
 
   useEffect(() => {
