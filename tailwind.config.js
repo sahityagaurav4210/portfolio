@@ -6,7 +6,7 @@ export default {
       fontFamily: {
         cookie: ['Cookie'],
         roboto: ['Roboto', 'sans-serif'],
-        verdana: ['Times New Roman'],
+        roman: ['Times New Roman'],
       },
     },
   },

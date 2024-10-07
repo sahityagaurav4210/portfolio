@@ -418,51 +418,11 @@ const education = [
 
 function App(): ReactNode {
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
-  const [photoUrl, setPhotoUrl] = useState<string>('');
-  const [resumeUrl, setResumeUrl] = useState<string>('');
   const [apiSignal, setApiSignal] = useState<boolean | null>(null);
   const [captcha, setCaptcha] = useState<IApiResponse>();
   const [lastModifiedDate, setLastModifiedDate] = useState<string | number>();
 
   useEffect(() => {
-    async function getFilePreviewAsync(bucketId: string, fileId: string, resource: Resources): Promise<URL> {
-      return new Promise((resolve, reject) => {
-        const client = new Client();
-
-        client.setEndpoint(import.meta.env.VITE_APPWRITE_URL);
-        client.setProject(import.meta.env.VITE_APPWRITE_PROJECT_ID);
-
-        const storage = new Storage(client);
-
-        const filePreview =
-          resource === Resources.PHOTO
-            ? storage.getFilePreview(bucketId, fileId)
-            : storage.getFileDownload(bucketId, fileId);
-
-        if (filePreview) {
-          resolve(filePreview);
-        } else reject('An error ocurred');
-      });
-    }
-
-    async function getFile(fileId: string, resourceType: Resources) {
-      const filePreview = await getFilePreviewAsync(import.meta.env.VITE_APPWRITE_BUCKET_ID, fileId, resourceType);
-      if (filePreview && typeof filePreview === 'object') {
-        const src =
-          filePreview.protocol +
-          '//' +
-          filePreview.hostname +
-          filePreview.pathname +
-          filePreview.search +
-          '&mode=admin';
-
-        if (resourceType === Resources.PHOTO) setPhotoUrl(src);
-        else {
-          setResumeUrl(src);
-        }
-      }
-    }
-
     async function ping() {
       const controller = new AbortController();
 
@@ -532,8 +492,6 @@ function App(): ReactNode {
       }
     }
 
-    getFile(import.meta.env.VITE_APPWRITE_FILE_ID, Resources.PHOTO);
-    getFile(import.meta.env.VITE_APPWRITE_CV_ID, Resources.CV);
     ping();
     captcha();
     getWebsiteUpdateDetails();
@@ -545,10 +503,10 @@ function App(): ReactNode {
         <Loader />
       ) : (
         <>
-          <Navbar menuItems={menuItems} url={resumeUrl} />
+          <Navbar menuItems={menuItems} url={`${import.meta.env.VITE_BACKEND_BASE_URL}/baas/files/download-cv`} />
 
           <section id='home'>
-            <Hero url={photoUrl} />
+            <Hero url={`${import.meta.env.VITE_BACKEND_BASE_URL}/baas/files/download-photo`} />
           </section>
 
           <section id='projects'>
