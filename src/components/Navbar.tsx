@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { DollarSign, Download, Menu, X } from 'lucide-react';
 import { INavbarProps } from '../interfaces/INavbar';
 import Logo from './Logo';
