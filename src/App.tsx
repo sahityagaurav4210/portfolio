@@ -7,8 +7,6 @@ import Navbar from './components/Navbar';
 import Projects from './components/Projects';
 import Skills from './components/Skills';
 import Loader from './components/Loader';
-import { Client, Storage } from 'appwrite';
-import { Resources } from './constants';
 import Contact from './components/Contact';
 import HireMe from './components/HireMe';
 
