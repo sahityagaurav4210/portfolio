@@ -268,12 +268,14 @@ function Contact({ apiSignal, captchaData, setCaptchaData }: IContractProps) {
 
           {/* {Captcha} */}
           <div className='grid grid-cols-12 gap-2 min-h-20 mb-4'>
-            <div className='col-span-8 lg:col-span-2 border border-dotted border-gray-400 rounded-md pointer-events-none flex justify-center items-center font-cookie text-5xl bg-cyan-950 text-gray-600'>
-              {captchaData?.captchaArray?.map((data: any, index: number) => (
-                <span className={`inline-block ${data.degree} mx-1 `} key={index}>
-                  {data.letter}
-                </span>
-              ))}
+            <div className='col-span-8 lg:col-span-2 border border-dotted border-gray-400 rounded-md pointer-events-none flex items-center justify-center font-cookie text-5xl bg-cyan-950 text-gray-600 p-1'>
+              {captchaData?.captchaArray?.map((data: any, index: number) => {
+                return (
+                  <p className={`inline-block ${data?.degree} mx-1`} key={index}>
+                    {data.letter}
+                  </p>
+                );
+              })}
             </div>
             <div className='col-span-4 lg:col-span-1 flex items-center justify-center gap-2'>
               {!isLoading ? (
