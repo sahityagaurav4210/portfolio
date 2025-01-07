@@ -1,5 +1,5 @@
 import React, { ReactNode, useEffect, useRef, useState } from 'react';
-import User from '../assets/user.png';
+import User from '../assets/user.webp';
 import { IAnalytics, IHeroProps } from '../interfaces';
 import { SKILLS } from '../constants';
 import Typewriter from 'typewriter-effect';
@@ -14,6 +14,7 @@ import { useGSAP } from '@gsap/react';
 
 function Hero({ url }: IHeroProps): ReactNode {
   const nameRef = useRef<HTMLHeadingElement | null>(null);
+  const [isPhotoLoaded,setIsPhotoLoaded]=useState<boolean>(false);
   const { contextSafe } = useGSAP({ scope: nameRef });
   const [analytics, setAnalytics] = useState<IAnalytics>({
     totalGithubContributions: 0,
@@ -62,18 +63,24 @@ function Hero({ url }: IHeroProps): ReactNode {
         <div className='flex items-center w-full flex-col lg:flex-row lg:divide-x-4 divide-blue-700 divide-dotted'>
           <div className='lg:w-1/2 mb-5'>
             <div className='flex items-center justify-center'>
-              {!url ? (
+              {!isPhotoLoaded ? (
                 <img
                   src={User}
                   alt='photo'
-                  className='rounded-full object-cover aspect-square mb-5 w-64 h-64'
+                  onLoad={(e)=>{
+                    e.preventDefault();
+                    setIsPhotoLoaded(true);
+                  }}
+                  className='rounded-full object-cover aspect-square mb-5 w-64 h-64 border-2 border-blue-400 ring-2 ring-offset-1 ring-blue-500 shadow-inner scale-95 hover:scale-105'
                   loading='lazy'
                 />
               ) : (
                 <img
                   src={url}
+                  fetchPriority='high'
                   alt='photo'
                   className='rounded-full object-cover aspect-square mb-5 w-64 h-64 border-2 border-blue-400 ring-2 ring-offset-1 ring-blue-500 shadow-inner scale-95 hover:scale-105'
+                  loading='lazy'
                 />
               )}
             </div>

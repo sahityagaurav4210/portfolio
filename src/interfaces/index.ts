@@ -38,6 +38,13 @@ export interface IApiResponse {
   data: any;
 }
 
+export interface IApisResponse {
+  pingApi: boolean;
+  updateWebsiteViewsApi: boolean;
+  captchaApi: boolean;
+  getWebsiteUpdateDetailsApi: boolean;
+}
+
 export interface ISupport {
   lastModifiedDate: string | number;
 }

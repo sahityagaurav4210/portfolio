@@ -16,7 +16,7 @@ import RockyLogo from './assets/rockylogo.jpeg';
 import GneLogo from './assets/gndeclogo.jpeg';
 import SchoolLogo from './assets/uspclogo.png';
 import { API_BASE_URL } from './api';
-import { IApiResponse } from './interfaces';
+import { IApiResponse, IApisResponse } from './interfaces';
 import Support from './components/Support';
 
 const menuItems = [
@@ -419,8 +419,41 @@ function App(): ReactNode {
   const [apiSignal, setApiSignal] = useState<boolean | null>(null);
   const [captcha, setCaptcha] = useState<IApiResponse>();
   const [lastModifiedDate, setLastModifiedDate] = useState<string | number>();
+  const [apiResponses, setApiResponses] = useState<IApisResponse>({
+    pingApi: false,
+    captchaApi: false,
+    updateWebsiteViewsApi: false,
+    getWebsiteUpdateDetailsApi: false,
+  });
 
   useEffect(() => {
+    async function updateWebsiteViews() {
+      try {
+        const controller = new AbortController();
+        const timerId = setTimeout(() => {
+          controller.abort('Ping api timeout');
+        }, parseInt(import.meta.env.VITE_BACKEND_API_TIMEOUT) || 1000);
+
+        const rawWebsiteViewsResponse = await fetch(`${API_BASE_URL}/baas/website/`, {
+          signal: controller.signal,
+          headers: {
+            'x-api-key': import.meta.env.VITE_BACKEND_TOKEN,
+          },
+          method: 'POST',
+        });
+        clearTimeout(timerId);
+
+        if (rawWebsiteViewsResponse.ok) {
+          setApiSignal(true);
+          setApiResponses({ ...apiResponses, updateWebsiteViewsApi: true });
+        } else {
+          setApiSignal(false);
+          setApiResponses({ ...apiResponses, updateWebsiteViewsApi: false });
+        }
+      } catch (error) {
+        setApiResponses({ ...apiResponses, updateWebsiteViewsApi: false });
+      }
+    }
     async function ping() {
       const controller = new AbortController();
 
@@ -436,16 +469,17 @@ function App(): ReactNode {
         const pingResponse = await rawPingResponse.json();
 
         if (rawPingResponse.ok && pingResponse.message === 'Pong') {
-          setApiSignal(true);
           setIsLoaded(true);
+          setApiResponses({ ...apiResponses, pingApi: true });
         } else {
-          setApiSignal(false);
+          setIsLoaded(false);
+          setApiResponses({ ...apiResponses, pingApi: false });
         }
       } catch (error: any) {
-        setApiSignal(false);
+        setIsLoaded(false);
+        setApiResponses({ ...apiResponses, pingApi: false });
       }
     }
-
     async function captcha() {
       const controller = new AbortController();
 
@@ -458,12 +492,18 @@ function App(): ReactNode {
           signal: controller.signal,
         });
         clearTimeout(timerId);
-        const { data } = (await rawCaptchaResponse.json()) as IApiResponse;
 
-        setCaptcha(data);
-      } catch (error: any) {}
+        if (rawCaptchaResponse.ok) {
+          const { data } = (await rawCaptchaResponse.json()) as IApiResponse;
+          setCaptcha(data);
+          setApiResponses({ ...apiResponses, captchaApi: true });
+        } else {
+          setApiResponses({ ...apiResponses, captchaApi: false });
+        }
+      } catch (error: any) {
+        setApiResponses({ ...apiResponses, captchaApi: false });
+      }
     }
-
     async function getWebsiteUpdateDetails() {
       const controller = new AbortController();
       try {
@@ -483,16 +523,20 @@ function App(): ReactNode {
         clearTimeout(timerId);
         const websiteUpdateResponse = (await rawWebsiteUpdatesResponse.json()) as IApiResponse;
 
-        if (rawWebsiteUpdatesResponse.ok) setLastModifiedDate(websiteUpdateResponse.data?.lastModifiedAt);
-        else setLastModifiedDate(Date.now());
+        if (rawWebsiteUpdatesResponse.ok) {
+          setLastModifiedDate(websiteUpdateResponse.data?.lastModifiedAt);
+          setApiResponses({ ...apiResponses, getWebsiteUpdateDetailsApi: true });
+        } else {
+          setLastModifiedDate(Date.now());
+          setApiResponses({ ...apiResponses, getWebsiteUpdateDetailsApi: false });
+        }
       } catch (error: any) {
         setLastModifiedDate(Date.now());
+        setApiResponses({ ...apiResponses, getWebsiteUpdateDetailsApi: false });
       }
     }
 
-    ping();
-    captcha();
-    getWebsiteUpdateDetails();
+    Promise.allSettled([ping(), captcha(), getWebsiteUpdateDetails(), updateWebsiteViews()]);
   }, []);
 
   return (
