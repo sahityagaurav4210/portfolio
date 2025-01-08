@@ -3,11 +3,11 @@ import { DollarSign, Download, Menu, X } from 'lucide-react';
 import { INavbarProps } from '../interfaces/INavbar';
 import Logo from './Logo';
 
-const Navbar: React.FC<INavbarProps> = ({ menuItems, url }) => {
+const Navbar: React.FC<INavbarProps> = ({ menuItems, url, disabled = false }) => {
   const [isMenuOpen, setIsMenuOpen] = React.useState<boolean>(false);
 
   const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen);
+    if (!disabled) setIsMenuOpen(!isMenuOpen);
   };
 
   return (
@@ -16,7 +16,7 @@ const Navbar: React.FC<INavbarProps> = ({ menuItems, url }) => {
         <Logo />
         <div className='hidden xl:block'>
           <ul className='inline-flex space-x-4'>
-            {menuItems.map((item) => (
+            {!disabled && menuItems.map((item) => (
               <li key={item.name}>
                 <a
                   href={item.href}

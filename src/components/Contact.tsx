@@ -73,12 +73,12 @@ function Contact({ apiSignal, captchaData, setCaptchaData }: IContractProps) {
     }
 
     if (contractDetails.message.length < 11) {
-      toast.warning('Message is too short. It must be atleast 10 characters long.', { autoClose: 2000, theme: 'dark' });
+      toast.warning('Message is too short. It must be at least 10 characters long.', { autoClose: 2000, theme: 'dark' });
       return;
     }
 
     if (contractDetails.email.length < 6) {
-      toast.warning('Email is too short.It must be atleast 5 characters long.', { autoClose: 2000, theme: 'dark' });
+      toast.warning('Email is too short.It must be at least 5 characters long.', { autoClose: 2000, theme: 'dark' });
       return;
     }
 
@@ -197,7 +197,7 @@ function Contact({ apiSignal, captchaData, setCaptchaData }: IContractProps) {
           {/* {Name} */}
           <div className='grid lg:grid-cols-2 gap-6 mb-4'>
             {/* {FirstName} */}
-            <fieldset className='border rounded-sm border-blue-400 outline-none px-2 text-sm lg:text-lg ring-2 ring-offset-1 ring-blue-200 transistion-all min-w-full placeholder:text-orange-400 placeholder:font-bold scale-95 focus-within:scale-100'>
+            <fieldset className='border rounded-sm border-blue-400 outline-none px-2 text-sm lg:text-lg ring-2 ring-offset-1 ring-blue-200 transition-all min-w-full placeholder:text-orange-400 placeholder:font-bold scale-95 focus-within:scale-100'>
               <legend className='px-2 text-blue-800 bg-white font-bold'>
                 First Name <span className='text-red-600'>*</span>
               </legend>

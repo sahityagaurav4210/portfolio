@@ -1,5 +1,4 @@
 import React, { ReactNode, useEffect, useRef, useState } from 'react';
-import User from '../assets/user.webp';
 import { IAnalytics, IHeroProps } from '../interfaces';
 import { SKILLS } from '../constants';
 import Typewriter from 'typewriter-effect';
@@ -11,10 +10,13 @@ import GithubLogo from '../assets/github.png';
 
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
+import ComponentLoader from './ComponentLoader';
 
 function Hero({ url }: IHeroProps): ReactNode {
   const nameRef = useRef<HTMLHeadingElement | null>(null);
-  const [isPhotoLoaded,setIsPhotoLoaded]=useState<boolean>(false);
+  const [isPhotoLoaded, setIsPhotoLoaded] = useState<boolean>(false);
+  const [fallBackImgUrl, setFallbackImgUrl] = useState<string | null>();
+  const [counter, setCounter] = useState<number>(0);
   const { contextSafe } = useGSAP({ scope: nameRef });
   const [analytics, setAnalytics] = useState<IAnalytics>({
     totalGithubContributions: 0,
@@ -54,6 +56,12 @@ function Hero({ url }: IHeroProps): ReactNode {
       else clearInterval(intervalHandle);
     }, 10);
 
+    async function loadImg() {
+      const image = (await import('../assets/user.png')).default as string;
+      setFallbackImgUrl(image);
+    }
+
+    loadImg();
     return () => clearInterval(intervalHandle);
   }, []);
 
@@ -62,26 +70,24 @@ function Hero({ url }: IHeroProps): ReactNode {
       <div className='container mx-auto py-10'>
         <div className='flex items-center w-full flex-col lg:flex-row lg:divide-x-4 divide-blue-700 divide-dotted'>
           <div className='lg:w-1/2 mb-5'>
-            <div className='flex items-center justify-center'>
-              {!isPhotoLoaded ? (
-                <img
-                  src={User}
-                  alt='photo'
-                  onLoad={(e)=>{
-                    e.preventDefault();
-                    setIsPhotoLoaded(true);
-                  }}
-                  className='rounded-full object-cover aspect-square mb-5 w-64 h-64 border-2 border-blue-400 ring-2 ring-offset-1 ring-blue-500 shadow-inner scale-95 hover:scale-105'
-                  loading='lazy'
-                />
-              ) : (
-                <img
-                  src={url}
-                  fetchPriority='high'
-                  alt='photo'
-                  className='rounded-full object-cover aspect-square mb-5 w-64 h-64 border-2 border-blue-400 ring-2 ring-offset-1 ring-blue-500 shadow-inner scale-95 hover:scale-105'
-                  loading='lazy'
-                />
+            <div className='relative flex flex-col items-center justify-center'>
+              <img
+                src={fallBackImgUrl || url}
+                alt='photo'
+                onLoad={(e) => {
+                  e.preventDefault();
+                  setFallbackImgUrl(null);
+                  if (counter === 1) setIsPhotoLoaded(true);
+                  setCounter((prev) => ++prev);
+                }}
+                className={`rounded-full object-cover aspect-square mb-5 w-64 h-64 border-2 border-blue-400 ring-2 ring-offset-1 ring-blue-500 shadow-inner scale-95 hover:scale-105 ${
+                  !isPhotoLoaded ? 'opacity-60' : 'opacity-100'
+                }`}
+              />
+              {!isPhotoLoaded && (
+                <div className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10'>
+                  <ComponentLoader />
+                </div>
               )}
             </div>
             <h1
@@ -95,8 +101,8 @@ function Hero({ url }: IHeroProps): ReactNode {
               </span>
             </h1>
             <div className='flex justify-center text-lg lg:text-2xl my-2 font-roboto'>
-              <p>skilled in</p>
-              <span className='mx-2 font-bold italic'>
+              <p>experienced in</p>
+              <span className='mx-2 font-bold italic text-orange-600'>
                 <Typewriter options={{ strings: SKILLS, autoStart: true, loop: true }} />
               </span>
             </div>
