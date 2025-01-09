@@ -32,7 +32,7 @@ const Cards: React.FC<IProjects> = ({
           {tech_stack.map((stack, index) => (
             <span
               key={index}
-              className='mb-2 mr-2 inline-block rounded-full bg-gray-700 text-white px-4 py-3 text-sm font-semibold text-center'
+              className='font-arial text-gray-800 shadow-sm shadow-black mb-2 mr-1 inline-block rounded-sm bg-blue-100 p-1 text-sm font-semibold text-center'
             >
               {stack}
             </span>

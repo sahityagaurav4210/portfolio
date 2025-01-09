@@ -6,23 +6,23 @@ import SchoolLogo from '../assets/uspclogo.png';
 
 export const menuItems = [
   {
-    name: 'Home',
+    name: 'HOME',
     href: '#home',
   },
   {
-    name: 'Projects',
+    name: 'PROJECTS',
     href: '#projects',
   },
   {
-    name: 'Experience',
+    name: 'EXPERIENCE',
     href: '#experience',
   },
   {
-    name: 'Skills',
+    name: 'SKILLS',
     href: '#skills',
   },
   {
-    name: 'Education',
+    name: 'EDUCATION',
     href: '#education',
   },
 ];
@@ -95,6 +95,13 @@ export const projects = [
     disabled: true,
     text: 'It is a truck driving training services website which gives a portal to users wherein they can manage everything related to their business like from  admission of a student to creation of government driving records and sheets, instructors attendance etc. I am working on it as a backend developer.',
     tech_stack: ['Nest.js', 'Typescript', 'Mongodb', 'Git', 'GitHub', 'Caprover', 'Express.js', 'Docker'],
+    ongoing: false,
+  },
+  {
+    name: 'Real Estate Property Listing Website',
+    disabled: true,
+    text: 'It is a property listing website which internally fetches property and its corresponding medias from an real estate transaction standard aka RETS. I am working on it as a backend developer.',
+    tech_stack: ['Nest.js', 'Typescript', 'Mongodb', 'Git', 'GitHub', 'Caprover', 'Express.js', 'Docker', 'Cron-jobs', 'Wordpress', 'FFmpeg', 'Image processing', 'AWS S3 Bucket'],
     ongoing: true,
   },
 ];
@@ -276,8 +283,9 @@ export const experience = [
       { labelName: 'To', content: 'Present' },
     ],
     description:
-      'I am working as a backend developer for more that 4 months now. During this, i have worked upon 2 projects. ',
+      'I am working as a backend developer for more that 8 months now. During this, i have worked upon 2 projects. ',
     isCurrent: true,
+    responsibilities: ['Developed image processing cron-job using ffmpeg library with auto roll-back feature.', 'Communicated with clients and front-end developers to deliver 100% customized backend system.', ' Optimized the company’s whole backend system (including servers) which resulted in decreasing the LOOPos backend api response time from 4sec to 1/4th of a second.', ' Reduced the server cost of LOOPos product by 15%.', ' Optimized LOOPos backend docker image size and build time from 2GB and 4 minutes to 650MB and 2 minutes.']
   },
   {
     companyLogo: CreativeLogo,
@@ -301,7 +309,8 @@ export const experience = [
       { labelName: 'To', content: 'Mar 2024' },
     ],
     description:
-      'I have worked here as a full stack developer for more than 3 months. During this period, i have developed the inventory and stock management website from scratch by myself only. Apart from this I have setup and maintained the linux server from scratch.',
+      'I have worked here as a full stack developer 4 months. During this period, i have developed the inventory and stock management website from scratch by myself only. Apart from this I have setup and maintained the linux server from scratch.',
+    responsibilities: ['Monitored and setup the whole server for my full-stack application from scratch.', 'Integrated my backend with existing mssql database.', 'Utilized Nginx and IIS web-servers to host my full-stack app built in ReactJs and NodeJs.', 'Installed SSL certificates from scratch on Nginx web-server to protect my app and hence build trust among company clients.']
   },
   {
     companyLogo: DigiLogo,
@@ -326,6 +335,7 @@ export const experience = [
     ],
     description:
       'I have worked here as a backend developer for more that a year. During this, i have worked upon more than 2 projects. I have also worked on a live project called EarthLink.',
+    responsibilities: ['Utilized microservices architecture to reduce the server load by 5%.', 'Developed test cases of APIs that reduced the error rates of an API by 2%.', 'Integrated PayTM payment gateway to deliver 100% secure payment solutions.']
   },
 ];
 

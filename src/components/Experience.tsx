@@ -26,6 +26,7 @@ function Experience({ experience }: IExperienceProps): ReactNode {
               description={item.description}
               isCurrent={item.isCurrent}
               key={item.companyLogo}
+              responsibilities={item?.responsibilities}
             />
           ))}
         </div>

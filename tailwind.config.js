@@ -7,6 +7,7 @@ export default {
         cookie: ['Cookie'],
         roboto: ['Roboto', 'sans-serif'],
         roman: ['Times New Roman'],
+        arial: ['Arial']
       },
     },
   },

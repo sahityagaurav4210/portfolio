@@ -22,6 +22,8 @@ export interface IExperienceCardProps {
   tags: ITagsProps[];
   description?: string;
   isCurrent?: boolean;
+  responsibilities?: string[]
+  width?:string
 }
 
 export interface IAnalytics {

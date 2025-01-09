@@ -145,7 +145,7 @@ function HomePage(): ReactNode {
   } else
     return (
       <>
-        <Navbar menuItems={menuItems} url={`${import.meta.env.VITE_BACKEND_BASE_URL}/baas/files/download-cv`} />
+        <Navbar menuItems={menuItems} url={`${import.meta.env.VITE_BACKEND_BASE_URL}/baas/files/download-cv`} disabled={false}/>
 
         <section id='home'>
           <Hero url={`${import.meta.env.VITE_BACKEND_BASE_URL}/baas/files/download-photo`} />

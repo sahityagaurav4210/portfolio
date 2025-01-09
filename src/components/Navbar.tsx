@@ -7,20 +7,21 @@ const Navbar: React.FC<INavbarProps> = ({ menuItems, url, disabled = false }) =>
   const [isMenuOpen, setIsMenuOpen] = React.useState<boolean>(false);
 
   const toggleMenu = () => {
-    if (!disabled) setIsMenuOpen(!isMenuOpen);
+    if (!disabled)
+      setIsMenuOpen(prev => !prev);
   };
 
   return (
     <div className='sticky top-0 left-0 z-20 w-full bg-zinc-50/55 backdrop-blur-md backdrop-brightness-100 border-b-2 border-dashed border-blue-200'>
-      <div className='mx-auto flex container items-center justify-between p-4 sm:px-6 lg:px-8  '>
+      <div className='mx-auto flex container lg:max-w-screen-lg items-center justify-between py-4 px-4 lg:px-0'>
         <Logo />
-        <div className='hidden xl:block'>
-          <ul className='inline-flex space-x-4'>
+        <div className='hidden lg:block'>
+          <ul className='inline-flex space-x-2'>
             {!disabled && menuItems.map((item) => (
               <li key={item.name}>
                 <a
                   href={item.href}
-                  className='text-xl font-semibold p-3 hover:bg-blue-800 hover:text-white rounded-md text-blue-800'
+                  className='font-roboto text-xl font-semibold p-2 hover:bg-blue-800 hover:text-white rounded-md text-blue-800'
                 >
                   {item.name}
                 </a>
@@ -28,10 +29,10 @@ const Navbar: React.FC<INavbarProps> = ({ menuItems, url, disabled = false }) =>
             ))}
           </ul>
         </div>
-        <div className='hidden xl:flex'>
+        <div className='hidden lg:flex'>
           <a
             href='#hireme'
-            className='rounded-md mx-4 flex transition-all scale-95 hover:scale-105 bg-blue-800 hover:bg-slate-100 p-4 text-md text-white hover:text-blue-800 shadow-md shadow-blue-200 font-bold ring-2 ring-blue-400 ring-offset-1'
+            className='rounded-md mx-2 flex transition-all scale-95 hover:scale-100 bg-blue-800 hover:bg-slate-100 p-4 text-md text-white hover:text-blue-800 shadow-md shadow-blue-200 font-bold ring-2 ring-blue-400 ring-offset-1'
           >
             <DollarSign className='mx-1' /> Hire Me
           </a>
@@ -45,9 +46,10 @@ const Navbar: React.FC<INavbarProps> = ({ menuItems, url, disabled = false }) =>
             <Download className='mx-1' /> Resume
           </a>
         </div>
-        <div className='xl:hidden'>
+        <div className='lg:hidden'>
           <Menu onClick={toggleMenu} className='h-6 w-6 cursor-pointer' />
         </div>
+
         {isMenuOpen && (
           <div className='absolute font-roboto inset-x-0 top-0 z-50 origin-top-right transform p-2 transition lg:hidden'>
             <div className='rounded-lg bg-zinc-50 ring-1 ring-offset-1 ring-blue-400 shadow-md outline-none shadow-blue-900 border border-blue-600 border-dashed'>

@@ -2,9 +2,9 @@ import React from 'react';
 import Tags from './Tags';
 import { IExperienceCardProps } from '../interfaces';
 
-const ExperienceCard: React.FC<IExperienceCardProps> = ({ companyLogo, tags, description, isCurrent = false }) => {
+const ExperienceCard: React.FC<IExperienceCardProps> = ({ companyLogo, tags, description, isCurrent = false, responsibilities = [], width = "" }) => {
   return (
-    <div className='transition-all relative w-[30rem] min-h-[800px] lg:min-h-[450px] rounded-md border-2 border-dashed border-blue-600 ring-1 ring-offset-1 ring-blue-400 mx-2 mb-5 shadow-md shadow-blue-400 overflow-hidden'>
+    <div className={`transition-all relative ${width || 'w-[25rem]'} min-h-[800px] lg:min-h-[450px] rounded-md border-2 border-dashed border-blue-600 ring-1 ring-offset-1 ring-blue-400 mx-2 mb-5 shadow-md shadow-blue-400 overflow-hidden`}>
       <div className='min-h-[200px] mb-5 flex justify-center items-center bg-blue-50'>
         <img src={companyLogo} alt='Company Logo' className='aspect-square object-contain mix-blend-multiply' />
       </div>
@@ -23,8 +23,19 @@ const ExperienceCard: React.FC<IExperienceCardProps> = ({ companyLogo, tags, des
         </div>
 
         {description && (
-          <p className='mt-3 text-sm lg:text-xl text-gray-800 text-justify min-h-[100px]'>{description}</p>
+          <div className='my-2'>
+            <p className='font-bold underline decoration-dashed text-base lg:text-lg font-roboto text-justify text-blue-800'>Description:-</p>
+            <p className='px-1 text-base lg:text-lg font-roboto text-justify'>{description}</p>
+          </div>
         )}
+        {responsibilities.length ? (
+          <>
+            <p className='font-roboto text-base lg:text-lg font-bold underline decoration-dashed text-blue-800'>Responsibilities:-</p>
+            <ul className='font-roboto marker:font-bold marker:text-blue-800 marker:underline list-inside list-decimal px-1 text-justify'>
+              {responsibilities.map((responsibility: string) => <li>{responsibility}</li>)}
+            </ul>
+          </>
+        ) : <></>}
       </div>
 
       {isCurrent && (
