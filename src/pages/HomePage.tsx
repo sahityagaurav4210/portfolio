@@ -11,7 +11,7 @@ import Contact from '../components/Contact';
 import HireMe from '../components/HireMe';
 import Support from '../components/Support';
 
-import { API_BASE_URL } from '../api';
+import { API_BASE_URL, getApiHeaders, HTTP_VERBS } from '../api';
 import { IApiResponse, IApisResponse } from '../interfaces';
 import { education, experience, menuItems, personal_projects, projects, skills } from '../data';
 import { useNavigate } from 'react-router-dom';
@@ -42,10 +42,8 @@ function HomePage(): ReactNode {
       try {
         const rawWebsiteViewsResponse = await fetch(`${API_BASE_URL}/baas/website/`, {
           signal: controller.signal,
-          headers: {
-            'x-api-key': import.meta.env.VITE_BACKEND_TOKEN,
-          },
-          method: 'POST',
+          headers: getApiHeaders(),
+          method: HTTP_VERBS.POST,
         });
 
         if (timerId) clearTimeout(timerId);
@@ -66,6 +64,7 @@ function HomePage(): ReactNode {
       try {
         const rawPingResponse = await fetch(`${API_BASE_URL}/ping`, {
           signal: controller.signal,
+          headers: getApiHeaders(),
         });
 
         if (timerId) clearTimeout(timerId);
@@ -88,6 +87,7 @@ function HomePage(): ReactNode {
       try {
         const rawCaptchaResponse = await fetch(`${API_BASE_URL}/captcha`, {
           signal: controller.signal,
+          headers: getApiHeaders(),
         });
 
         if (timerId) clearTimeout(timerId);
@@ -110,9 +110,7 @@ function HomePage(): ReactNode {
           `${API_BASE_URL}/baas/website/last-modified-date?portfolio_url=https://gaurav-sahitya.netlify.app`,
           {
             signal: controller.signal,
-            headers: {
-              'x-api-key': import.meta.env.VITE_BACKEND_TOKEN,
-            },
+            headers: getApiHeaders(),
           }
         );
 
