@@ -1,4 +1,4 @@
-import { memo, ReactNode } from 'react';
+import { ReactNode } from 'react';
 import Navbar from '../components/Navbar';
 import { menuItems } from '../data';
 import Socket from '../assets/socket.webp';
@@ -15,9 +15,12 @@ function OfflinePage(): ReactNode {
       {/* Main Content */}
       <div className='flex-grow flex items-center justify-center'>
         <div className='text-center p-8 max-w-xs lg:max-w-lg'>
-          <h1 className='text-4xl font-bold text-red-500 mb-4 underline underline-offset-4 decoration-dashed'>CONNECTION LOST</h1>
+          <h1 className='text-4xl font-bold text-red-500 mb-4 underline underline-offset-4 decoration-dashed'>
+            CONNECTION LOST
+          </h1>
           <p className='text-lg text-gray-600 mb-6'>
-            Ah, we lost connection from our backend servers. We kindly request you to please click on the button below once. We're sorry for the inconvenience caused to you.
+            Ah, we lost connection from our backend servers. We kindly request you to please click on the button below
+            once. We're sorry for the inconvenience caused to you.
           </p>
           <img src={Socket} className='my-4 cursor-none pointer-events-none rounded-lg shadow-lg shadow-zinc-800'></img>
           <button
@@ -34,4 +37,4 @@ function OfflinePage(): ReactNode {
   );
 }
 
-export default memo(OfflinePage);
+export default OfflinePage;
