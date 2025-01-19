@@ -1,6 +1,6 @@
 import React from 'react';
 import Tags from './Tags';
-import { IExperienceCardProps } from '../interfaces';
+import { IExperienceCardProps, ITagsProps } from '../interfaces';
 
 const ExperienceCard: React.FC<IExperienceCardProps> = ({ companyLogo, tags, description, isCurrent = false, responsibilities = [], width = "" }) => {
   return (
@@ -15,8 +15,8 @@ const ExperienceCard: React.FC<IExperienceCardProps> = ({ companyLogo, tags, des
             <legend className='text-blue-800 font-bold font-roboto'>Overview</legend>
 
             <div className='flex items-center gap-4 flex-wrap'>
-              {tags?.map((tag) => (
-                <Tags labelName={tag.labelName} content={tag.content} key={tag.labelName} />
+              {tags?.map((tag: ITagsProps, index: number) => (
+                <Tags labelName={tag.labelName} content={tag.content} key={`${tag.labelName}${index}`} />
               ))}
             </div>
           </fieldset>

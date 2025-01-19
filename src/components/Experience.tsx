@@ -19,13 +19,13 @@ function Experience({ experience }: IExperienceProps): ReactNode {
           section.
         </p>
         <div className='flex items-center justify-center flex-wrap gap-2'>
-          {experience.map((item) => (
+          {experience.map((item, index: number) => (
             <ExperienceCard
               companyLogo={item.companyLogo}
               tags={item.tags}
               description={item.description}
               isCurrent={item.isCurrent}
-              key={item.companyLogo}
+              key={`${item.companyLogo}${index}`}
               responsibilities={item?.responsibilities}
             />
           ))}

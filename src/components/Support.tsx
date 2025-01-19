@@ -7,9 +7,9 @@ function Support({ lastModifiedDate }: ISupport): ReactNode {
     <div className='container mx-auto font-roboto'>
       <div className='flex p-1 items-center'>
         <span className='mx-1'>
-          <BadgeHelp />
+          <BadgeHelp size={12}/>
         </span>{' '}
-        <p className='text-sm lg:text-lg'>
+        <p className='text-xs'>
           For any support and queries please{' '}
           <a
             href='mailto:works.sahitya@gmail.com'

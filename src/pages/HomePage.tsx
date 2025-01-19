@@ -8,10 +8,9 @@ import Projects from '../components/Projects';
 import Skills from '../components/Skills';
 import Loader from '../components/Loader';
 import Contact from '../components/Contact';
-import HireMe from '../components/HireMe';
 import Support from '../components/Support';
 
-import { API_BASE_URL, getApiHeaders, HTTP_VERBS } from '../api';
+import { API_BASE_URL, downloadMedia, getApiHeaders, HTTP_VERBS } from '../api';
 import { IApiResponse, IApisResponse } from '../interfaces';
 import { education, experience, menuItems, personal_projects, projects, skills } from '../data';
 import { useNavigate } from 'react-router-dom';
@@ -26,7 +25,9 @@ function HomePage(): ReactNode {
     captchaApi: false,
     updateWebsiteViewsApi: false,
     getWebsiteUpdateDetailsApi: false,
+    getPhotoUrl: false,
   });
+  const [photoUrl, setPhotoUrl] = useState<string>("");
 
   const navigate = useNavigate();
 
@@ -60,6 +61,7 @@ function HomePage(): ReactNode {
         setApiResponses((prev) => ({ ...prev, updateWebsiteViewsApi: true }));
       }
     }
+
     async function ping() {
       try {
         const rawPingResponse = await fetch(`${API_BASE_URL}/ping`, {
@@ -83,6 +85,7 @@ function HomePage(): ReactNode {
         setApiResponses((prev) => ({ ...prev, pingApi: true }));
       }
     }
+
     async function captcha() {
       try {
         const rawCaptchaResponse = await fetch(`${API_BASE_URL}/captcha`, {
@@ -104,6 +107,7 @@ function HomePage(): ReactNode {
         setApiResponses((prev) => ({ ...prev, captchaApi: true }));
       }
     }
+
     async function getWebsiteUpdateDetails() {
       try {
         const rawWebsiteUpdatesResponse = await fetch(
@@ -130,7 +134,25 @@ function HomePage(): ReactNode {
       }
     }
 
-    Promise.allSettled([ping(), captcha(), getWebsiteUpdateDetails(), updateWebsiteViews()]);
+    async function getPhotoUrl() {
+      try {
+        const photo = await downloadMedia(`${API_BASE_URL}/baas/files/download-photo`, controller.signal);
+
+        if (timerId) clearTimeout(timerId);
+        if (photo) {
+          localStorage.setItem("photo-url", photo);
+          setPhotoUrl(photo);
+          setApiResponses(prev => ({ ...prev, getPhotoUrl: false }))
+        }
+        else {
+          setApiResponses(prev => ({ ...prev, getPhotoUrl: true }))
+        }
+      } catch (error: any) {
+        setApiResponses(prev => ({ ...prev, getPhotoUrl: true }))
+      }
+    }
+
+    Promise.allSettled([ping(), captcha(), getWebsiteUpdateDetails(), getPhotoUrl(), updateWebsiteViews()]);
   }, []);
 
   if (!isLoaded && apiSignal === null) return <Loader />;
@@ -138,17 +160,17 @@ function HomePage(): ReactNode {
     apiResponses.captchaApi &&
     apiResponses.getWebsiteUpdateDetailsApi &&
     apiResponses.pingApi &&
-    apiResponses.updateWebsiteViewsApi
+    apiResponses.updateWebsiteViewsApi && apiResponses.getPhotoUrl
   ) {
     navigate('/offline');
     return;
   } else
     return (
       <>
-        <Navbar menuItems={menuItems} url={`${import.meta.env.VITE_BACKEND_BASE_URL}/baas/files/download-cv`} disabled={false}/>
+        <Navbar menuItems={menuItems} url={`${import.meta.env.VITE_BACKEND_BASE_URL}/baas/files/download-cv`} disabled={false} />
 
         <section id='home'>
-          <Hero url={`${import.meta.env.VITE_BACKEND_BASE_URL}/baas/files/download-photo`} />
+          <Hero url={photoUrl} />
         </section>
 
         <section id='projects'>
@@ -169,10 +191,6 @@ function HomePage(): ReactNode {
 
         <section id='contact'>
           <Contact apiSignal={apiSignal} captchaData={captcha} setCaptchaData={setCaptcha} />
-        </section>
-
-        <section id='hireme'>
-          <HireMe />
         </section>
 
         <section id='support'>

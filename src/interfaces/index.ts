@@ -23,7 +23,7 @@ export interface IExperienceCardProps {
   description?: string;
   isCurrent?: boolean;
   responsibilities?: string[]
-  width?:string
+  width?: string
 }
 
 export interface IAnalytics {
@@ -45,8 +45,12 @@ export interface IApisResponse {
   updateWebsiteViewsApi: boolean;
   captchaApi: boolean;
   getWebsiteUpdateDetailsApi: boolean;
+  getPhotoUrl: boolean
 }
 
 export interface ISupport {
   lastModifiedDate: string | number;
+}
+export interface IImageSuspenseProps {
+  url: string;
 }

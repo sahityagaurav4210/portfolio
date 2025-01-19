@@ -8,10 +8,9 @@ const Skills: React.FC<ISkillsProps> = ({ skills }): ReactNode => {
     <div>
       <Heading headingName='Skills' className='m-6' />
       <div className='container mx-auto mb-2'>
-        <p className='font-roboto text-sm lg:text-lg px-2 text-justify'>
-          Following are my list of skills that I have used in different projects.
+        <p className='font-roboto text-sm lg:text-lg px-2 text-justify text-balance'>
+        Below is my list of skills that I have used in various projects. I have also mentioned my experience with each skill.
         </p>
-        <hr className='mt-1 mx-2' />
       </div>
       <div className='flex flex-wrap items-center justify-center mb-5'>
         {skills.map((project: ISkills) => (

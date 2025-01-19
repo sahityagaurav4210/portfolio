@@ -1,5 +1,4 @@
 import React, { ReactNode, useState } from 'react';
-import Heading from './Heading';
 import { DollarSign } from 'lucide-react';
 import Notes from './Notes';
 import { IHireme } from '../interfaces/IHireme';
@@ -7,7 +6,7 @@ import { HiringType } from '../interfaces';
 import Progress from './Progressbar';
 import { toast } from 'react-toastify';
 import { HIRING_FULL_TIME_MSG, HIRING_PART_TIME_MSG } from '../constants';
-import { API_BASE_URL, HTTP_VERBS } from '../api';
+import { API_BASE_URL, getApiHeaders, HTTP_VERBS } from '../api';
 
 function HireMe(): ReactNode {
   const [hiremeDetails, setHiremeDetails] = useState<IHireme>({
@@ -18,6 +17,7 @@ function HireMe(): ReactNode {
     budget: '',
     hiring_type: HiringType.PART_TIME,
     message: '',
+    currency_type: 'INR'
   });
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -46,7 +46,7 @@ function HireMe(): ReactNode {
       message = message.replace(/:tenure/, hiremeDetails.tenure?.toString() || '');
     }
 
-    const payload = { ...hiremeDetails, message, budget: `${hiremeDetails.budget}USD` };
+    const payload = { ...hiremeDetails, message, budget: `${hiremeDetails.budget} ${hiremeDetails.currency_type}` };
 
     if (payload.client_name.length < 2) {
       toast.warning('Client name is too short. It must be atleast 2 characters long.', {
@@ -81,11 +81,7 @@ function HireMe(): ReactNode {
     try {
       const apiRawResponse = await fetch(`${API_BASE_URL}/baas/hiring/add`, {
         method: HTTP_VERBS.POST,
-        headers: {
-          'Content-Type': 'application/json',
-          'X-Api-Key': import.meta.env.VITE_BACKEND_TOKEN,
-          Accept: '*/*',
-        },
+        headers: { ...getApiHeaders(), 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
         signal: abortController.signal,
       });
@@ -109,6 +105,7 @@ function HireMe(): ReactNode {
         hiring_type: HiringType.PART_TIME,
         message: '',
         tenure: 0,
+        currency_type: ''
       });
       setLoading(false);
     }
@@ -116,17 +113,18 @@ function HireMe(): ReactNode {
 
   return (
     <>
-      <Heading headingName='Hire Me' className='m-4' />
       <div className='container mx-auto'>
         <p className='text-sm lg:text-lg my-2 mx-2 lg:mx-0 font-roboto text-justify'>
           I hope you have liked my skills and experience. If in case you have a project for me in your mind then kindly
           fill up this form to hire me.
         </p>
-        <form className='p-4 mb-4 border-2 font-roboto border-dashed rounded-md min-h-[30rem] flex flex-col justify-center mx-2 lg:mx-0 shadow-md shadow-gray-400'>
+
+        <form className='p-4 mb-4 border-2 font-roboto border-dashed rounded-md min-h-[5rem] flex flex-col justify-center mx-2 lg:mx-0 shadow-md shadow-gray-400 border-orange-300'>
           <h1 className='text-center text-4xl font-bold underline underline-offset-4 decoration-dashed text-orange-500'>
             Form
           </h1>
-          <p className='text-sm lg:text-xl text-justify leading-10 font-bold mb-2'>
+
+          <p className='text-sm lg:text-base text-justify leading-5 font-bold mb-2'>
             Hello my name is{' '}
             <input
               type='text'
@@ -177,7 +175,19 @@ function HireMe(): ReactNode {
               }
             />{' '}
             <sup className='mr-2 text-red-500'>*</sup>
-            USD.
+            <select
+              className='p-2 bg-transparent outline-none m-2 min-w-1 border-2 border-dashed border-blue-800 text-align-center text-blue-800'
+              id='currency_type'
+              value={hiremeDetails.currency_type}
+              onChange={(event) => setHiremeDetails({ ...hiremeDetails, [event.target.id]: event.target.value })}
+            >
+              <option value="INR">INR (₹)</option>
+              <option value="USD">USD ($)</option>
+              <option value="EUR">EURO (€)</option>
+              <option value="GBP">GBP (£)</option>
+              <option value="AUD">AUD ($)</option>
+            </select>.
+
             {hiremeDetails.hiring_type === HiringType.PART_TIME && (
               <>
                 Your contract period will be of{' '}
@@ -196,7 +206,7 @@ function HireMe(): ReactNode {
             )}
           </p>
 
-          <p className='text-sm lg:text-xl text-justify leading-10 font-bold mb-2'>
+          <p className='text-sm lg:text-base text-justify leading-10 font-bold mb-2'>
             Please contact me on{' '}
             <input
               type='email'
@@ -241,7 +251,7 @@ function HireMe(): ReactNode {
             <>
               <button
                 type='submit'
-                className='w-36 transition-transform duration-500 mt-2 inline-flex items-center p-4 border-2 border-dashed border-blue-400 border-spacing-2 justify-center font-bold text-white bg-blue-800 rounded-lg ring-2 ring-offset-1 ring-blue-400 scale-95 focus:scale-100 outline-none text-sm lg:text-lg shadow-md shadow-blue-800'
+                className='w-28 transition-transform duration-500 mt-2 inline-flex items-center px-2 py-3.5 border-2 border-dashed border-blue-400 border-spacing-2 justify-center font-bold text-white bg-blue-800 rounded-lg ring-2 ring-offset-1 ring-blue-400 scale-95 focus:scale-100 outline-none text-sm lg:text-base shadow-md shadow-blue-800'
                 onClick={handleSubmit}
               >
                 <DollarSign /> Hire Me

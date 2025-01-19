@@ -6,4 +6,5 @@ export interface IHireme {
   tenure?: number;
   client_email: string;
   message: string;
+  currency_type: string;
 }

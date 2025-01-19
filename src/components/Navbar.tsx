@@ -1,10 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { DollarSign, Download, Menu, X } from 'lucide-react';
 import { INavbarProps } from '../interfaces/INavbar';
 import Logo from './Logo';
+import { downloadMedia } from '../api';
+import { Link } from 'react-router-dom';
 
 const Navbar: React.FC<INavbarProps> = ({ menuItems, url, disabled = false }) => {
   const [isMenuOpen, setIsMenuOpen] = React.useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const toggleMenu = () => {
     if (!disabled)
@@ -20,7 +23,8 @@ const Navbar: React.FC<INavbarProps> = ({ menuItems, url, disabled = false }) =>
             {!disabled && menuItems.map((item) => (
               <li key={item.name}>
                 <a
-                  href={item.href}
+                  href={item.href as string}
+                  hrefLang='en-US'
                   className='font-roboto text-xl font-semibold p-2 hover:bg-blue-800 hover:text-white rounded-md text-blue-800'
                 >
                   {item.name}
@@ -30,20 +34,28 @@ const Navbar: React.FC<INavbarProps> = ({ menuItems, url, disabled = false }) =>
           </ul>
         </div>
         <div className='hidden lg:flex'>
-          <a
-            href='#hireme'
+          <Link
+            to='/hiring'
             className='rounded-md mx-2 flex transition-all scale-95 hover:scale-100 bg-blue-800 hover:bg-slate-100 p-4 text-md text-white hover:text-blue-800 shadow-md shadow-blue-200 font-bold ring-2 ring-blue-400 ring-offset-1'
           >
             <DollarSign className='mx-1' /> Hire Me
-          </a>
+          </Link>
 
           <a
-            href={url}
-            target='_blank'
-            className='rounded-md flex transition-all scale-95 hover:scale-105 bg-orange-50 hover:bg-orange-600 p-4 text-md text-orange-600 hover:text-white shadow-md shadow-orange-200 font-bold ring-2 ring-orange-400 ring-offset-2'
+            onClick={async () => {
+              setIsLoading(prev => !prev);
+              const response = await downloadMedia(url);
+              if (response)
+                window.open(response, "_blank");
+              else
+                alert("Something went wrong, please try again after sometime.")
+              setIsLoading(prev => !prev);
+            }}
+            aria-disabled={isLoading}
+            className='rounded-md flex transition-all scale-95 hover:scale-105 bg-orange-50 hover:bg-orange-600 p-4 text-md text-orange-600 hover:text-white shadow-md shadow-orange-200 font-bold ring-2 ring-orange-400 ring-offset-2 hover:cursor-pointer aria-disabled:bg-slate-700 aria-disabled:text-gray-200 aria-disabled:ring-slate-800'
             download={'Gaurav_Sahitya_2YOE_Backend_CV.pdf'}
           >
-            <Download className='mx-1' /> Resume
+            <Download className='mx-1' /> {!isLoading ? 'Resume' : 'Downloading'}
           </a>
         </div>
         <div className='lg:hidden'>
@@ -73,6 +85,7 @@ const Navbar: React.FC<INavbarProps> = ({ menuItems, url, disabled = false }) =>
                       <a
                         key={item.name}
                         href={item.href}
+                        hrefLang='en-US'
                         className='flex items-center border-t-2 border-l-2 border-indigo-800 shadow-sm shadow-violet-400 rounded-md p-2 font-semibold outline-none'
                         onClick={() => setIsMenuOpen(false)}
                       >
@@ -82,21 +95,30 @@ const Navbar: React.FC<INavbarProps> = ({ menuItems, url, disabled = false }) =>
                   </nav>
                 </div>
                 <div className='grid grid-cols-2 gap-x-4 mt-4 p-2'>
-                  <a
-                    href='#hireme'
+                  <Link
+                    to='/hiring'
                     className='flex items-center justify-center text-center rounded-md bg-blue-800 px-3 py-2 text-lg font-semibold text-white shadow-sm ring-2 ring-offset-2 ring-blue-400'
                   >
                     <DollarSign className='mx-1' />
                     Hire Me
-                  </a>
+                  </Link>
                   <a
-                    href={url}
+                    onClick={async () => {
+                      setIsLoading(prev => !prev);
+                      const response = await downloadMedia(url);
+                      if (response)
+                        window.open(response, "_blank");
+                      else
+                        alert("Something went wrong, please try again after sometime.");
+                      setIsLoading(prev => !prev);
+                    }}
                     target='_blank'
-                    className='flex items-center justify-center text-center rounded-md bg-orange-600 px-3 py-2 text-lg font-semibold text-white shadow-sm ring-2 ring-offset-2 ring-orange-400'
+                    aria-disabled={isLoading}
+                    className='flex items-center justify-center text-center rounded-md bg-orange-600 px-3 py-2 text-lg font-semibold text-white shadow-sm ring-2 ring-offset-2 ring-orange-400 aria-disabled:bg-slate-700 aria-disabled:text-gray-200 aria-disabled:ring-slate-800'
                     download={'Gaurav_Sahitya_2YOE_Backend_CV.pdf'}
                   >
                     <Download className='mx-1' />
-                    Resume
+                    {!isLoading ? 'Resume' : 'Downloading'}
                   </a>
                 </div>
               </div>

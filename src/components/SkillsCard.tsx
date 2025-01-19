@@ -1,11 +1,12 @@
 import React from 'react';
 import { ISkills } from '../interfaces/ISkills';
 import { BriefcaseBusiness } from 'lucide-react';
+import ImageSuspense from './ImageSuspense';
 
 const SkillsCards: React.FC<ISkills> = ({ name, text, picture, experience }) => {
   return (
     <div className='transition-all w-96 max-w-sm lg:max-w-lg min-h-[320px] lg:min-h-[490px] border-2 border-dashed rounded-md mx-2 mb-5 shadow-md shadow-blue-800 border-orange-400 ring-2 ring-offset-1 ring-blue-500'>
-      <img src={picture} alt='Laptop' className='bg-black w-full h-[200px] rounded-t-md object-cover' />
+      <ImageSuspense url={picture}/>
       <div className='py-4 px-1 text-black'>
         <div className='flex justify-between w-full'>
           <h1 className='inline-flex items-center font-bold font-roboto text-lg border-r-2 border-b-2 border-blue-950 p-2 shadow-sm shadow-blue-600 rounded-md italic'>

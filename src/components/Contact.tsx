@@ -5,7 +5,7 @@ import { IContract, IContractProps } from '../interfaces/IContact';
 import { toast } from 'react-toastify';
 import Notes from './Notes';
 import Progress from './Progressbar';
-import { API_BASE_URL, HTTP_VERBS } from '../api';
+import { API_BASE_URL, getApiHeaders, HTTP_VERBS } from '../api';
 import { IApiResponse } from '../interfaces';
 import Validated from './Validated';
 
@@ -46,6 +46,7 @@ function Contact({ apiSignal, captchaData, setCaptchaData }: IContractProps) {
 
       const rawCaptchaResponse = await fetch(`${API_BASE_URL}/captcha`, {
         signal: controller.signal,
+        headers: getApiHeaders()
       });
       clearTimeout(timerId);
       const { data } = (await rawCaptchaResponse.json()) as IApiResponse;
@@ -107,12 +108,13 @@ function Contact({ apiSignal, captchaData, setCaptchaData }: IContractProps) {
       }, parseInt(import.meta.env.VITE_BACKEND_API_TIMEOUT) || 1000);
 
       try {
+        
         const apiRawResponse = await fetch(`${API_BASE_URL}/baas/contract/create`, {
           method: HTTP_VERBS.POST,
           headers: {
             'Content-Type': 'application/json',
-            'X-Api-Key': import.meta.env.VITE_BACKEND_TOKEN,
             Accept: '*/*',
+            ...getApiHeaders()
           },
           body: JSON.stringify(contractDetails),
           signal: abortController.signal,
@@ -268,7 +270,7 @@ function Contact({ apiSignal, captchaData, setCaptchaData }: IContractProps) {
 
           {/* {Captcha} */}
           <div className='grid grid-cols-12 gap-2 min-h-20 mb-4'>
-            <div className='col-span-8 lg:col-span-2 border border-dotted border-gray-400 rounded-md pointer-events-none flex items-center justify-center font-cookie text-5xl bg-cyan-950 text-gray-600 p-1'>
+            <div className='col-span-8 lg:col-span-3 border border-dotted border-gray-400 rounded-md pointer-events-none flex items-center justify-center font-cookie text-5xl bg-cyan-950 text-gray-600 p-1 mx-2'>
               {captchaData?.captchaArray?.map((data: any, index: number) => {
                 return (
                   <p className={`inline-block ${data?.degree} mx-1`} key={index}>
@@ -277,6 +279,7 @@ function Contact({ apiSignal, captchaData, setCaptchaData }: IContractProps) {
                 );
               })}
             </div>
+
             <div className='col-span-4 lg:col-span-1 flex items-center justify-center gap-2'>
               {!isLoading ? (
                 <button
@@ -312,7 +315,8 @@ function Contact({ apiSignal, captchaData, setCaptchaData }: IContractProps) {
                 <Progress />
               )}
             </div>
-            <div className='col-span-6 lg:col-span-7'>
+
+            <div className='col-span-6 lg:col-span-5'>
               <fieldset className='border rounded-sm border-blue-400 outline-none px-2 text-sm lg:text-lg ring-2 ring-offset-1 ring-blue-200 transistion-all scale-95 focus-within:scale-100 min-w-full'>
                 <legend className='px-2 text-blue-800 bg-white font-bold'>
                   Captcha <span className='text-red-500'>*</span>
@@ -332,7 +336,7 @@ function Contact({ apiSignal, captchaData, setCaptchaData }: IContractProps) {
               </fieldset>
             </div>
 
-            <div className='col-span-6 lg:col-span-2 flex items-center justify-center'>
+            <div className='col-span-6 lg:col-span-3 flex items-center justify-center'>
               {!isValidated ? (
                 <>
                   {!isLoading ? (

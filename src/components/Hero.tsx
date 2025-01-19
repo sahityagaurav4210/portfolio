@@ -80,9 +80,8 @@ function Hero({ url }: IHeroProps): ReactNode {
                   if (counter === 1) setIsPhotoLoaded(true);
                   setCounter((prev) => ++prev);
                 }}
-                className={`rounded-full object-cover aspect-square mb-5 w-64 h-64 border-2 border-blue-400 ring-2 ring-offset-1 ring-blue-500 shadow-inner scale-95 hover:scale-105 ${
-                  !isPhotoLoaded ? 'opacity-60' : 'opacity-100'
-                }`}
+                className={`rounded-full object-cover aspect-square mb-5 w-64 h-64 border-2 border-blue-400 ring-2 ring-offset-1 ring-blue-500 shadow-inner scale-95 hover:scale-105 ${!isPhotoLoaded ? 'opacity-60' : 'opacity-100'
+                  }`}
               />
               {!isPhotoLoaded && (
                 <div className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10'>
