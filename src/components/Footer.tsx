@@ -16,7 +16,7 @@ function Footer() {
           <p className='mt-1 italic'>Content of this website is being owned and maintained by Gaurav Sahitya.</p>
         </div>
         <div className="p-1 flex items-center justify-center lg:border-r">
-          <a href='#' className='mx-1 underline decoration-dashed underline-offset-2'>Admin Panel</a> <a href="#" className='mx-1 underline decoration-dashed underline-offset-2'>CMS Portal</a>
+          <a href={import.meta.env.VITE_PBADMIN_URL} target='_blank' className='mx-1 underline decoration-dashed underline-offset-2'>Admin Panel</a> <a href="#" className='mx-1 underline decoration-dashed underline-offset-2'>CMS Portal</a>
         </div>
         <div className="p-1 mt-1 lg:mt-0 flex justify-evenly items-center">
           <FaLinkedin size={24} onClick={() => window.open(import.meta.env.VITE_LINKEDIN_URL, "_blank")} className='hover:cursor-pointer' />
