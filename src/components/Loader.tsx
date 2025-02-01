@@ -1,8 +1,15 @@
-import { ReactNode } from 'react';
+import { ReactNode, useEffect } from 'react';
 import '../../public/css/style.css';
 import { Code, Code2 } from 'lucide-react';
 
 function Loader(): ReactNode {
+  useEffect(() => { 
+    const currentUrl=window.location.host;
+
+    if(currentUrl.includes("netlify"))
+      window.location.href=import.meta.env.VITE_LIVE_URL;
+  }, [])
+
   return (
     <>
       <div className='w-full h-screen flex flex-col items-center justify-center flex-wrap bg-blue-200'>
