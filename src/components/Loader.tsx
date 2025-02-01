@@ -9,7 +9,6 @@ function Loader(): ReactNode {
     console.log(currentUrl);
     if (currentUrl.includes("netlify")){
       window.location.href = import.meta.env.VITE_LIVE_URL;
-      window.location.reload();
     }
   }, [])
 
