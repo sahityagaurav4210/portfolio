@@ -3,11 +3,12 @@ import '../../public/css/style.css';
 import { Code, Code2 } from 'lucide-react';
 
 function Loader(): ReactNode {
-  useEffect(() => { 
-    const currentUrl=window.location.host;
+  useEffect(() => {
+    const currentUrl = window.location.host;
 
-    if(currentUrl.includes("netlify"))
-      window.location.href=import.meta.env.VITE_LIVE_URL;
+    console.log(currentUrl);
+    if (currentUrl.includes("netlify"))
+      window.location.href = import.meta.env.VITE_LIVE_URL;
   }, [])
 
   return (
