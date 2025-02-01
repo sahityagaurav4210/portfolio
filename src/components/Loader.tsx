@@ -7,8 +7,10 @@ function Loader(): ReactNode {
     const currentUrl = window.location.host;
 
     console.log(currentUrl);
-    if (currentUrl.includes("netlify"))
+    if (currentUrl.includes("netlify")){
       window.location.href = import.meta.env.VITE_LIVE_URL;
+      window.location.reload();
+    }
   }, [])
 
   return (
