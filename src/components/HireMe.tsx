@@ -74,7 +74,7 @@ function HireMe(): ReactNode {
       return;
     }
 
-    if(!/^[0-9\.]+$/g.test(payload.budget)){
+    if(!/^[0-9\.]+$/g.test(hiremeDetails.budget)){
       toast.warning('Please enter your budget amount in numbers or decimal.', {
         autoClose: 2000,
         theme: 'dark',
