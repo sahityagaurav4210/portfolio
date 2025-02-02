@@ -37,6 +37,7 @@ function HireMe(): ReactNode {
       message = message.replace(/:client-project-name/, hiremeDetails.client_project_name);
       message = message.replace(/:budget/, hiremeDetails.budget);
       message = message.replace(/:hiring-type/, hiremeDetails.hiring_type);
+      message = message.replace(/:currency/, hiremeDetails.currency_type);
     } else {
       message = HIRING_PART_TIME_MSG.replace(/:client-name/gi, hiremeDetails.client_name);
       message = message.replace(/:client-email/, hiremeDetails.client_email);
@@ -44,6 +45,7 @@ function HireMe(): ReactNode {
       message = message.replace(/:budget/, hiremeDetails.budget);
       message = message.replace(/:hiring-type/, hiremeDetails.hiring_type);
       message = message.replace(/:tenure/, hiremeDetails.tenure?.toString() || '');
+      message = message.replace(/:currency/, hiremeDetails.currency_type);
     }
 
     const payload = { ...hiremeDetails, message, budget: `${hiremeDetails.budget} ${hiremeDetails.currency_type}` };
@@ -66,6 +68,14 @@ function HireMe(): ReactNode {
 
     if (payload.client_project_name.length < 2) {
       toast.warning('Client project name is too short. It must be atleast 2 characters long.', {
+        autoClose: 2000,
+        theme: 'dark',
+      });
+      return;
+    }
+
+    if(!/^[0-9\.]+$/g.test(payload.budget)){
+      toast.warning('Please enter your budget amount in numbers or decimal.', {
         autoClose: 2000,
         theme: 'dark',
       });
@@ -164,7 +174,7 @@ function HireMe(): ReactNode {
             <sup className='mr-2 text-red-500'>*</sup>
             freelance developer. My budget is{' '}
             <input
-              type='text'
+              type='number'
               className='border-b-2 m-2 p-2 outline-none bg-transparent border-blue-800 text-center font-bold text-blue-800'
               placeholder='price'
               id='budget'
@@ -173,6 +183,7 @@ function HireMe(): ReactNode {
               onChange={(event) =>
                 setHiremeDetails({ ...hiremeDetails, [event.target.id]: event.target.value?.toLowerCase() })
               }
+              inputMode='numeric'
             />{' '}
             <sup className='mr-2 text-red-500'>*</sup>
             <select
