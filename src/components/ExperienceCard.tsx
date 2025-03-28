@@ -32,7 +32,7 @@ const ExperienceCard: React.FC<IExperienceCardProps> = ({ companyLogo, tags, des
           <>
             <p className='font-roboto text-base lg:text-lg font-bold underline decoration-dashed text-blue-800 underline-offset-2'>Responsibilities:-</p>
             <ul className='font-roboto marker:font-bold marker:text-blue-800 marker:underline list-inside list-decimal px-1 text-justify'>
-              {responsibilities.map((responsibility: string) => <li>{responsibility}</li>)}
+              {responsibilities.map((responsibility: string, index:number) => <li key={`Resp-Key-${index}`}>{responsibility}</li>)}
             </ul>
           </>
         ) : <></>}
