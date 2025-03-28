@@ -124,12 +124,12 @@ function HireMe(): ReactNode {
   return (
     <>
       <div className='container mx-auto'>
-        <p className='text-sm lg:text-lg my-2 mx-2 lg:mx-0 font-roboto text-justify'>
+        <p className='text-sm lg:text-lg my-2 mx-2 xl:mx-1 font-roboto text-justify'>
           I hope you have liked my skills and experience. If in case you have a project for me in your mind then kindly
           fill up this form to hire me.
         </p>
 
-        <form className='p-4 mb-4 border-2 font-roboto border-dashed rounded-md min-h-[5rem] flex flex-col justify-center mx-2 lg:mx-0 shadow-md shadow-gray-400 border-orange-300'>
+        <form className='p-4 my-4 border-2 font-roboto border-dashed rounded-md flex flex-col justify-center mx-2 xl:mx-1 shadow-md shadow-gray-400 border-orange-300'>
           <h1 className='text-center text-4xl font-bold underline underline-offset-4 decoration-dashed text-orange-500'>
             Form
           </h1>
