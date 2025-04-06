@@ -36,7 +36,7 @@ const Skills = (): ReactNode => {
             text={project.description || project.text}
             picture={project.picture || project.url || SkillImg}
             key={`SKILL-CARD-${index}`}
-            experience={project.experience || `${project.experience} years`}
+            experience={typeof project.experience === 'number' ? `${project.experience} years` : project.experience}
           />
         ))}
       </div>
