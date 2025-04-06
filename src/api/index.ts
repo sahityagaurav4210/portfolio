@@ -1,4 +1,5 @@
 import { UserAgent } from '../constants';
+import { IApiReply } from '../interfaces/IApi';
 
 export enum HTTP_VERBS {
   GET = 'GET',
@@ -7,6 +8,20 @@ export enum HTTP_VERBS {
   PATCH = 'PATCH',
   DELETE = 'DELETE',
   OPTIONS = 'OPTIONS',
+}
+
+export enum ApiStatus {
+  SUCCESS = "success",
+  ERROR = "error",
+  EXCEPTION = "exception",
+  VALIDATION = "validation",
+  CONFLICT = "already exists",
+  UNDEFINED = "not defined",
+  UNAUTHORISED = "unauthorised",
+  NOT_FOUND = "not found",
+  FORBIDDEN = "forbidden",
+  TIMEOUT = "api time out",
+  LOGOUT = "Logout",
 }
 
 export const API_BASE_URL = import.meta.env.VITE_BACKEND_BASE_URL || 'http://localhost:12318/api/v1';
@@ -30,5 +45,38 @@ export async function downloadMedia(url: string, signal?: AbortSignal) {
   } catch (error: any) {
     console.log(error);
     return null;
+  }
+}
+
+export class ApiController {
+  public async GET(loginUri: string): Promise<IApiReply> {
+    try {
+      const controller = new AbortController();
+      const headers = getApiHeaders()
+
+      setTimeout(() => {
+        controller.abort();
+      }, Number(import.meta.env.VITE_BACKEND_API_TIMEOUT) || 5000);
+
+      const rawReply = await fetch(
+        `${import.meta.env.VITE_BACKEND_BASE_URL}/${loginUri}`,
+        {
+          method: HTTP_VERBS.GET,
+          headers,
+          signal: controller.signal,
+        }
+      );
+
+      const reply = (await rawReply.json()) as IApiReply;
+
+      return reply;
+    } catch (error) {
+      const reply = {
+        status: ApiStatus.TIMEOUT,
+        message: "Connection broked, please try again later",
+      };
+
+      return reply;
+    }
   }
 }

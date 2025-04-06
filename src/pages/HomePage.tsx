@@ -12,7 +12,7 @@ import Support from '../components/Support';
 
 import { API_BASE_URL, downloadMedia, getApiHeaders, HTTP_VERBS } from '../api';
 import { IApiResponse, IApisResponse } from '../interfaces';
-import { education, experience, menuItems, personal_projects, projects, skills } from '../data';
+import { education, experience, menuItems, personal_projects, projects } from '../data';
 import { useNavigate } from 'react-router-dom';
 
 function HomePage(): ReactNode {
@@ -186,7 +186,7 @@ function HomePage(): ReactNode {
         </section>
 
         <section id='skills'>
-          <Skills skills={skills} />
+          <Skills />
         </section>
 
         <section id='contact'>
