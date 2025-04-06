@@ -33,10 +33,10 @@ const Skills = (): ReactNode => {
         {skillDetails.map((project: Record<string, any>, index: number) => (
           <SkillsCards
             name={project.name}
-            text={project.description}
-            picture={project.url || SkillImg}
+            text={project.description || project.text}
+            picture={project.picture || project.url || SkillImg}
             key={`SKILL-CARD-${index}`}
-            experience={`${project.experience} years`}
+            experience={project.experience || `${project.experience} years`}
           />
         ))}
       </div>
