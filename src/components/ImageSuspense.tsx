@@ -3,7 +3,7 @@ import { IImageSuspenseProps } from '../interfaces';
 import ComponentLoader from './ComponentLoader';
 
 function ImageSuspense({ url }: IImageSuspenseProps): ReactNode {
-  const [isPhotoLoaded, setIsPhotoLoaded] = useState<boolean>();
+  const [isPhotoLoaded, setIsPhotoLoaded] = useState<boolean>(false);
   const [counter, setCounter] = useState<number>(0);
   const [fallBackImgUrl, setFallbackImgUrl] = useState<string | null>(null);
 
@@ -14,6 +14,12 @@ function ImageSuspense({ url }: IImageSuspenseProps): ReactNode {
     }
 
     loadImg();
+
+    return () => {
+      setIsPhotoLoaded(false);
+      setCounter(0);
+      setFallbackImgUrl(null);
+    }
   }, []);
 
   return (
@@ -29,7 +35,7 @@ function ImageSuspense({ url }: IImageSuspenseProps): ReactNode {
           };
           setCounter((prev) => ++prev);
         }}
-        className={`w-full h-[200px] rounded-t-md object-cover aspect-square ${!isPhotoLoaded ? 'opacity-60' : 'opacity-100'
+        className={`w-full min-h-56 max-h-60 rounded-t-md object-cover aspect-square ${!isPhotoLoaded ? 'opacity-60' : 'opacity-100'
           }`}
       />
       {!isPhotoLoaded && (
