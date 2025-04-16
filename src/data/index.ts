@@ -19,7 +19,7 @@ export const menuItems = [
   },
   {
     name: 'SKILLS',
-    href: '#skills',
+    href: '/skills',
   },
   {
     name: 'EDUCATION',

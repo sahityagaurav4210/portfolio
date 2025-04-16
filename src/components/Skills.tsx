@@ -1,9 +1,9 @@
 import React, { ReactNode, useEffect, useState } from 'react';
 import SkillsCards from './SkillsCard';
-import Heading from './Heading';
 import { ApiController, ApiStatus } from '../api';
 import SkillImg from '../assets/skill.avif';
 import { skills } from '../data';
+import SimpleHeading from './SimpleHeading';
 
 const Skills = (): ReactNode => {
   const [skillDetails, setSkillsDetails] = useState<Array<Record<string, any>>>(skills);
@@ -26,7 +26,7 @@ const Skills = (): ReactNode => {
 
   return (
     <div>
-      <Heading headingName='Skills' className='m-6' />
+      <SimpleHeading headingName='My Skills' className='m-6' />
       <div className='container mx-auto mb-4'>
         <p className='font-roboto text-sm lg:text-lg px-2 text-justify text-balance'>
           Here’s a quick look at the tools and technologies I’ve worked with. From backend frameworks to databases and deployment tools, each skill listed below reflects my experience and the stack I’m most comfortable building with. I’m always exploring new tech to stay sharp and deliver better solutions.

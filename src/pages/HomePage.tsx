@@ -185,10 +185,6 @@ function HomePage(): ReactNode {
           <Education education={education} />
         </section>
 
-        <section id='skills'>
-          <Skills />
-        </section>
-
         <section id='contact'>
           <Contact apiSignal={apiSignal} captchaData={captcha} setCaptchaData={setCaptcha} />
         </section>
