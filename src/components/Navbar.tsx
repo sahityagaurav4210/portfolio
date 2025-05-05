@@ -1,13 +1,11 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { DollarSign, Download, Menu, X } from 'lucide-react';
 import { INavbarProps } from '../interfaces/INavbar';
 import Logo from './Logo';
-import { downloadMedia } from '../api';
 import { Link } from 'react-router-dom';
 
 const Navbar: React.FC<INavbarProps> = ({ menuItems, url, disabled = false }) => {
   const [isMenuOpen, setIsMenuOpen] = React.useState<boolean>(false);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const toggleMenu = () => {
     if (!disabled)
@@ -42,20 +40,12 @@ const Navbar: React.FC<INavbarProps> = ({ menuItems, url, disabled = false }) =>
           </Link>
 
           <a
-            onClick={async () => {
-              setIsLoading(prev => !prev);
-              const response = await downloadMedia(url);
-              if (response)
-                window.open(response, "_blank");
-              else
-                alert("Something went wrong, please try again after sometime.")
-              setIsLoading(prev => !prev);
-            }}
-            aria-disabled={isLoading}
+            href={url}
+            target='_blank'
             className='rounded-md flex transition-all scale-95 hover:scale-105 bg-orange-50 hover:bg-orange-600 p-4 text-md text-orange-600 hover:text-white shadow-md shadow-orange-200 font-bold ring-2 ring-orange-400 ring-offset-2 hover:cursor-pointer aria-disabled:bg-slate-700 aria-disabled:text-gray-200 aria-disabled:ring-slate-800'
             download={'Gaurav_Sahitya_2YOE_Backend_CV.pdf'}
           >
-            <Download className='mx-1' /> {!isLoading ? 'Resume' : 'Downloading'}
+            <Download className='mx-1' /> Resume
           </a>
         </div>
         <div className='lg:hidden'>
@@ -103,22 +93,13 @@ const Navbar: React.FC<INavbarProps> = ({ menuItems, url, disabled = false }) =>
                     Hire Me
                   </Link>
                   <a
-                    onClick={async () => {
-                      setIsLoading(prev => !prev);
-                      const response = await downloadMedia(url);
-                      if (response)
-                        window.open(response, "_blank");
-                      else
-                        alert("Something went wrong, please try again after sometime.");
-                      setIsLoading(prev => !prev);
-                    }}
+                    href={url}
                     target='_blank'
-                    aria-disabled={isLoading}
                     className='flex items-center justify-center text-center rounded-md bg-orange-600 px-3 py-2 text-lg font-semibold text-white shadow-sm ring-2 ring-offset-2 ring-orange-400 aria-disabled:bg-slate-700 aria-disabled:text-gray-200 aria-disabled:ring-slate-800'
                     download={'Gaurav_Sahitya_2YOE_Backend_CV.pdf'}
                   >
                     <Download className='mx-1' />
-                    {!isLoading ? 'Resume' : 'Downloading'}
+                    Resume
                   </a>
                 </div>
               </div>
