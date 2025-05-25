@@ -105,6 +105,11 @@ function Hero({ url }: IHeroProps): ReactNode {
                 <Typewriter options={{ strings: SKILLS, autoStart: true, loop: true }} />
               </span>
             </div>
+            <div className='mx-2'>
+              <p className='text-base font-arial text-center text-orange-600 font-bold underline underline-offset-4 decoration-dotted decoration-blue-600 italic'>
+                A highly motivated and detail-oriented software developer with 2.5 years of experience in designing, developing, and maintaining scalable software systems.
+              </p>
+            </div>
             <div className='flex items-center justify-center md:hidden'>
               <p className='font-roboto p-2'>Find me on </p>
               <span className='flex items-center gap-x-2 cursor-pointer'>

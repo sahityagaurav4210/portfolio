@@ -9,7 +9,7 @@ const Projects: React.FC<IProjectsProps> = ({ projects, personal_projects }) => 
       <Heading headingName='Projects' />
       <div>
         <h1 className='text-4xl lg:text-5xl text-blue-800 sm:text-center lg:text-start italic underline underline-offset-8 decoration-dashed decoration-blue-800/55 font-roboto p-6 mb-3'>
-          Personal <span className='text-blue-800/75 font-semibold'>Projects</span>
+          Personal <span className='text-blue-800/95 font-bold'>Projects</span>
         </h1>
         <div className='flex flex-wrap items-center justify-center mb-5'>
           {personal_projects.map((project: IProjects) => (
@@ -23,6 +23,8 @@ const Projects: React.FC<IProjectsProps> = ({ projects, personal_projects }) => 
               liveLink={project.liveLink}
               documentation_link={project.documentation_link}
               ongoing={project.ongoing}
+              note={project.note}
+              showDivider={project.showDivider}
             />
           ))}
         </div>
@@ -41,6 +43,8 @@ const Projects: React.FC<IProjectsProps> = ({ projects, personal_projects }) => 
               liveLink={project.liveLink}
               key={project.name}
               ongoing={project.ongoing}
+              note={project.note}
+              showDivider={project.showDivider}
             />
           ))}
         </div>

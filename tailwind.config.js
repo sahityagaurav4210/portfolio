@@ -7,7 +7,8 @@ export default {
         cookie: ['Cookie'],
         roboto: ['Roboto', 'sans-serif'],
         roman: ['Times New Roman'],
-        arial: ['Arial']
+        arial: ['Arial'],
+        bookman: ["Bookman Old Style"]
       },
     },
   },

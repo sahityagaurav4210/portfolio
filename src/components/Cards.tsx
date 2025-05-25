@@ -1,6 +1,8 @@
 import React from 'react';
 import { IProjects } from '../interfaces/IProjects';
 import { ArrowUpRight } from 'lucide-react';
+import Divider from './Divider';
+import { CiWarning } from 'react-icons/ci';
 
 const Cards: React.FC<IProjects> = ({
   name,
@@ -11,6 +13,7 @@ const Cards: React.FC<IProjects> = ({
   liveLink,
   documentation_link,
   ongoing,
+  note, showDivider
 }) => {
   return (
     <div className='transition-all w-96 min-h-[700px] rounded-md border-2 border-dashed border-blue-500 ring-1 ring-offset-1 ring-blue-400 mx-2 mb-3 relative'>
@@ -28,6 +31,7 @@ const Cards: React.FC<IProjects> = ({
         <div className='my-4 text-center font-semibold border border-b-2 border-blue-300 ring-1 ring-offset-1 ring-blue-400 bg-blue-800 shadow-inner shadow-blue-300 text-white rounded-sm px-2 py-2 w-1/3'>
           <p className='text-sm'>TECH STACK</p>
         </div>
+
         <div className='mt-2'>
           {tech_stack.map((stack, index) => (
             <span
@@ -39,23 +43,36 @@ const Cards: React.FC<IProjects> = ({
           ))}
         </div>
 
+        {showDivider && <Divider color='bg-blue-200' />}
+
+        {note &&
+          <div className="mt-2 bg-amber-200 border border-amber-600 ring-2 ring-amber-400 border-spacing-4 ring-offset-1 p-1 rounded-md flex gap-x-1 justify-center flex-col text-xs">
+            <div className='font-bold inline-flex items-center text-orange-900'>
+              <CiWarning size={16} />
+              <p>Warning</p>
+            </div>
+
+            <p className='text-justify text-xs'>{note}</p>
+          </div>
+        }
+
         {!disabled && (
           <div className='flex flex-col'>
-            <button
+            {codeLink && <button
               type='button'
               disabled={disabled}
-              onClick={() => codeLink && window.open(codeLink)}
-              className='transistion-all mt-4 w-full rounded-sm bg-orange-800 px-2 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-orange-800/65 outline-none ring-1 ring-offset-1 ring-orange-500 border border-dashed border-orange-400 scale-95 focus-visible:scale-100'
+              onClick={() => codeLink ? window.open(codeLink) : alert("Sorry, but code is not available at the moment.")}
+              className='transistion-all mt-4 w-full rounded-sm bg-orange-800 px-2 py-1.5 text-sm font-bold text-white shadow-sm hover:bg-neutral-100 hover:text-orange-800 outline-none ring-1 ring-offset-1 ring-orange-500 border border-dashed border-orange-400 scale-95 focus-visible:scale-100 font-roboto'
             >
               View code <ArrowUpRight className='inline-block font-bold' />
-            </button>
+            </button>}
 
             {liveLink && (
               <button
                 type='button'
                 disabled={disabled}
-                onClick={() => liveLink && window.open(liveLink)}
-                className='transistion-all mt-4 w-full rounded-sm bg-orange-800 px-2 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-orange-800/65 outline-none ring-1 ring-offset-1 ring-orange-500 border border-dashed border-orange-400 scale-95 focus-visible:scale-100'
+                onClick={() => liveLink ? window.open(liveLink) : alert("Sorry, but the preview is not available at the moment.")}
+                className='transistion-all mt-4 w-full rounded-sm bg-orange-800 px-2 py-1.5 text-sm font-bold text-white shadow-sm hover:bg-neutral-100 hover:text-orange-800 outline-none ring-1 ring-offset-1 ring-orange-500 border border-dashed border-orange-400 scale-95 focus-visible:scale-100 font-roboto'
               >
                 Preview <ArrowUpRight className='inline-block font-bold' />
               </button>
@@ -65,8 +82,8 @@ const Cards: React.FC<IProjects> = ({
               <button
                 type='button'
                 disabled={disabled}
-                onClick={() => window.open(documentation_link)}
-                className='transistion-all mt-4 w-full rounded-sm bg-orange-800 px-2 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-orange-800/65 outline-none ring-1 ring-offset-1 ring-orange-500 border border-dashed border-orange-400 scale-95 focus-visible:scale-100'
+                onClick={() => documentation_link ? window.open(documentation_link) : alert("No docs are available for the selected project.")}
+                className='transistion-all mt-4 w-full rounded-sm bg-orange-800 px-2 py-1.5 text-sm font-bold text-white shadow-sm hover:bg-neutral-100 hover:text-orange-800 outline-none ring-1 ring-offset-1 ring-orange-500 border border-dashed border-orange-400 scale-95 focus-visible:scale-100'
               >
                 View docs <ArrowUpRight className='inline-block font-bold' />
               </button>

@@ -24,14 +24,14 @@ const ExperienceCard: React.FC<IExperienceCardProps> = ({ companyLogo, tags, des
 
         {description && (
           <div className='my-2'>
-            <p className='font-bold underline decoration-dashed text-base lg:text-lg font-roboto text-justify text-blue-800 underline-offset-2'>Description:-</p>
-            <p className='px-1 text-base lg:text-lg font-roboto text-justify'>{description}</p>
+            <p className='font-bold underline decoration-dashed text-base font-roboto text-justify text-blue-800 underline-offset-2'>Description:-</p>
+            <p className='px-1 text-base font-roboto text-justify'>{description}</p>
           </div>
         )}
         {responsibilities.length ? (
           <>
-            <p className='font-roboto text-base lg:text-lg font-bold underline decoration-dashed text-blue-800 underline-offset-2'>Responsibilities:-</p>
-            <ul className='font-roboto marker:font-bold marker:text-blue-800 marker:underline list-inside list-decimal px-1 text-justify'>
+            <p className='font-roboto text-base font-bold underline decoration-dashed text-blue-800 underline-offset-2'>Responsibilities and archivements: -</p>
+            <ul className='font-roboto marker:font-bold marker:text-blue-800 marker:underline list-inside list-decimal px-1 text-justify text-base'>
               {responsibilities.map((responsibility: string, index:number) => <li key={`Resp-Key-${index}`}>{responsibility}</li>)}
             </ul>
           </>

@@ -7,6 +7,8 @@ export interface IProjects {
   liveLink?: string;
   documentation_link?: string;
   ongoing?: boolean;
+  note?: string;
+  showDivider?: boolean;
 }
 
 export interface IProjectsProps {

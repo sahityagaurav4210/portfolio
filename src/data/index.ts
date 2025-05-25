@@ -1,5 +1,6 @@
 import DigiLogo from '../assets/digilogo.webp';
 import CreativeLogo from '../assets/creativelogo.png';
+import CdacLogo from '../assets/cdac.webp';
 import RockyLogo from '../assets/rockylogo.jpeg';
 import GneLogo from '../assets/gndeclogo.jpeg';
 import SchoolLogo from '../assets/uspclogo.png';
@@ -30,7 +31,7 @@ export const menuItems = [
 export const projects = [
   {
     name: 'EarthLink',
-    disabled: true,
+    disabled: false,
     text: 'EarthLink is a telecommunication company in the US which provides internet services to 90% of US households and buisnesses. I worked as a full stack developer on their live project for over a year, interacting with the project manager, developers, and testers via calls and chats.',
     tech_stack: [
       'Node.js',
@@ -50,10 +51,12 @@ export const projects = [
       'Docker',
       'Docker Compose',
     ],
+    liveLink: "https://www.earthlink.net",
+    showDivider: true
   },
   {
     name: 'LOOPos',
-    disabled: true,
+    disabled: false,
     text: 'It is a food ordering app, a product of Rocky Mountain Technology India Pvt Ltd that provides POS to restraunt owners and mobile apps and website like platforms to customer by which customer order their food and restraunt receives them through POS. It also provides dining facility at available restraunts. I am working on this project as a backend developer.',
     tech_stack: [
       'Nest.js',
@@ -70,7 +73,9 @@ export const projects = [
       'Caprover',
       'Docker',
     ],
-    ongoing: true,
+    ongoing: false,
+    liveLink: "https://www.loopos.ca",
+    showDivider: true
   },
   {
     name: 'Creative Ease Web',
@@ -96,13 +101,16 @@ export const projects = [
     text: 'It is a truck driving training services website which gives a portal to users wherein they can manage everything related to their business like from  admission of a student to creation of government driving records and sheets, instructors attendance etc. I am working on it as a backend developer.',
     tech_stack: ['Nest.js', 'Typescript', 'Mongodb', 'Git', 'GitHub', 'Caprover', 'Express.js', 'Docker'],
     ongoing: false,
+    showDivider: false
   },
   {
     name: 'Real Estate Property Listing Website',
-    disabled: true,
+    disabled: false,
     text: 'It is a property listing website which internally fetches property and its corresponding medias from an real estate transaction standard aka RETS. I am working on it as a backend developer.',
     tech_stack: ['Nest.js', 'Typescript', 'Mongodb', 'Git', 'GitHub', 'Caprover', 'Express.js', 'Docker', 'Cron-jobs', 'Wordpress', 'FFmpeg', 'Image processing', 'AWS S3 Bucket'],
-    ongoing: true,
+    ongoing: false,
+    liveLink: "https://sidhu-web.loopretail.tngwebsolutions.com",
+    showDivider: true
   },
 ];
 
@@ -115,6 +123,7 @@ export const personal_projects = [
     documentation_link: 'https://sahityagaurav4210.github.io/book-junction-clipboard/',
     text: `It's an npm package that automatically pastes content onto the system's clipboard.`,
     tech_stack: ['Node.js', 'Typescript', 'Unit testing', 'Git', 'GitHub', 'GitHub Actions', 'Powershell'],
+    showDivider: true
   },
   {
     name: 'ENV Loader',
@@ -124,6 +133,16 @@ export const personal_projects = [
     codeLink: 'https://github.com/sahityagaurav4210/env-loader',
     documentation_link: 'https://env-loader-docs.netlify.app/',
     disabled: false,
+    showDivider: true
+  },
+  {
+    name: 'Accounting',
+    text: "It is a accounts management web portal that helps the user in tracking their expenses and other account related stuff.",
+    tech_stack: ['Nest.js', 'Git', 'GitHub', 'MongoDB', 'Docker', 'Caprover', 'React.js', 'MUI', 'Google cloud storage', 'Typescript'],
+    liveLink: 'https://accounting.webapps.sgaurav.me',
+    disabled: false,
+    note: "If you're visiting this web portal for the first time then kindly create your account first to get started.",
+    showDivider: true
   },
 ];
 
@@ -262,6 +281,32 @@ export const skills = [
 
 export const experience = [
   {
+    companyLogo: CdacLogo,
+    tags: [
+      {
+        labelName: 'Company Name',
+        content: 'Centre for Development of Advance Computing (CDAC)',
+      },
+      {
+        labelName: 'Designation',
+        content: 'Project Engineer',
+      },
+      {
+        labelName: 'Department',
+        content: 'eGovernance Solutions Group (EGSG)',
+      },
+      {
+        labelName: 'From',
+        content: 'May 2025',
+      },
+      { labelName: 'To', content: 'Present' },
+    ],
+    description:
+      'I am working here as a project engineer in egovernance solutions group department.',
+    responsibilities: ['To resolve issues of project related to eGovernance department of Government of India.', 'Communicate with fellow developers and senior teammates to deliver 100% customized software system.','Create and maintain software systems and websites related to eGovernance department.'],
+    isCurrent: true
+  },
+  {
     companyLogo: RockyLogo,
     tags: [
       {
@@ -280,11 +325,11 @@ export const experience = [
         labelName: 'From',
         content: 'Apr 2024',
       },
-      { labelName: 'To', content: 'Present' },
+      { labelName: 'To', content: 'Apr 2025' },
     ],
     description:
-      'I am working as a backend developer for more that 8 months now. During this, i have worked upon 2 projects. ',
-    isCurrent: true,
+      'I have worked here as a backend developer for more than year year now. During this, I have worked upon more than 2 projects. ',
+    isCurrent: false,
     responsibilities: ['Developed image processing cron-job using ffmpeg library with auto roll-back feature.', 'Communicated with clients and front-end developers to deliver 100% customized backend system.', ' Optimized the company’s whole backend system (including servers) which resulted in decreasing the LOOPos backend api response time from 4sec to 1/4th of a second.', ' Reduced the server cost of LOOPos product by 15%.', ' Optimized LOOPos backend docker image size and build time from 2GB and 4 minutes to 650MB and 2 minutes.']
   },
   {

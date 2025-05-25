@@ -176,8 +176,10 @@ function HomePage(): ReactNode {
           <Projects projects={projects} personal_projects={personal_projects} />
         </section>
 
-        <section id='experience'>
-          <Experience experience={experience} />
+        <section id='experience' className='pt-10'>
+          <div className='scroll-mt-4'>
+            <Experience experience={experience} />
+          </div>
         </section>
 
         <section id='education'>

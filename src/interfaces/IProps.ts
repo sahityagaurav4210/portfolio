@@ -5,3 +5,7 @@ export interface IExperienceProps {
 export interface IEducationProps {
   education: Array<Record<string, any>>;
 }
+
+export interface IDividerProps {
+  color?: string;
+}
