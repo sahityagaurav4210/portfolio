@@ -2,7 +2,7 @@ import React from 'react';
 import { IProjects } from '../interfaces/IProjects';
 import { ArrowUpRight } from 'lucide-react';
 import Divider from './Divider';
-import { CiWarning } from 'react-icons/ci';
+import Warning from './Warning';
 
 const Cards: React.FC<IProjects> = ({
   name,
@@ -13,15 +13,17 @@ const Cards: React.FC<IProjects> = ({
   liveLink,
   documentation_link,
   ongoing,
-  note, showDivider
+  note, showDivider, cardImage
 }) => {
   return (
     <div className='transition-all w-96 min-h-[700px] rounded-md border-2 border-dashed border-blue-500 ring-1 ring-offset-1 ring-blue-400 mx-2 mb-3 relative'>
-      <img
-        src='https://images.unsplash.com/photo-1522199755839-a2bacb67c546?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTF8fGJsb2d8ZW58MHx8MHx8&auto=format&fit=crop&w=800&q=60'
-        alt='Laptop'
-        className='min-h-[200px] w-full rounded-t-md object-cover'
-      />
+      <div className="m-1">
+        <img
+          src={cardImage || 'https://images.unsplash.com/photo-1522199755839-a2bacb67c546?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTF8fGJsb2d8ZW58MHx8MHx8&auto=format&fit=crop&w=800&q=60'}
+          alt='Laptop'
+          className='rounded-md min-h-[250px] w-full object-cover flex justify-center'
+        />
+      </div>
       <div className='p-4'>
         <h1 className='inline-flex items-center font-bold font-roboto text-lg border-r-2 border-b-2 border-blue-950 p-2 shadow-sm shadow-blue-600 rounded-md italic'>
           {name}
@@ -32,29 +34,24 @@ const Cards: React.FC<IProjects> = ({
           <p className='text-sm'>TECH STACK</p>
         </div>
 
-        <div className='mt-2'>
-          {tech_stack.map((stack, index) => (
-            <span
-              key={index}
-              className='font-arial text-gray-800 shadow-sm shadow-black mb-2 mr-1 inline-block rounded-sm bg-neutral-200 p-1 text-sm font-semibold text-center'
-            >
-              {stack}
-            </span>
-          ))}
+        <div className='my-2'>
+          {
+            tech_stack.length ?
+              tech_stack.map((stack, index) => (
+                <span
+                  key={index}
+                  className='font-arial text-gray-800 shadow-sm shadow-black mb-2 mr-1 inline-block rounded-sm bg-neutral-200 p-1 text-sm font-semibold text-center'
+                >
+                  {stack}
+                </span>
+              )) :
+              <Warning text='Due to some security reasons, tech stack of this project is not provided in the public domain.' />
+          }
         </div>
 
         {showDivider && <Divider color='bg-blue-200' />}
 
-        {note &&
-          <div className="mt-2 bg-amber-200 border border-amber-600 ring-2 ring-amber-400 border-spacing-4 ring-offset-1 p-1 rounded-md flex gap-x-1 justify-center flex-col text-xs">
-            <div className='font-bold inline-flex items-center text-orange-900'>
-              <CiWarning size={16} />
-              <p>Warning</p>
-            </div>
-
-            <p className='text-justify text-xs'>{note}</p>
-          </div>
-        }
+        {note && <Warning text={note} />}
 
         {!disabled && (
           <div className='flex flex-col'>

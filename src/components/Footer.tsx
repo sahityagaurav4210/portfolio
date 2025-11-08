@@ -12,7 +12,9 @@ function Footer() {
               <span className='text-orange-600'>भा</span><span className='text-white'>र</span><span className='text-green-600'>त</span>
               &nbsp;
               <img src="https://bookjn-bucket.s3.ap-south-1.amazonaws.com/country-flags/ind.svg" alt="Indian Flag" width={16} height={16} />
-            </span> &nbsp; || &copy; Gaurav Sahitya || All rights are reserved</p>
+            </span> &nbsp; || &copy; Gaurav Sahitya || All rights are reserved
+          </p>
+          <p className='mt-1 italic'>Unauthorized copying or distribution of content in any manner is strictly prohibited.</p>
           <p className='mt-1 italic'>Content of this website is being owned and maintained by Gaurav Sahitya.</p>
         </div>
         <div className="p-1 flex items-center justify-center lg:border-r flex-col">

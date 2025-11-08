@@ -52,7 +52,8 @@ export const projects = [
       'Docker Compose',
     ],
     liveLink: "https://www.earthlink.net",
-    showDivider: true
+    showDivider: true,
+    cardImage: "/earthlink.webp"
   },
   {
     name: 'LOOPos',
@@ -75,7 +76,8 @@ export const projects = [
     ],
     ongoing: false,
     liveLink: "https://www.loopos.ca",
-    showDivider: true
+    showDivider: true,
+    cardImage: "/loopos.webp"
   },
   {
     name: 'Creative Ease Web',
@@ -101,7 +103,8 @@ export const projects = [
     text: 'It is a truck driving training services website which gives a portal to users wherein they can manage everything related to their business like from  admission of a student to creation of government driving records and sheets, instructors attendance etc. I am working on it as a backend developer.',
     tech_stack: ['Nest.js', 'Typescript', 'Mongodb', 'Git', 'GitHub', 'Caprover', 'Express.js', 'Docker'],
     ongoing: false,
-    showDivider: false
+    showDivider: false,
+    cardImage: "/fastrack.jpg"
   },
   {
     name: 'Real Estate Property Listing Website',
@@ -112,6 +115,16 @@ export const projects = [
     liveLink: "https://sidhu-web.loopretail.tngwebsolutions.com",
     showDivider: true
   },
+  {
+    name: 'Census Management and Monitoring System (CMMS)',
+    disabled: false,
+    text: 'The Census Management and Monitoring System is a digital platform designed to streamline census operations, including data collection, verification, and analysis. It enhances accuracy, transparency, and efficiency by enabling real-time monitoring of field activities, ensuring reliable demographic insights for informed decision-making and effective government planning.',
+    tech_stack: [],
+    ongoing: true,
+    showDivider: true,
+    cardImage: "http://portfolio-ftp.sgaurav.me/assets/public/coi-1762617590206-535249590.png",
+    liveLink: "https://test.census.gov.in/se",
+  }
 ];
 
 export const personal_projects = [
@@ -303,7 +316,7 @@ export const experience = [
     ],
     description:
       'I am working here as a project engineer in egovernance solutions group department.',
-    responsibilities: ['To resolve issues of project related to eGovernance department of Government of India.', 'Communicate with fellow developers and senior teammates to deliver 100% customized software system.','Create and maintain software systems and websites related to eGovernance department.'],
+    responsibilities: ['To resolve issues of project related to eGovernance department of Government of India.', 'Communicate with fellow developers and senior teammates to deliver 100% customized software system.', 'Create and maintain software systems and websites related to eGovernance department.'],
     isCurrent: true
   },
   {

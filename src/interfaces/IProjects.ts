@@ -9,6 +9,7 @@ export interface IProjects {
   ongoing?: boolean;
   note?: string;
   showDivider?: boolean;
+  cardImage?: string;
 }
 
 export interface IProjectsProps {

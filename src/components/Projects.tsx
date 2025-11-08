@@ -45,6 +45,7 @@ const Projects: React.FC<IProjectsProps> = ({ projects, personal_projects }) => 
               ongoing={project.ongoing}
               note={project.note}
               showDivider={project.showDivider}
+              cardImage={project.cardImage}
             />
           ))}
         </div>
