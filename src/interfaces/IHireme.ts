@@ -7,4 +7,7 @@ export interface IHireme {
   client_email: string;
   message: string;
   currency_type: string;
+  captcha:string;
+  project_desc:string;
+  terms:boolean;
 }

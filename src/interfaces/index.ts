@@ -43,7 +43,6 @@ export interface IApiResponse {
 export interface IApisResponse {
   pingApi: boolean;
   updateWebsiteViewsApi: boolean;
-  captchaApi: boolean;
   getWebsiteUpdateDetailsApi: boolean;
   getPhotoUrl: boolean
 }

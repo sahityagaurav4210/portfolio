@@ -1,5 +1,4 @@
 import { ReactNode } from 'react';
-import { IApiResponse } from '.';
 
 export interface IContract {
   first_name: string;
@@ -11,10 +10,4 @@ export interface IContract {
 
 export interface INoteProps {
   note: ReactNode;
-}
-
-export interface IContractProps {
-  apiSignal: boolean | null;
-  captchaData: any;
-  setCaptchaData: React.Dispatch<React.SetStateAction<IApiResponse | undefined>>;
 }

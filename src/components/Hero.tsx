@@ -135,7 +135,7 @@ function Hero({ url }: IHeroProps): ReactNode {
             </div>
             <div className='mt-5 flex items-center justify-center gap-x-2 flex-wrap'>
               <a
-                href='#contact'
+                href='/contact-me'
                 className='rounded-md inline-flex transition-all bg-blue-800 p-4 text-md font-semibold text-white shadow-sm shadow-blue-200 ring-2 ring-offset-1 ring-blue-500 mx-4 scale-95 hover:scale-105 hover:bg-white hover:text-blue-800 outline-none mb-4 min-w-30 lg:min-w-44 border-2 border-dashed border-blue-400 justify-center font-roboto'
               >
                 <BookUser className='mx-1' /> Contact Me

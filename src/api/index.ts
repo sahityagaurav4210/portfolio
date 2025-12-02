@@ -49,21 +49,52 @@ export async function downloadMedia(url: string, signal?: AbortSignal) {
 }
 
 export class ApiController {
-  public async GET(loginUri: string): Promise<IApiReply> {
+  public async GET(url: string): Promise<IApiReply> {
     try {
       const controller = new AbortController();
-      const headers = getApiHeaders()
+      const headers = getApiHeaders();
 
       setTimeout(() => {
         controller.abort();
       }, Number(import.meta.env.VITE_BACKEND_API_TIMEOUT) || 5000);
 
-      const rawReply = await fetch(
-        `${import.meta.env.VITE_BACKEND_BASE_URL}/${loginUri}`,
+      const rawReply = await fetch(`${import.meta.env.VITE_BACKEND_BASE_URL}/${url}`,
         {
           method: HTTP_VERBS.GET,
           headers,
           signal: controller.signal,
+        }
+      );
+
+      const reply = (await rawReply.json()) as IApiReply;
+
+      return reply;
+    } catch (error) {
+      const reply = {
+        status: ApiStatus.TIMEOUT,
+        message: "Connection broked, please try again later",
+      };
+
+      return reply;
+    }
+  }
+
+  public async POST(url: string, payload?: Record<string, any>): Promise<IApiReply> {
+    try {
+      const controller = new AbortController();
+      const headers = getApiHeaders();
+      const stringifiedPayload = payload ? { body: JSON.stringify(payload) } : {};
+
+      setTimeout(() => {
+        controller.abort();
+      }, Number(import.meta.env.VITE_BACKEND_API_TIMEOUT) || 5000);
+
+      const rawReply = await fetch(`${import.meta.env.VITE_BACKEND_BASE_URL}/${url}`,
+        {
+          method: HTTP_VERBS.POST,
+          headers,
+          signal: controller.signal,
+          ...stringifiedPayload
         }
       );
 

@@ -6,7 +6,6 @@ import Hero from '../components/Hero';
 import Navbar from '../components/Navbar';
 import Projects from '../components/Projects';
 import Loader from '../components/Loader';
-import Contact from '../components/Contact';
 import Support from '../components/Support';
 
 import { API_BASE_URL, downloadMedia, getApiHeaders, HTTP_VERBS } from '../api';
@@ -17,11 +16,9 @@ import { useNavigate } from 'react-router-dom';
 function HomePage(): ReactNode {
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
   const [apiSignal, setApiSignal] = useState<boolean | null>(null);
-  const [captcha, setCaptcha] = useState<IApiResponse>();
   const [lastModifiedDate, setLastModifiedDate] = useState<string | number>();
   const [apiResponses, setApiResponses] = useState<IApisResponse>({
     pingApi: false,
-    captchaApi: false,
     updateWebsiteViewsApi: false,
     getWebsiteUpdateDetailsApi: false,
     getPhotoUrl: false,
@@ -85,28 +82,6 @@ function HomePage(): ReactNode {
       }
     }
 
-    async function captcha() {
-      try {
-        const rawCaptchaResponse = await fetch(`${API_BASE_URL}/captcha`, {
-          signal: controller.signal,
-          headers: getApiHeaders(),
-        });
-
-        if (timerId) clearTimeout(timerId);
-
-        if (rawCaptchaResponse.ok) {
-          const { data } = (await rawCaptchaResponse.json()) as IApiResponse;
-          setCaptcha(data);
-          setApiResponses({ ...apiResponses, captchaApi: false });
-        } else {
-          setApiResponses({ ...apiResponses, captchaApi: true });
-        }
-      } catch (error: any) {
-        setApiSignal(false);
-        setApiResponses((prev) => ({ ...prev, captchaApi: true }));
-      }
-    }
-
     async function getWebsiteUpdateDetails() {
       try {
         const rawWebsiteUpdatesResponse = await fetch(
@@ -151,15 +126,15 @@ function HomePage(): ReactNode {
       }
     }
 
-    Promise.allSettled([ping(), captcha(), getWebsiteUpdateDetails(), getPhotoUrl(), updateWebsiteViews()]);
+    Promise.allSettled([ping(), getWebsiteUpdateDetails(), getPhotoUrl(), updateWebsiteViews()]);
   }, []);
 
   if (!isLoaded && apiSignal === null) return <Loader />;
   else if (
-    apiResponses.captchaApi &&
     apiResponses.getWebsiteUpdateDetailsApi &&
     apiResponses.pingApi &&
-    apiResponses.updateWebsiteViewsApi && apiResponses.getPhotoUrl
+    apiResponses.updateWebsiteViewsApi &&
+    apiResponses.getPhotoUrl
   ) {
     navigate('/offline');
     return;
@@ -184,10 +159,6 @@ function HomePage(): ReactNode {
 
         <section id='education'>
           <Education education={education} />
-        </section>
-
-        <section id='contact'>
-          <Contact apiSignal={apiSignal} captchaData={captcha} setCaptchaData={setCaptcha} />
         </section>
 
         <section id='support'>
