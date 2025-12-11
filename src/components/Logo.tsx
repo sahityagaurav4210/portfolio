@@ -8,7 +8,7 @@ function Logo() {
         >
           Gaurav <span className='text-blue-800/75'>S.</span>
         </span>
-        <span className='font-arial font-bold mt-2 tracking-widest text-xs text-orange-700'>PROJECT ENGINEER</span>
+        <span className='font-arial font-bold mt-2 tracking-widest text-xs text-orange-700'>FULL-STACK DEVELOPER</span>
       </div>
     </>
   );

@@ -1,5 +1,5 @@
-import { ReactNode, useEffect, useState } from 'react';
-import HireMe from '../views/HireMe';
+import { memo, ReactNode, useEffect, useState } from 'react';
+import Contact from '../views/Contact';
 import Navbar from '../components/Navbar';
 import { menuItems } from '../data';
 import Footer from '../components/Footer';
@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import { ApiController, ApiStatus } from '../api';
 import Loader from '../components/Loader';
 
-function HireMePage(): ReactNode {
+function ContactMePage(): ReactNode {
   const [apiSignal, setApiSignal] = useState<boolean | null>(null);
   const [apiResponses, setApiResponses] = useState({
     pingApi: false,
@@ -63,16 +63,16 @@ function HireMePage(): ReactNode {
         <Navbar
           menuItems={menuItems}
           url={`${import.meta.env.VITE_BACKEND_BASE_URL}/baas/files/download-cv`}
-          disabled={true}
+          disabled
         />
 
-        <HireMe />
+        <Contact />
 
-        <div className='w-full'>
+        <div>
           <Footer />
         </div>
       </>
     );
 }
 
-export default HireMePage;
+export default memo(ContactMePage);

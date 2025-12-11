@@ -4,6 +4,7 @@ import OfflinePage from './pages/OfflinePage';
 import HomePage from './pages/HomePage';
 import HireMePage from './pages/HireMePage';
 import SkillsPage from './pages/SkillsPage';
+import ContactMePage from './pages/ContactMePage';
 
 function App(): ReactNode {
   return (
@@ -14,6 +15,7 @@ function App(): ReactNode {
           <Route path='/offline' element={<OfflinePage />} />
           <Route path='/hiring' element={<HireMePage />} />
           <Route path='/skills' element={<SkillsPage />} />
+          <Route path='/contact-me' element={<ContactMePage />} />
         </Routes>
       </BrowserRouter>
     </>

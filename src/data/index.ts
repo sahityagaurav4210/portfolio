@@ -419,7 +419,6 @@ export const education = [
         content: '7.38 CGPA',
       },
     ],
-    isCurrent: true,
   },
   {
     id: 2,

@@ -68,8 +68,8 @@ function Hero({ url }: IHeroProps): ReactNode {
   return (
     <>
       <div className='container mx-auto py-10'>
-        <div className='flex items-center w-full flex-col lg:flex-row lg:divide-x-4 divide-blue-700 divide-dotted'>
-          <div className='lg:w-1/2 mb-5'>
+        <div className='flex items-center w-full flex-col'>
+          <div>
             <div className='relative flex flex-col items-center justify-center'>
               <img
                 src={fallBackImgUrl || url}
@@ -105,9 +105,9 @@ function Hero({ url }: IHeroProps): ReactNode {
                 <Typewriter options={{ strings: SKILLS, autoStart: true, loop: true }} />
               </span>
             </div>
-            <div className='mx-2'>
+            <div className='mx-4'>
               <p className='text-base font-arial text-center text-orange-600 font-bold underline underline-offset-4 decoration-dotted decoration-blue-600 italic'>
-                A highly motivated and detail-oriented software developer with 2.5 years of experience in designing, developing, and maintaining scalable software systems.
+                A highly motivated and detail-oriented software developer having more than 2.5 years of experience in designing, developing, and maintaining scalable software systems.
               </p>
             </div>
             <div className='flex items-center justify-center md:hidden'>
@@ -135,7 +135,7 @@ function Hero({ url }: IHeroProps): ReactNode {
             </div>
             <div className='mt-5 flex items-center justify-center gap-x-2 flex-wrap'>
               <a
-                href='#contact'
+                href='/contact-me'
                 className='rounded-md inline-flex transition-all bg-blue-800 p-4 text-md font-semibold text-white shadow-sm shadow-blue-200 ring-2 ring-offset-1 ring-blue-500 mx-4 scale-95 hover:scale-105 hover:bg-white hover:text-blue-800 outline-none mb-4 min-w-30 lg:min-w-44 border-2 border-dashed border-blue-400 justify-center font-roboto'
               >
                 <BookUser className='mx-1' /> Contact Me
@@ -149,11 +149,11 @@ function Hero({ url }: IHeroProps): ReactNode {
             </div>
           </div>
 
-          <div className='lg:w-1/2 '>
+          <div className='my-2'>
             <div className='flex gap-4 flex-wrap items-center justify-center w-full'>
               <div className='flex items-center'>
                 <div className='min-h-16 min-w-10 border-2 border-dashed ring-1 ring-offset-2 ring-orange-400 p-4 bg-orange-800 rounded-xl shadow-md shadow-orange-500'>
-                  <p className='text-center text-9xl font-roboto font-extrabold text-white'>{analytics.experience}</p>
+                  <p className='text-center text-9xl font-roboto font-extrabold text-white'>{analytics.experience}+</p>
                   <p className='text-white font-bold font-roboto text-center'> years of experience</p>
                 </div>
               </div>
