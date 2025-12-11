@@ -9,6 +9,8 @@ import { HIRING_FULL_TIME_MSG, HIRING_PART_TIME_MSG } from '../constants';
 import { API_BASE_URL, getApiHeaders, HTTP_VERBS } from '../api';
 import Captcha from '../components/Captcha';
 import { getAppToastConfig } from '../config';
+import SimpleHeading from '../components/SimpleHeading';
+import Divider from '../components/Divider';
 
 function HireMe(): ReactNode {
   const [captchaData, setCaptchaData] = useState<string>();
@@ -35,7 +37,6 @@ function HireMe(): ReactNode {
   }, []);
 
   const handleSwitchOnChange = useCallback(function (event: React.ChangeEvent<HTMLInputElement>) {
-    event.preventDefault();
     setHiremeDetails(prev => ({ ...prev, [event.target.id]: event.target.checked }));
   }, []);
 
@@ -226,7 +227,8 @@ function HireMe(): ReactNode {
   }
 
   async function handleCheckBoxOnChange(event: React.ChangeEvent<HTMLInputElement>) {
-    event.preventDefault();
+    // event is unused; referencing it avoids 'declared but never read' lint errors
+    void event;
     const captcha = hiremeDetails.captcha;
     setLoading(true);
 
@@ -272,16 +274,20 @@ function HireMe(): ReactNode {
   return (
     <>
       <div className='container mx-auto'>
+        <SimpleHeading headingName='Hire Me' />
+
         <p className='text-sm lg:text-lg my-2 mx-2 xl:mx-1 font-roboto text-justify'>
-          I hope you have liked my skills and experience. If in case you have a project for me in your mind then kindly
-          fill up this form to hire me.
+          I hope you've liked my projects which I have worked on. I also do side projects and if there's a project for me then you can directly hire me as a freelance software developer. Please fill the form to do so.
         </p>
 
-        <h1 className='text-center text-4xl font-bold underline underline-offset-4 decoration-dashed text-orange-500'>
-          Hiring Form
-        </h1>
+        <Divider />
+
 
         <form className='p-4 my-4 border-2 font-roboto border-dashed rounded-md flex flex-col justify-center mx-2 xl:mx-1 shadow-md shadow-gray-400 border-orange-300'>
+
+          <h1 className='text-center text-4xl font-bold underline underline-offset-4 decoration-dashed text-orange-500'>
+            Hiring Form
+          </h1>
 
           <div className='grid grid-cols-12 my-2'>
             <div className="col-span-12 lg:col-span-4 flex items-center">
@@ -491,7 +497,7 @@ function HireMe(): ReactNode {
 
             <div className="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border after:border-gray-300 after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-800"></div>
 
-            <span className="ms-3 text-sm font-extrabold text-gray-900 text-justify dark:text-gray-300 my-1 sm:my-0">
+            <span className="ms-3 text-sm font-extrabold text-gray-900 text-justify my-1 sm:my-0">
               I have read and understood the above declaration, and I accept its terms.
             </span>
           </label>

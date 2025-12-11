@@ -8,6 +8,8 @@ import { API_BASE_URL, getApiHeaders, HTTP_VERBS } from '../api';
 import { IApiResponse } from '../interfaces';
 import Captcha from '../components/Captcha';
 import { getAppToastConfig } from '../config';
+import SimpleHeading from '../components/SimpleHeading';
+import Divider from '../components/Divider';
 
 function Contact(): ReactNode {
   const [captchaData, setCaptchaData] = useState<string>();
@@ -176,7 +178,8 @@ function Contact(): ReactNode {
   }
 
   async function handleCheckBoxOnChange(event: React.ChangeEvent<HTMLInputElement>) {
-    event.preventDefault();
+    // event is unused; referencing it avoids 'declared but never read' lint errors
+    void event;
     const captcha = contractDetails.captcha;
     setIsLoading(true);
 
@@ -221,14 +224,29 @@ function Contact(): ReactNode {
 
   return (
     <div className='container mx-auto min-h-96'>
-      <p className='text-sm lg:text-lg px-2 font-roboto text-justify'>
-        Feel free to reach out for collaboration, project inquiries, or any opportunities. I’m always open to connecting and discussing new ideas. You can contact me by filling up the form given below.
-      </p>
+      <SimpleHeading headingName='Contact Me' />
+
+      <div className='my-2'>
+        <p className='text-sm lg:text-lg px-2 font-roboto text-justify'>
+          Feel free to reach out for collaboration, project inquiries, or any opportunities. I’m always open to connecting and discussing new ideas. You can contact me by filling up the form given below.
+        </p>
+      </div>
+
+      <Divider />
+
 
       <form
-        className='p-4 mb-2 shadow-md shadow-gray-400 border-2 my-2 mx-2 border-dashed border-orange-400 rounded-md font-roboto'
+        className='px-4 py-2 mb-2 shadow-md shadow-gray-400 border-2 my-2 mx-2 border-dashed border-orange-400 rounded-md font-roboto'
         onSubmit={handleSubmit}
       >
+
+        <div className="my-2">
+          <h1 className='text-center text-4xl font-bold underline underline-offset-4 decoration-dashed text-orange-500'>
+            Contact Form
+          </h1>
+        </div>
+
+
         <div className='grid lg:grid-cols-2 gap-6 mb-4'>
           {/* {FirstName} */}
           <div className="relative w-full">
@@ -274,46 +292,44 @@ function Contact(): ReactNode {
           </div>
         </div>
 
-        <div className='grid lg:grid-cols-2 mb-4 gap-6'>
-          <div className="relative w-full">
-            <input
-              type="email"
-              id="email"
-              value={contractDetails.email}
-              required
-              placeholder=" "
-              className="peer h-10 w-full rounded-[4px] border border-gray-400 bg-white px-3 text-sm text-gray-900 placeholder-transparent focus:border-2 focus:border-blue-600 focus:outline-none disabled:bg-gray-100"
-              onChange={contractDetailsTextboxHandler}
-              autoComplete='off'
-              autoCapitalize='on'
-            />
-            <label
-              htmlFor="email"
-              className="pointer-events-none absolute left-3 top-2 origin-[0] -translate-y-4 scale-75 transform bg-white px-1 text-sm text-gray-500 duration-200 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-2 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:text-blue-600 peer-focus:bg-white"
-            >
-              Email
-              <sup className='text-red-500 text-xs'>*</sup>
-            </label>
-          </div>
+        <div className="relative w-full my-2">
+          <input
+            type="email"
+            id="email"
+            value={contractDetails.email}
+            required
+            placeholder=" "
+            className="peer h-10 w-full rounded-[4px] border border-gray-400 bg-white px-3 text-sm text-gray-900 placeholder-transparent focus:border-2 focus:border-blue-600 focus:outline-none disabled:bg-gray-100"
+            onChange={contractDetailsTextboxHandler}
+            autoComplete='off'
+            autoCapitalize='on'
+          />
+          <label
+            htmlFor="email"
+            className="pointer-events-none absolute left-3 top-2 origin-[0] -translate-y-4 scale-75 transform bg-white px-1 text-sm text-gray-500 duration-200 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-2 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:text-blue-600 peer-focus:bg-white"
+          >
+            Email
+            <sup className='text-red-500 text-xs'>*</sup>
+          </label>
+        </div>
 
-          <div className="relative w-full">
-            <textarea
-              id="message"
-              value={contractDetails.message}
-              placeholder=" "
-              rows={2}
-              className="peer p-2 min-h-10 w-full rounded-[4px] border border-gray-400 bg-white px-3 text-sm text-gray-900 placeholder-transparent focus:border-2 focus:border-blue-600 focus:outline-none disabled:bg-gray-100 resize-y"
-              onChange={contractDetailsTextboxHandler}
-              autoComplete='off'
-            />
-            <label
-              htmlFor="message"
-              className="pointer-events-none absolute left-3 top-2 origin-[0] -translate-y-4 scale-75 transform bg-white px-1 text-sm text-gray-500 duration-200 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-2 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:text-blue-600 peer-focus:bg-white"
-            >
-              Message
-              <sup className='text-red-500 text-xs'>*</sup>
-            </label>
-          </div>
+        <div className="relative w-full">
+          <textarea
+            id="message"
+            value={contractDetails.message}
+            placeholder=" "
+            rows={2}
+            className="peer p-2 min-h-10 w-full rounded-[4px] border border-gray-400 bg-white px-3 text-sm text-gray-900 placeholder-transparent focus:border-2 focus:border-blue-600 focus:outline-none disabled:bg-gray-100 resize-y"
+            onChange={contractDetailsTextboxHandler}
+            autoComplete='off'
+          />
+          <label
+            htmlFor="message"
+            className="pointer-events-none absolute left-3 top-2 origin-[0] -translate-y-4 scale-75 transform bg-white px-1 text-sm text-gray-500 duration-200 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-2 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:text-blue-600 peer-focus:bg-white"
+          >
+            Message
+            <sup className='text-red-500 text-xs'>*</sup>
+          </label>
         </div>
 
         <Captcha

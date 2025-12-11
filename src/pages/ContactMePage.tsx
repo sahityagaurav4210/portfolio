@@ -68,7 +68,7 @@ function ContactMePage(): ReactNode {
 
         <Contact />
 
-        <div className='xl:absolute xl:bottom-0 w-full'>
+        <div>
           <Footer />
         </div>
       </>
