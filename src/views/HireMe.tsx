@@ -262,7 +262,7 @@ function HireMe(): ReactNode {
     let id: NodeJS.Timeout;
 
     if (!isValidated) {
-      id = setInterval(() => reloadCaptcha(), 20 * 60 * 1000);
+      id = setInterval(() => reloadCaptcha(), Number(import.meta.env.VITE_CAPTCHA_TIMEOUT) * 60 * 1000);
     }
 
     return function () {

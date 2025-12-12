@@ -213,7 +213,7 @@ function Contact(): ReactNode {
     let id: NodeJS.Timeout;
 
     if (!isValidated) {
-      id = setInterval(() => reloadCaptcha(), 300 * 1000);
+      id = setInterval(() => reloadCaptcha(), Number(import.meta.env.VITE_CAPTCHA_TIMEOUT) * 60 * 1000);
     }
 
     return function () {
