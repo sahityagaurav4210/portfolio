@@ -4,13 +4,10 @@ import { SKILLS } from '../constants';
 import Typewriter from 'typewriter-effect';
 import { BookUser, BriefcaseBusiness } from 'lucide-react';
 
-import HackerrankLogo from '../assets/hackerrank.png';
-import LinkedinLogo from '../assets/linkedin.png';
-import GithubLogo from '../assets/github.png';
-
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
 import ComponentLoader from './ComponentLoader';
+import CodingProfileBanner from './CodingProfileBanner';
 
 function Hero({ url }: Readonly<IHeroProps>): ReactNode {
   const nameRef = useRef<HTMLHeadingElement | null>(null);
@@ -106,45 +103,7 @@ function Hero({ url }: Readonly<IHeroProps>): ReactNode {
             </p>
           </div>
           <div className='flex items-center justify-center md:hidden'>
-            <p className='font-roboto p-2'>Find me on </p>
-            <span className='flex items-center gap-x-2 cursor-pointer'>
-              <button
-                onClick={(_) => window.open('https://hackerrank.com/sahityagaurav_41', '_blank', 'noopener,noreferrer')}
-                className='bg-transparent'
-              >
-                <img
-                  src={HackerrankLogo}
-                  className='rounded-full'
-                  title='Hackerrank'
-                  alt='Hackerrank Logo'
-                />
-              </button>
-
-              <button
-                className='bg-transparent'
-                onClick={(_) => window.open('https://linkedin.com/in/sahityagaurav4210', '_blank', 'noopener,noreferrer')}
-              >
-                <img
-                  src={LinkedinLogo}
-                  className='rounded-full'
-                  title='Linkedin'
-                  alt='Linkedin Logo'
-                />
-              </button>
-
-              <button
-                className='bg-transparent'
-                onClick={(_) => window.open('https://github.com/sahityagaurav4210', '_blank', 'noopener,noreferrer')}
-              >
-                <img
-                  src={GithubLogo}
-                  className='rounded-full'
-                  title='Github'
-                  alt='Github Logo'
-                />
-              </button>
-
-            </span>
+            <CodingProfileBanner/>
           </div>
           <div className='mt-5 flex items-center justify-center gap-x-2 flex-wrap'>
             <a
@@ -200,45 +159,7 @@ function Hero({ url }: Readonly<IHeroProps>): ReactNode {
           </div>
 
           <div className='hidden lg:flex mt-4 items-center justify-center text-gray-700'>
-            <p className='font-roboto p-2'>Find me on </p>
-            <span className='flex items-center gap-x-2 cursor-pointer'>
-              <button
-                onClick={(_) => window.open('https://hackerrank.com/sahityagaurav_41', '_blank', 'noopener,noreferrer')}
-                className='bg-transparent'
-              >
-                <img
-                  src={HackerrankLogo}
-                  className='rounded-full'
-                  title='Hackerrank'
-                  alt='Hackerrank Logo'
-                />
-              </button>
-
-              <button
-                className='bg-transparent'
-                onClick={(_) => window.open('https://linkedin.com/in/sahityagaurav4210', '_blank', 'noopener,noreferrer')}
-              >
-                <img
-                  src={LinkedinLogo}
-                  className='rounded-full'
-                  title='Linkedin'
-                  alt='Linkedin Logo'
-                />
-              </button>
-
-              <button
-                className='bg-transparent'
-                onClick={(_) => window.open('https://github.com/sahityagaurav4210', '_blank', 'noopener,noreferrer')}
-              >
-                <img
-                  src={GithubLogo}
-                  className='rounded-full'
-                  title='Github'
-                  alt='Github Logo'
-                />
-              </button>
-
-            </span>
+            <CodingProfileBanner/>
           </div>
         </div>
       </div>
