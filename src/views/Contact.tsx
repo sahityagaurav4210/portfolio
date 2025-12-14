@@ -135,7 +135,7 @@ function Contact(): ReactNode {
 
     const payload = { ...contractDetails, captchaId, captcha: undefined };
     const controller = new ApiController();
-    
+
     const contractApiResponse = await controller.POST('baas/contract/create', payload);
 
     if (contractApiResponse.status === ApiStatus.SUCCESS)
@@ -187,6 +187,10 @@ function Contact(): ReactNode {
     await reloadCaptcha();
   }
 
+  function intervalHandler(): void {
+    reloadCaptcha();
+  }
+
   useEffect(() => {
     loadCaptcha();
   }, []);
@@ -196,7 +200,7 @@ function Contact(): ReactNode {
     let id: NodeJS.Timeout;
 
     if (!isValidated) {
-      id = setInterval(() => reloadCaptcha(), Number(import.meta.env.VITE_CAPTCHA_TIMEOUT) * 60 * 1000);
+      id = setInterval(intervalHandler, Number(import.meta.env.VITE_CAPTCHA_TIMEOUT) * 60 * 1000);
     }
 
     return function () {
@@ -231,7 +235,7 @@ function Contact(): ReactNode {
 
 
         <div className='grid lg:grid-cols-2 gap-6 mb-4'>
-          
+
           <div className="relative w-full">
             <input
               type="text"

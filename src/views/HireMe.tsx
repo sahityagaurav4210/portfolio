@@ -105,6 +105,10 @@ function HireMe(): ReactNode {
     await reloadCaptcha();
   }
 
+  function intervalHandler(): void {
+    reloadCaptcha();
+  }
+
   async function handleSubmit(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
     event.preventDefault();
 
@@ -269,7 +273,7 @@ function HireMe(): ReactNode {
     let id: NodeJS.Timeout;
 
     if (!isValidated) {
-      id = setInterval(() => reloadCaptcha(), Number(import.meta.env.VITE_CAPTCHA_TIMEOUT) * 60 * 1000);
+      id = setInterval(intervalHandler, Number(import.meta.env.VITE_CAPTCHA_TIMEOUT) * 60 * 1000);
     }
 
     return function () {
