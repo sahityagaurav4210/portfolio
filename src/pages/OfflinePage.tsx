@@ -18,7 +18,7 @@ function OfflinePage(): ReactNode {
           <h1 className='font-roboto text-2xl lg:text-4xl font-extrabold text-red-500 mb-4 underline underline-offset-4 decoration-dashed'>
             CONNECTION LOST
           </h1>
-          <img src={Socket} className='my-4 cursor-none pointer-events-none rounded-lg shadow-lg shadow-zinc-800'></img>
+          <img src={Socket} alt='Fallback text' className='my-4 cursor-none pointer-events-none rounded-lg shadow-lg shadow-zinc-800'></img>
           <p className='text-xs text-justify text-gray-600 mb-6'>
             Ah, we lost connection from our backend servers. We kindly request you to please click on the button below
             once. We're sorry for the inconvenience caused to you.
