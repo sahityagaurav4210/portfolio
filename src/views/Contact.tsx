@@ -4,7 +4,7 @@ import { IContract } from '../interfaces/IContact';
 import { toast } from 'react-toastify';
 import Notes from '../components/Notes';
 import Progress from '../components/Progressbar';
-import { API_BASE_URL, getApiHeaders, HTTP_VERBS } from '../api';
+import { API_BASE_URL, ApiController, ApiStatus, getApiHeaders } from '../api';
 import { IApiResponse } from '../interfaces';
 import Captcha from '../components/Captcha';
 import { getAppToastConfig } from '../config';
@@ -37,7 +37,7 @@ function Contact(): ReactNode {
     try {
       const timerId = setTimeout(() => {
         controller.abort('Captcha api timeout');
-      }, parseInt(import.meta.env.VITE_BACKEND_API_TIMEOUT) || 1000);
+      }, Number.parseInt(import.meta.env.VITE_BACKEND_API_TIMEOUT) || 1000);
 
       const rawCaptchaResponse = await fetch(`${API_BASE_URL}/captcha`, {
         signal: controller.signal,
@@ -54,7 +54,7 @@ function Contact(): ReactNode {
       setCaptchaData(URL.createObjectURL(blob));
       setCaptchaId(data.captchaId);
       clearTimeout(timerId);
-    } catch (error: any) {
+    } catch {
       toast.warning('Failed to refresh the data', getAppToastConfig());
     } finally {
       setIsLoading(false);
@@ -68,7 +68,7 @@ function Contact(): ReactNode {
     try {
       const timerId = setTimeout(() => {
         controller.abort('Captcha api timeout');
-      }, parseInt(import.meta.env.VITE_BACKEND_API_TIMEOUT) || 1000);
+      }, Number.parseInt(import.meta.env.VITE_BACKEND_API_TIMEOUT) || 1000);
 
       const rawCaptchaResponse = await fetch(`${API_BASE_URL}/ref-captcha?captchaId=${captchaId}`, {
         signal: controller.signal,
@@ -84,7 +84,7 @@ function Contact(): ReactNode {
 
       setCaptchaData(URL.createObjectURL(blob));
       clearTimeout(timerId);
-    } catch (error: any) {
+    } catch {
       toast.warning('Failed to refresh the data', getAppToastConfig());
     } finally {
       setIsLoading(false);
@@ -105,9 +105,6 @@ function Contact(): ReactNode {
       toast.warning('Please verify your captcha first', getAppToastConfig());
       return;
     }
-
-    const abortController = new AbortController();
-
 
     if (contractDetails.message.length < 10) {
       toast.warning('Message is too short. It must be at least 10 characters long.', getAppToastConfig());
@@ -135,73 +132,63 @@ function Contact(): ReactNode {
     }
 
     setIsLoading(true);
-    const timerId = setTimeout(() => {
-      abortController.abort('Contract api timeout');
-    }, parseInt(import.meta.env.VITE_BACKEND_API_TIMEOUT) || 1000);
 
-    try {
-      const payload = { ...contractDetails, captchaId, captcha: undefined };
-      const apiRawResponse = await fetch(`${API_BASE_URL}/baas/contract/create`, {
-        method: HTTP_VERBS.POST,
-        headers: {
-          'Content-Type': 'application/json',
-          Accept: '*/*',
-          ...getApiHeaders()
-        },
-        body: JSON.stringify(payload),
-        signal: abortController.signal,
-      });
-      clearTimeout(timerId);
+    const payload = { ...contractDetails, captchaId, captcha: undefined };
+    const controller = new ApiController();
 
-      const response = await apiRawResponse.json();
+    const contractApiResponse = await controller.POST('baas/contract/create', payload);
 
-      if (apiRawResponse.ok) {
-        toast.success(response.message, getAppToastConfig());
-      } else toast.error(response.message, getAppToastConfig());
+    if (contractApiResponse.status === ApiStatus.SUCCESS)
+      toast.success(contractApiResponse.message, getAppToastConfig());
+    else
+      toast.error(contractApiResponse.message, getAppToastConfig());
 
-    } catch (error: unknown) {
-      const err = error as Error;
-      toast.error(err.message, getAppToastConfig());
-    } finally {
-      setContractDetails({
-        first_name: '',
-        last_name: '',
-        email: '',
-        message: '',
-        captcha: '',
-      });
+    setContractDetails({
+      first_name: '',
+      last_name: '',
+      email: '',
+      message: '',
+      captcha: '',
+    });
 
-      setIsLoading(false);
-      setIsValidated(false);
-      await loadCaptcha();
-    }
+    setIsLoading(false);
+    setIsValidated(false);
+    await loadCaptcha();
   }
 
   async function handleCheckBoxOnChange(event: React.ChangeEvent<HTMLInputElement>) {
-    // event is unused; referencing it avoids 'declared but never read' lint errors
-    void event;
+    event.preventDefault();
+
+    if (isLoading || !event.isTrusted || isValidated || !captchaId) return;
+
     const captcha = contractDetails.captcha;
+    const controller = new ApiController();
+
     setIsLoading(true);
 
-    const rawCaptchaValidateResponse = await fetch(
-      `${API_BASE_URL}/captcha-validate?captcha=${captcha}&captchaId=${captchaId}`
-    );
-    const captchaValidateResponse = await rawCaptchaValidateResponse.json();
+    const captchaValidateResponse = await controller.GET(`captcha-validate?captcha=${captcha}&captchaId=${captchaId}`);
 
-    if (rawCaptchaValidateResponse.ok && captchaValidateResponse.message == 'Captcha verified') {
+    if (captchaValidateResponse.status === ApiStatus.SUCCESS && captchaValidateResponse.message == 'Captcha verified') {
       setIsLoading(false);
       setIsValidated(true);
-
       toast.success(captchaValidateResponse.message, getAppToastConfig());
-    } else {
-      setIsLoading(false);
-
-      toast.error(captchaValidateResponse.message, getAppToastConfig());
+      return;
     }
+
+    if (captchaValidateResponse.status === ApiStatus.ERROR || captchaValidateResponse.status === ApiStatus.EXCEPTION) {
+      await loadCaptcha();
+    }
+
+    setIsLoading(false);
+    toast.error(captchaValidateResponse.message, getAppToastConfig());
   }
 
   async function refreshCaptcha() {
     await reloadCaptcha();
+  }
+
+  function intervalHandler(): void {
+    reloadCaptcha();
   }
 
   useEffect(() => {
@@ -213,7 +200,7 @@ function Contact(): ReactNode {
     let id: NodeJS.Timeout;
 
     if (!isValidated) {
-      id = setInterval(() => reloadCaptcha(), Number(import.meta.env.VITE_CAPTCHA_TIMEOUT) * 60 * 1000);
+      id = setInterval(intervalHandler, Number(import.meta.env.VITE_CAPTCHA_TIMEOUT) * 60 * 1000);
     }
 
     return function () {
@@ -248,7 +235,7 @@ function Contact(): ReactNode {
 
 
         <div className='grid lg:grid-cols-2 gap-6 mb-4'>
-          {/* {FirstName} */}
+
           <div className="relative w-full">
             <input
               type="text"
@@ -266,12 +253,10 @@ function Contact(): ReactNode {
               htmlFor="first_name"
               className="pointer-events-none absolute left-3 top-2 origin-[0] -translate-y-4 scale-75 transform bg-white px-1 text-sm text-gray-500 duration-200 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-2 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:text-blue-600 peer-focus:bg-white"
             >
-              First Name
-              <sup className='text-red-500 text-xs'>*</sup>
+              First Name<sup className='text-red-500 text-xs'>*</sup>
             </label>
           </div>
 
-          {/* {LastName} */}
           <div className="relative w-full">
             <input
               type="text"
@@ -308,8 +293,7 @@ function Contact(): ReactNode {
             htmlFor="email"
             className="pointer-events-none absolute left-3 top-2 origin-[0] -translate-y-4 scale-75 transform bg-white px-1 text-sm text-gray-500 duration-200 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-2 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:text-blue-600 peer-focus:bg-white"
           >
-            Email
-            <sup className='text-red-500 text-xs'>*</sup>
+            Email<sup className='text-red-500 text-xs'>*</sup>
           </label>
         </div>
 
@@ -327,8 +311,7 @@ function Contact(): ReactNode {
             htmlFor="message"
             className="pointer-events-none absolute left-3 top-2 origin-[0] -translate-y-4 scale-75 transform bg-white px-1 text-sm text-gray-500 duration-200 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-2 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:text-blue-600 peer-focus:bg-white"
           >
-            Message
-            <sup className='text-red-500 text-xs'>*</sup>
+            Message<sup className='text-red-500 text-xs'>*</sup>
           </label>
         </div>
 
@@ -371,20 +354,20 @@ function Contact(): ReactNode {
 
         <div className='flex items-center mt-4'>
           <button
-            disabled={isLoading || !isValidated}
+            disabled={isLoading || !isValidated || !captchaId}
             type='submit'
             className='min-w-28 transition-transform duration-500 mt-2 inline-flex items-center px-2 py-3.5 border-2 border-dashed border-blue-400 border-spacing-2 justify-center font-bold text-white bg-blue-800 rounded-lg ring-2 ring-offset-1 ring-blue-400 scale-95 focus:scale-100 outline-none text-sm lg:text-base shadow-md shadow-blue-800 disabled:bg-slate-700 disabled:border-slate-600 disabled:ring-slate-400'
           >
             {
-              !isLoading ? (
-                <>
-                  <Contact2 className='mx-2' />
-                  <span>Contact Me</span>
-                </>
-              ) : (
+              isLoading ? (
                 <>
                   <Progress />
                   <span>Loading, please wait...</span>
+                </>
+              ) : (
+                <>
+                  <Contact2 className='mx-2' />
+                  <span>Contact Me</span>
                 </>
               )
             }

@@ -69,7 +69,7 @@ export class ApiController {
       const reply = (await rawReply.json()) as IApiReply;
 
       return reply;
-    } catch (error) {
+    } catch {
       const reply = {
         status: ApiStatus.TIMEOUT,
         message: "Connection broked, please try again later",
@@ -82,7 +82,7 @@ export class ApiController {
   public async POST(url: string, payload?: Record<string, any>): Promise<IApiReply> {
     try {
       const controller = new AbortController();
-      const headers = getApiHeaders();
+      const headers = { ...getApiHeaders(), 'Content-Type': 'application/json', Accept: 'application/json' };
       const stringifiedPayload = payload ? { body: JSON.stringify(payload) } : {};
 
       setTimeout(() => {
@@ -101,7 +101,7 @@ export class ApiController {
       const reply = (await rawReply.json()) as IApiReply;
 
       return reply;
-    } catch (error) {
+    } catch {
       const reply = {
         status: ApiStatus.TIMEOUT,
         message: "Connection broked, please try again later",

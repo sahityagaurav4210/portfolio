@@ -27,7 +27,7 @@ function ContactMePage(): ReactNode {
         setApiSignal(false);
         setApiResponses(prev => ({ ...prev, updateWebsiteViewsApi: true }));
       }
-    } catch (error) {
+    } catch {
       setApiSignal(false);
       setApiResponses(prev => ({ ...prev, updateWebsiteViewsApi: true }));
     }
@@ -37,7 +37,7 @@ function ContactMePage(): ReactNode {
     const controller = new ApiController();
 
     try {
-      const response = await controller.POST("ping");
+      const response = await controller.GET("ping");
 
       if (response.status === ApiStatus.SUCCESS) {
         setApiSignal(true);
@@ -45,7 +45,7 @@ function ContactMePage(): ReactNode {
         setApiSignal(false);
         setApiResponses(prev => ({ ...prev, pingApi: true }));
       }
-    } catch (error) {
+    } catch {
       setApiSignal(false);
       setApiResponses(prev => ({ ...prev, pingApi: true }));
     }

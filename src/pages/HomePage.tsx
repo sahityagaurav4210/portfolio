@@ -29,7 +29,7 @@ function HomePage(): ReactNode {
 
   useEffect(() => {
     const controller = new AbortController();
-    const timeOut = parseInt(import.meta.env.VITE_BACKEND_API_TIMEOUT) || 1000;
+    const timeOut = Number.parseInt(import.meta.env.VITE_BACKEND_API_TIMEOUT) || 1000;
 
     const timerId = setTimeout(() => {
       controller.abort('Update website view api timeout');
@@ -52,7 +52,7 @@ function HomePage(): ReactNode {
           setApiSignal(false);
           setApiResponses({ ...apiResponses, updateWebsiteViewsApi: true });
         }
-      } catch (error) {
+      } catch {
         setApiSignal(false);
         setApiResponses((prev) => ({ ...prev, updateWebsiteViewsApi: true }));
       }
@@ -75,7 +75,7 @@ function HomePage(): ReactNode {
           setIsLoaded(false);
           setApiResponses({ ...apiResponses, pingApi: true });
         }
-      } catch (error: any) {
+      } catch {
         setIsLoaded(false);
         setApiSignal(false);
         setApiResponses((prev) => ({ ...prev, pingApi: true }));
@@ -102,7 +102,7 @@ function HomePage(): ReactNode {
           setLastModifiedDate(Date.now());
           setApiResponses({ ...apiResponses, getWebsiteUpdateDetailsApi: true });
         }
-      } catch (error: any) {
+      } catch {
         setLastModifiedDate(Date.now());
         setApiResponses((prev) => ({ ...prev, getWebsiteUpdateDetailsApi: true }));
       }
@@ -121,7 +121,7 @@ function HomePage(): ReactNode {
         else {
           setApiResponses(prev => ({ ...prev, getPhotoUrl: true }))
         }
-      } catch (error: any) {
+      } catch {
         setApiResponses(prev => ({ ...prev, getPhotoUrl: true }))
       }
     }
