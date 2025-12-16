@@ -14,7 +14,7 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-        
+
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v3
         with:
@@ -42,17 +42,25 @@ jobs:
         if: github.event_name == 'push' && github.ref == 'refs/heads/master'
         env:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-        run:
-          |
-           docker build -t portfolio .
-           docker tag portfolio ${DOCKER_USERNAME}/portfolio:latest
-      
+        run: |
+          docker build -t portfolio .
+          docker tag portfolio ${DOCKER_USERNAME}/portfolio:latest
+
       - name: Publishing
         env:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
           DOCKER_PASSWORD: ${{ secrets.DOCKER_SECRET }}
         if: github.event_name == 'push' && github.ref == 'refs/heads/master'
-        run: 
-          |
-           docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD}
-           docker push ${DOCKER_USERNAME}/portfolio:latest
+        run: |
+          docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD}
+          docker push ${DOCKER_USERNAME}/portfolio:latest
+
+      - name: Deploying
+        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+        run: |
+          npm install -g caprover
+          caprover deploy \
+          --host ${{ secrets.CAPROVER_HOST }} \
+          -p ${{ secrets.CAPROVER_PWD }} \
+          --imageName ${{ secrets.DOCKER_USERNAME }}/portfolio:latest \
+          --appName portfolio
