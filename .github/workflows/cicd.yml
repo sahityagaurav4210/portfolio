@@ -42,8 +42,17 @@ jobs:
         if: github.event_name == 'push' && github.ref == 'refs/heads/master'
         env:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          VITE_BACKEND_BASE_URL: ${{ secrets.VITE_BACKEND_BASE_URL }}
+          VITE_BACKEND_API_TIMEOUT: ${{ secrets.VITE_BACKEND_API_TIMEOUT }}
+          VITE_BACKEND_TOKEN: ${{ secrets.VITE_BACKEND_TOKEN }}
+          VITE_LINKEDIN_URL: ${{ secrets.VITE_LINKEDIN_URL }}
+          VITE_INSTAGRAM_URL: ${{ secrets.VITE_INSTAGRAM_URL }}
+          VITE_TWITTER_URL: ${{ secrets.VITE_TWITTER_URL }}
+          VITE_LIVE_URL: ${{ secrets.VITE_LIVE_URL }}
+          VITE_PBADMIN_URL: ${{ secrets.VITE_PBADMIN_URL }}
+          VITE_CAPTCHA_TIMEOUT: ${{ secrets.VITE_CAPTCHA_TIMEOUT }}
         run: |
-          docker build -t portfolio .
+          docker build --build-args VITE_BACKEND_BASE_URL=${VITE_BACKEND_BASE_URL} VITE_BACKEND_API_TIMEOUT=${VITE_BACKEND_API_TIMEOUT} VITE_BACKEND_TOKEN=${VITE_BACKEND_TOKEN} VITE_LINKEDIN_URL=${VITE_LINKEDIN_URL}  VITE_INSTAGRAM_URL=${VITE_INSTAGRAM_URL} VITE_TWITTER_URL=${VITE_TWITTER_URL} VITE_LIVE_URL=${VITE_LIVE_URL} VITE_PBADMIN_URL=${VITE_PBADMIN_URL} VITE_CAPTCHA_TIMEOUT=${VITE_CAPTCHA_TIMEOUT} -t portfolio .
           docker tag portfolio ${DOCKER_USERNAME}/portfolio:latest
 
       - name: Publishing
