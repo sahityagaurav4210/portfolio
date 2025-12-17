@@ -8,8 +8,8 @@ import Projects from '../components/Projects';
 import Loader from '../components/Loader';
 import Support from '../components/Support';
 
-import { API_BASE_URL, downloadMedia, getApiHeaders, HTTP_VERBS } from '../api';
-import { IApiResponse, IApisResponse } from '../interfaces';
+import { API_BASE_URL, ApiController, ApiStatus, downloadMedia, getApiHeaders, HTTP_VERBS } from '../api';
+import { IApisResponse } from '../interfaces';
 import { education, experience, menuItems, personal_projects, projects } from '../data';
 import { useNavigate } from 'react-router-dom';
 
@@ -23,7 +23,7 @@ function HomePage(): ReactNode {
     getWebsiteUpdateDetailsApi: false,
     getPhotoUrl: false,
   });
-  const [photoUrl, setPhotoUrl] = useState<string>("");
+  const [photoUrl, setPhotoUrl] = useState<string>('');
 
   const navigate = useNavigate();
 
@@ -84,18 +84,12 @@ function HomePage(): ReactNode {
 
     async function getWebsiteUpdateDetails() {
       try {
-        const rawWebsiteUpdatesResponse = await fetch(
-          `${API_BASE_URL}/baas/website/last-modified-date?portfolio_url=https://gaurav-sahitya.netlify.app`,
-          {
-            signal: controller.signal,
-            headers: getApiHeaders(),
-          }
+        const controller = new ApiController();
+        const websiteUpdateResponse = await controller.GET(
+          `baas/website/last-modified-date?portfolio_url=${import.meta.env.VITE_LIVE_URL}`
         );
 
-        if (timerId) clearTimeout(timerId);
-        const websiteUpdateResponse = (await rawWebsiteUpdatesResponse.json()) as IApiResponse;
-
-        if (rawWebsiteUpdatesResponse.ok) {
+        if (websiteUpdateResponse.status === ApiStatus.SUCCESS && websiteUpdateResponse.data?.lastModifiedAt) {
           setLastModifiedDate(websiteUpdateResponse.data?.lastModifiedAt);
           setApiResponses({ ...apiResponses, getWebsiteUpdateDetailsApi: false });
         } else {
@@ -114,15 +108,14 @@ function HomePage(): ReactNode {
 
         if (timerId) clearTimeout(timerId);
         if (photo) {
-          localStorage.setItem("photo-url", photo);
+          localStorage.setItem('photo-url', photo);
           setPhotoUrl(photo);
-          setApiResponses(prev => ({ ...prev, getPhotoUrl: false }))
-        }
-        else {
-          setApiResponses(prev => ({ ...prev, getPhotoUrl: true }))
+          setApiResponses((prev) => ({ ...prev, getPhotoUrl: false }));
+        } else {
+          setApiResponses((prev) => ({ ...prev, getPhotoUrl: true }));
         }
       } catch {
-        setApiResponses(prev => ({ ...prev, getPhotoUrl: true }))
+        setApiResponses((prev) => ({ ...prev, getPhotoUrl: true }));
       }
     }
 
@@ -141,7 +134,13 @@ function HomePage(): ReactNode {
   } else
     return (
       <>
-        <Navbar menuItems={menuItems} url={`${import.meta.env.VITE_BACKEND_BASE_URL}/baas/files/download-cv?token=${import.meta.env.VITE_BACKEND_TOKEN}`} disabled={false} />
+        <Navbar
+          menuItems={menuItems}
+          url={`${import.meta.env.VITE_BACKEND_BASE_URL}/baas/files/download-cv?token=${
+            import.meta.env.VITE_BACKEND_TOKEN
+          }`}
+          disabled={false}
+        />
 
         <section id='home'>
           <Hero url={photoUrl} />
