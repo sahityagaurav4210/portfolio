@@ -13,7 +13,7 @@ function Support({ lastModifiedDate }: Readonly<ISupport>): ReactNode {
           For any support and queries please{' '}
           <a
             href='mailto:works.sahitya@gmail.com'
-            className='underline decoration-dashed decoration-blue-800 text-blue-800'
+            className='underline decoration-dotted font-bold decoration-blue-800 text-blue-800 uppercase underline-offset-2 text-xs'
           >
             click here.
           </a>
