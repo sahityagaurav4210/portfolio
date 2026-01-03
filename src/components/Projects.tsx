@@ -3,39 +3,34 @@ import Cards from './Cards';
 import { IProjects, IProjectsProps } from '../interfaces/IProjects';
 import Heading from './Heading';
 import { Link } from 'react-router-dom';
-import { SquareArrowOutUpRight } from 'lucide-react';
+import { BriefcaseBusiness, Building2, SquareArrowOutUpRight } from 'lucide-react';
+import TextContainer from './TextContainer';
 
 const Projects: React.FC<IProjectsProps> = ({ projects, personal_projects }) => {
   return (
     <>
       <Heading headingName='Projects' />
 
-      <div>
-        <h1 className='text-4xl lg:text-5xl text-blue-800 sm:text-center lg:text-start italic underline underline-offset-8 decoration-dashed decoration-blue-800/55 font-roboto p-6 mb-3'>
-          Personal <span className='text-blue-800/95 font-bold'>Projects</span>
-        </h1>
+      <TextContainer applyMy>
+        <p className='text-sm lg:text-lg font-roboto text-justify'>
+          <span className='text-lg lg:text-4xl font-bold font-bookman text-blue-800'>I</span> have worked on diverse
+          projects across both <span className='font-bold'>government</span> and{' '}
+          <span className='font-bold'>private</span> sector organizations. These assignments involved designing,
+          developing, and maintaining robust applications while collaborating with{' '}
+          <span className='font-bold'>multidisciplinary</span> teams and adhering to{' '}
+          <span className='font-bold'>strict regulatory</span> and business requirements. This experience has enhanced
+          my adaptability, problem-solving skills, and understanding of varied operational environments. Below, I have
+          listed my projects which I have worked on in a categorized manner.
+        </p>
+      </TextContainer>
 
-        <div className='flex flex-wrap items-center justify-center mb-5'>
-          {personal_projects.map((project: IProjects) => (
-            <Cards
-              key={project.name}
-              name={project.name}
-              text={project.text}
-              tech_stack={project.tech_stack}
-              disabled={project.disabled}
-              codeLink={project.codeLink}
-              liveLink={project.liveLink}
-              documentation_link={project.documentation_link}
-              ongoing={project.ongoing}
-              note={project.note}
-              showDivider={project.showDivider}
-            />
-          ))}
+      <div className='container mx-auto'>
+        <div className='flex items-center p-4 gap-2'>
+          <Building2 size={48} className='text-orange-600' />
+          <h1 className='text-4xl lg:text-5xl text-blue-800 sm:text-center lg:text-start font-roboto'>
+            Company <span className='text-blue-800/95 font-bold'>PROJECTS</span>
+          </h1>
         </div>
-
-        <h1 className='text-4xl lg:text-5xl text-blue-800 sm:text-center lg:text-start italic underline underline-offset-8 decoration-dashed decoration-blue-800/55 font-roboto p-6 mb-3'>
-          Company <span className='text-blue-800/75 font-semibold'>Projects</span>
-        </h1>
 
         <div className='flex flex-wrap items-center justify-center'>
           {projects.map((project: IProjects) => (
@@ -54,13 +49,42 @@ const Projects: React.FC<IProjectsProps> = ({ projects, personal_projects }) => 
             />
           ))}
         </div>
+
+        <div className='flex items-center p-4 gap-2'>
+          <BriefcaseBusiness size={48} className='text-orange-600' />
+          <h1 className='text-4xl lg:text-5xl text-blue-800 sm:text-center lg:text-start font-roboto'>
+            Personal <span className='text-blue-800/95 font-bold'>PROJECT</span>
+          </h1>
+        </div>
+
+        <div className='flex flex-wrap items-center justify-center mb-5'>
+          {personal_projects.map((project: IProjects) => (
+            <Cards
+              key={project.name}
+              name={project.name}
+              text={project.text}
+              tech_stack={project.tech_stack}
+              disabled={project.disabled}
+              codeLink={project.codeLink}
+              liveLink={project.liveLink}
+              documentation_link={project.documentation_link}
+              ongoing={project.ongoing}
+              note={project.note}
+              showDivider={project.showDivider}
+            />
+          ))}
+        </div>
       </div>
 
-      <div className='container my-2 mx-auto p-4'>
-        <p className="text-sm lg:text-lg font-roboto text-justify">I hope you've liked my projects which I have worked on. I also do side projects and if there's a project for me then you can directly <span className="font-bold">hire me</span> as a freelance software developer. Please fill the form by clicking on the button given below.</p>
-      </div>
+      <TextContainer applyMy>
+        <p className='text-sm lg:text-lg font-roboto text-justify'>
+          I hope you've liked my projects which I have worked on. I also do side projects and if there's a project for
+          me then you can directly <span className='font-bold'>hire me</span> as a freelance software developer. Please
+          fill the form by clicking on the button given below.
+        </p>
+      </TextContainer>
 
-      <div className="container mx-auto">
+      <div className='container mx-auto'>
         <div className='max-w-max'>
           <Link
             to='/hiring'

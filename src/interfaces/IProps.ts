@@ -8,4 +8,5 @@ export interface IEducationProps {
 
 export interface IDividerProps {
   color?: string;
+  my?: number;
 }

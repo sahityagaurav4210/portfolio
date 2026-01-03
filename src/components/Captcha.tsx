@@ -1,24 +1,64 @@
-import React, { ReactNode, } from 'react';
+import React, { ReactNode, useCallback } from 'react';
 import Progress from './Progressbar';
 import Validated from './Validated';
 import { ICaptchaProps } from '../interfaces/ICaptcha';
-import { CircleCheck, RefreshCcw } from 'lucide-react';
+import { AudioWaveform, CircleCheck, RefreshCcw } from 'lucide-react';
 
-function Captcha({ captchaData, isLoading, isValidated, refreshCaptcha, contractDetails, contractDetailsTextboxHandler, handleCheckBoxOnChange }: ICaptchaProps): ReactNode {
+function Captcha({
+  captchaData,
+  isLoading,
+  isValidated,
+  refreshCaptcha,
+  contractDetails,
+  contractDetailsTextboxHandler,
+  handleCheckBoxOnChange,
+  captchaAudioUrl,
+}: Readonly<ICaptchaProps>): ReactNode {
+  const playCaptchaAudio = useCallback(
+    function () {
+      if (!captchaAudioUrl) return;
+
+      const audio = new Audio();
+      audio.src = captchaAudioUrl;
+      audio.play();
+    },
+    [captchaAudioUrl]
+  );
+
   if (isValidated) return <Validated />;
 
   return (
     <div className='grid grid-cols-12 gap-2 min-h-20 mb-2'>
-      <div className='col-span-12 lg:col-span-4 rounded-md flex items-center justify-evenly lg:justify-center'>
-        <img src={captchaData} alt="Captcha" className='lg:mx-2' />
-        <button
-          className='border transition-all p-2 rounded-md bg-orange-900 border-orange-500 border-spacing-2 ring-1 ring-offset-1 ring-orange-400 cursor-pointer focus:outline-dotted outline-orange-300 scale-95 focus-within:scale-100'
-          type='button'
-          disabled={isValidated}
-          onClick={refreshCaptcha}
-        >
-          {!isLoading ? <RefreshCcw className='text-white' onClick={refreshCaptcha} /> : <Progress />}
-        </button>
+      <div className='col-span-12 lg:col-span-4 rounded-md'>
+        <div className='w-full flex items-center justify-evenly lg:justify-center flex-wrap'>
+          <img src={captchaData} alt='Captcha' className='lg:mx-2' />
+
+          {isLoading ? (
+            <div className='w-12 h-12 bg-blue-800 rounded-md flex items-center justify-center ring-1 ring-offset-1 ring-blue-400 focus:outline-dotted outline-blue-300 scale-95 focus-within:scale-100'>
+              <Progress />
+            </div>
+          ) : (
+            <>
+              <button
+                className='border transition-all p-2 rounded-md bg-orange-900 border-orange-500 border-spacing-2 ring-1 ring-offset-1 ring-orange-400 cursor-pointer focus:outline-dotted outline-orange-300 scale-95 focus-within:scale-100'
+                type='button'
+                disabled={isValidated}
+                onClick={refreshCaptcha}
+              >
+                <RefreshCcw className='text-white' onClick={refreshCaptcha} />
+              </button>
+
+              <button
+                className='border transition-all p-2 rounded-md bg-orange-900 border-orange-500 border-spacing-2 ring-1 ring-offset-1 ring-orange-400 cursor-pointer focus:outline-dotted outline-orange-300 scale-95 focus-within:scale-100 mx-1'
+                type='button'
+                disabled={isValidated}
+                onClick={playCaptchaAudio}
+              >
+                <AudioWaveform className='text-white' />
+              </button>
+            </>
+          )}
+        </div>
       </div>
 
       <div className='col-span-8 lg:col-span-3'>
@@ -43,27 +83,25 @@ function Captcha({ captchaData, isLoading, isValidated, refreshCaptcha, contract
       </div>
 
       <div className='col-span-4 lg:col-span-3 flex items-center justify-evenly lg:justify-center'>
-        {
-          !isLoading ? (
-            <>
-              <div className='relative flex items-center justify-center'>
-                <input
-                  type='checkbox'
-                  id='validate'
-                  className='appearance-none text-blue-500 transition-all border border-blue-500 border-spacing-4 ring-1 ring-offset-1 ring-blue-400 scale-95 rounded-md mx-2 h-8 w-8 checked:bg-blue-700 checked:scale-100 checked:before:content'
-                  onChange={handleCheckBoxOnChange}
-                />
-                <CircleCheck className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-white' />
-              </div>
+        {isLoading ? (
+          <Progress />
+        ) : (
+          <>
+            <div className='relative flex items-center justify-center'>
+              <input
+                type='checkbox'
+                id='validate'
+                className='appearance-none text-blue-500 transition-all border border-blue-500 border-spacing-4 ring-1 ring-offset-1 ring-blue-400 scale-95 rounded-md mx-2 h-8 w-8 checked:bg-blue-700 checked:scale-100 checked:before:content'
+                onChange={handleCheckBoxOnChange}
+              />
+              <CircleCheck className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-white' />
+            </div>
 
-              <label htmlFor='validate' className='cursor-pointer text-sm lg:text-lg font-bold font-roboto'>
-                I'm not a robot
-              </label>
-            </>
-          ) : (
-            <Progress />
-          )
-        }
+            <label htmlFor='validate' className='cursor-pointer text-sm lg:text-lg font-bold font-roboto'>
+              I'm not a robot
+            </label>
+          </>
+        )}
       </div>
     </div>
   );

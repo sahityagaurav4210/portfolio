@@ -13,13 +13,18 @@ const Cards: React.FC<IProjects> = ({
   liveLink,
   documentation_link,
   ongoing,
-  note, showDivider, cardImage
+  note,
+  showDivider,
+  cardImage,
 }) => {
   return (
     <div className='transition-all w-96 min-h-[700px] rounded-md border-2 border-dashed border-blue-500 ring-1 ring-offset-1 ring-blue-400 mx-2 mb-3 relative'>
-      <div className="m-1">
+      <div className='m-1'>
         <img
-          src={cardImage || 'https://images.unsplash.com/photo-1522199755839-a2bacb67c546?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTF8fGJsb2d8ZW58MHx8MHx8&auto=format&fit=crop&w=800&q=60'}
+          src={
+            cardImage ||
+            'https://images.unsplash.com/photo-1522199755839-a2bacb67c546?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTF8fGJsb2d8ZW58MHx8MHx8&auto=format&fit=crop&w=800&q=60'
+          }
           alt='Laptop'
           className='rounded-md min-h-[250px] w-full object-cover flex justify-center'
         />
@@ -35,18 +40,18 @@ const Cards: React.FC<IProjects> = ({
         </div>
 
         <div className='my-2'>
-          {
-            tech_stack.length ?
-              tech_stack.map((stack, index) => (
-                <span
-                  key={index}
-                  className='font-arial text-gray-800 shadow-sm shadow-black mb-2 mr-1 inline-block rounded-sm bg-neutral-200 p-1 text-sm font-semibold text-center'
-                >
-                  {stack}
-                </span>
-              )) :
-              <Warning text='Due to some security reasons, tech stack of this project is not provided in the public domain.' />
-          }
+          {tech_stack.length ? (
+            tech_stack.map((stack) => (
+              <span
+                key={stack}
+                className='font-arial text-gray-800 shadow-sm shadow-black mb-2 mr-1 inline-block rounded-sm bg-neutral-200 p-1 text-sm font-semibold text-center'
+              >
+                {stack}
+              </span>
+            ))
+          ) : (
+            <Warning text='Due to some security reasons, tech stack of this project is not provided in the public domain.' />
+          )}
         </div>
 
         {showDivider && <Divider color='bg-blue-200' />}
@@ -55,20 +60,26 @@ const Cards: React.FC<IProjects> = ({
 
         {!disabled && (
           <div className='flex flex-col'>
-            {codeLink && <button
-              type='button'
-              disabled={disabled}
-              onClick={() => codeLink ? window.open(codeLink) : alert("Sorry, but code is not available at the moment.")}
-              className='transistion-all mt-4 w-full rounded-sm bg-orange-800 px-2 py-1.5 text-sm font-bold text-white shadow-sm hover:bg-neutral-100 hover:text-orange-800 outline-none ring-1 ring-offset-1 ring-orange-500 border border-dashed border-orange-400 scale-95 focus-visible:scale-100 font-roboto'
-            >
-              View code <ArrowUpRight className='inline-block font-bold' />
-            </button>}
+            {codeLink && (
+              <button
+                type='button'
+                disabled={disabled}
+                onClick={() =>
+                  codeLink ? window.open(codeLink) : alert('Sorry, but code is not available at the moment.')
+                }
+                className='transistion-all mt-4 w-full rounded-sm bg-orange-800 px-2 py-1.5 text-sm font-bold text-white shadow-sm hover:bg-neutral-100 hover:text-orange-800 outline-none ring-1 ring-offset-1 ring-orange-500 border border-dashed border-orange-400 scale-95 focus-visible:scale-100 font-roboto'
+              >
+                View code <ArrowUpRight className='inline-block font-bold' />
+              </button>
+            )}
 
             {liveLink && (
               <button
                 type='button'
                 disabled={disabled}
-                onClick={() => liveLink ? window.open(liveLink) : alert("Sorry, but the preview is not available at the moment.")}
+                onClick={() =>
+                  liveLink ? window.open(liveLink) : alert('Sorry, but the preview is not available at the moment.')
+                }
                 className='transistion-all mt-4 w-full rounded-sm bg-orange-800 px-2 py-1.5 text-sm font-bold text-white shadow-sm hover:bg-neutral-100 hover:text-orange-800 outline-none ring-1 ring-offset-1 ring-orange-500 border border-dashed border-orange-400 scale-95 focus-visible:scale-100 font-roboto'
               >
                 Preview <ArrowUpRight className='inline-block font-bold' />
@@ -79,7 +90,11 @@ const Cards: React.FC<IProjects> = ({
               <button
                 type='button'
                 disabled={disabled}
-                onClick={() => documentation_link ? window.open(documentation_link) : alert("No docs are available for the selected project.")}
+                onClick={() =>
+                  documentation_link
+                    ? window.open(documentation_link)
+                    : alert('No docs are available for the selected project.')
+                }
                 className='transistion-all mt-4 w-full rounded-sm bg-orange-800 px-2 py-1.5 text-sm font-bold text-white shadow-sm hover:bg-neutral-100 hover:text-orange-800 outline-none ring-1 ring-offset-1 ring-orange-500 border border-dashed border-orange-400 scale-95 focus-visible:scale-100'
               >
                 View docs <ArrowUpRight className='inline-block font-bold' />

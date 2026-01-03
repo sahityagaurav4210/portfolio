@@ -3,7 +3,10 @@ export interface ICaptchaProps {
   isLoading: boolean;
   isValidated: boolean;
   refreshCaptcha(): Promise<void>;
-  contractDetails: Record<string,any>;
-  contractDetailsTextboxHandler(event: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>): void;
-  handleCheckBoxOnChange(event: React.ChangeEvent<HTMLInputElement>): Promise<void>
+  contractDetails: Record<string, any>;
+  contractDetailsTextboxHandler(
+    event: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>
+  ): void;
+  handleCheckBoxOnChange(event: React.ChangeEvent<HTMLInputElement>): Promise<void>;
+  captchaAudioUrl?: string;
 }
