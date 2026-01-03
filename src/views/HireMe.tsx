@@ -344,7 +344,7 @@ function HireMe(): ReactNode {
                   htmlFor='tenure'
                   className='pointer-events-none absolute left-3 top-2 origin-[0] -translate-y-4 scale-75 transform bg-white px-1 text-sm text-gray-500 duration-200 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-2 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:text-blue-600 peer-focus:bg-white'
                 >
-                  Tenure
+                  Tenure (in months)
                 </label>
               </div>
             </div>

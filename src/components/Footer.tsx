@@ -16,9 +16,12 @@ function Footer() {
               &nbsp;
               <img src='/ind.svg' alt='Indian Flag' width={16} height={16} />
             </span>{' '}
-            &nbsp; • &copy; 2024-2026 Gaurav Sahitya • All rights are reserved
+            &nbsp;
           </p>
+
+          <p>&copy; 2024-2026 Gaurav Sahitya • All rights are reserved</p>
         </div>
+
         <div className='p-1 flex items-center justify-center lg:border-r flex-col'>
           <div>
             <a
@@ -30,6 +33,7 @@ function Footer() {
             </a>
           </div>
         </div>
+
         <div className='p-1 mt-1 lg:mt-0 flex justify-evenly items-center'>
           <FaLinkedin
             size={24}
