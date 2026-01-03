@@ -16,7 +16,7 @@ function Footer() {
               &nbsp;
               <img src='/ind.svg' alt='Indian Flag' width={16} height={16} />
             </span>{' '}
-            &nbsp; || &copy; Gaurav Sahitya || All rights are reserved
+            &nbsp; • &copy; 2024-2026 Gaurav Sahitya • All rights are reserved
           </p>
         </div>
         <div className='p-1 flex items-center justify-center lg:border-r flex-col'>
@@ -47,12 +47,6 @@ function Footer() {
             className='hover:cursor-pointer'
           />
         </div>
-      </div>
-
-      <div>
-        <p className='mt-1 text-white text-center'>
-          Content of this website is being owned and maintained by Gaurav Sahitya.
-        </p>
       </div>
     </section>
   );

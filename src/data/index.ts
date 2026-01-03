@@ -30,6 +30,16 @@ export const menuItems = [
 
 export const projects = [
   {
+    name: 'Census Management and Monitoring System (CMMS)',
+    disabled: false,
+    text: 'The Census Management and Monitoring System is a digital platform designed to streamline census operations, including data collection, verification, and analysis. It enhances accuracy, transparency, and efficiency by enabling real-time monitoring of field activities, ensuring reliable demographic insights for informed decision-making and effective government planning.',
+    tech_stack: [],
+    ongoing: true,
+    showDivider: true,
+    cardImage: '/cmms.png',
+    liveLink: 'https://test.census.gov.in/se',
+  },
+  {
     name: 'EarthLink',
     disabled: false,
     text: 'EarthLink is a telecommunication company in the US which provides internet services to 90% of US households and buisnesses. I worked as a full stack developer on their live project for over a year, interacting with the project manager, developers, and testers via calls and chats.',
@@ -51,9 +61,9 @@ export const projects = [
       'Docker',
       'Docker Compose',
     ],
-    liveLink: "https://www.earthlink.net",
+    liveLink: 'https://www.earthlink.net',
     showDivider: true,
-    cardImage: "/earthlink.webp"
+    cardImage: '/earthlink.webp',
   },
   {
     name: 'LOOPos',
@@ -75,27 +85,9 @@ export const projects = [
       'Docker',
     ],
     ongoing: false,
-    liveLink: "https://www.loopos.ca",
+    liveLink: 'https://www.loopos.ca',
     showDivider: true,
-    cardImage: "/loopos.webp"
-  },
-  {
-    name: 'Creative Ease Web',
-    disabled: true,
-    text: 'It is an inventory and stock management website. I have worked on it as a full stack developer and developed it from scratch by myself only. Apart from this I have also maintained the production server of it.',
-    tech_stack: [
-      'Node.js',
-      'React.js',
-      'Bootstrap',
-      'Microsoft SQL Server (MSSQL)',
-      'Redis',
-      'Git',
-      'GitHub',
-      'Javascript',
-      'Nginx',
-      'IIS',
-      'Server Administration',
-    ],
+    cardImage: '/loopos.webp',
   },
   {
     name: 'Fastrack',
@@ -104,27 +96,29 @@ export const projects = [
     tech_stack: ['Nest.js', 'Typescript', 'Mongodb', 'Git', 'GitHub', 'Caprover', 'Express.js', 'Docker'],
     ongoing: false,
     showDivider: false,
-    cardImage: "/fastrack.jpg"
+    cardImage: '/fastrack.jpg',
   },
   {
     name: 'Real Estate Property Listing Website',
-    disabled: false,
+    disabled: true,
     text: 'It is a property listing website which internally fetches property and its corresponding medias from an real estate transaction standard aka RETS. I am working on it as a backend developer.',
-    tech_stack: ['Nest.js', 'Typescript', 'Mongodb', 'Git', 'GitHub', 'Caprover', 'Express.js', 'Docker', 'Cron-jobs', 'Wordpress', 'FFmpeg', 'Image processing', 'AWS S3 Bucket'],
+    tech_stack: [
+      'Nest.js',
+      'Typescript',
+      'Mongodb',
+      'Git',
+      'GitHub',
+      'Caprover',
+      'Express.js',
+      'Docker',
+      'Cron-jobs',
+      'Wordpress',
+      'FFmpeg',
+      'Image processing',
+      'AWS S3 Bucket',
+    ],
     ongoing: false,
-    liveLink: "https://sidhu-web.loopretail.tngwebsolutions.com",
-    showDivider: true
   },
-  {
-    name: 'Census Management and Monitoring System (CMMS)',
-    disabled: false,
-    text: 'The Census Management and Monitoring System is a digital platform designed to streamline census operations, including data collection, verification, and analysis. It enhances accuracy, transparency, and efficiency by enabling real-time monitoring of field activities, ensuring reliable demographic insights for informed decision-making and effective government planning.',
-    tech_stack: [],
-    ongoing: true,
-    showDivider: true,
-    cardImage: "http://portfolio-ftp.sgaurav.me/assets/public/coi-1762617590206-535249590.png",
-    liveLink: "https://test.census.gov.in/se",
-  }
 ];
 
 export const personal_projects = [
@@ -136,7 +130,7 @@ export const personal_projects = [
     documentation_link: 'https://sahityagaurav4210.github.io/book-junction-clipboard/',
     text: `It's an npm package that automatically pastes content onto the system's clipboard.`,
     tech_stack: ['Node.js', 'Typescript', 'Unit testing', 'Git', 'GitHub', 'GitHub Actions', 'Powershell'],
-    showDivider: true
+    showDivider: true,
   },
   {
     name: 'ENV Loader',
@@ -146,16 +140,7 @@ export const personal_projects = [
     codeLink: 'https://github.com/sahityagaurav4210/env-loader',
     documentation_link: 'https://env-loader-docs.netlify.app/',
     disabled: false,
-    showDivider: true
-  },
-  {
-    name: 'Accounting',
-    text: "It is a accounts management web portal that helps the user in tracking their expenses and other account related stuff.",
-    tech_stack: ['Nest.js', 'Git', 'GitHub', 'MongoDB', 'Docker', 'Caprover', 'React.js', 'MUI', 'Google cloud storage', 'Typescript'],
-    liveLink: 'https://accounting.webapps.sgaurav.me',
-    disabled: false,
-    note: "If you're visiting this web portal for the first time then kindly create your account first to get started.",
-    showDivider: true
+    showDivider: true,
   },
 ];
 
@@ -263,7 +248,8 @@ export const skills = [
     name: 'MongoDB',
     text: 'It is a No-SQL type of database which provides semi-schema and schemaless feature. I have 1.7 years of experience in it.',
     experience: '1.7 years',
-    picture: 'data:image/jpeg;base64,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',
+    picture:
+      'data:image/jpeg;base64,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',
   },
   {
     name: 'Microsoft SQL Server',
@@ -297,8 +283,8 @@ export const experience = [
     companyLogo: CdacLogo,
     tags: [
       {
-        labelName: 'Company Name',
-        content: 'Centre for Development of Advance Computing (CDAC)',
+        labelName: 'Company/Organization Name',
+        content: 'Centre for Development of Advance Computing (C-DAC)',
       },
       {
         labelName: 'Designation',
@@ -313,17 +299,23 @@ export const experience = [
         content: 'May 2025',
       },
       { labelName: 'To', content: 'Present' },
+      { labelName: 'Type', content: 'Government' },
     ],
-    description:
-      'I am working here as a project engineer in egovernance solutions group department.',
-    responsibilities: ['To resolve issues of project related to eGovernance department of Government of India.', 'Communicate with fellow developers and senior teammates to deliver 100% customized software system.', 'Create and maintain software systems and websites related to eGovernance department.'],
-    isCurrent: true
+    description: 'I am working here as a project engineer in egovernance solutions group department.',
+    responsibilities: [
+      "To develop and maintain the census management and monitoring system project. It is a portal which is related to india's first digital census.",
+      'To interact with other government departments like ORGI (Office of the registrar general of india) and develop software systems for them.',
+      'To resolve issues of project related to eGovernance department of Government of India.',
+      'Communicate with fellow developers and senior teammates to deliver 100% customized software system.',
+      'Create and maintain software systems and websites related to eGovernance department.',
+    ],
+    isCurrent: true,
   },
   {
     companyLogo: RockyLogo,
     tags: [
       {
-        labelName: 'Company Name',
+        labelName: 'Company/Organization Name',
         content: 'Rocky Mountain Technologies India Pvt Ltd',
       },
       {
@@ -339,17 +331,24 @@ export const experience = [
         content: 'Apr 2024',
       },
       { labelName: 'To', content: 'Apr 2025' },
+      { labelName: 'Type', content: 'Private' },
     ],
     description:
       'I have worked here as a backend developer for more than year year now. During this, I have worked upon more than 2 projects. ',
     isCurrent: false,
-    responsibilities: ['Developed image processing cron-job using ffmpeg library with auto roll-back feature.', 'Communicated with clients and front-end developers to deliver 100% customized backend system.', ' Optimized the company’s whole backend system (including servers) which resulted in decreasing the LOOPos backend api response time from 4sec to 1/4th of a second.', ' Reduced the server cost of LOOPos product by 15%.', ' Optimized LOOPos backend docker image size and build time from 2GB and 4 minutes to 650MB and 2 minutes.']
+    responsibilities: [
+      'Developed image processing cron-job using ffmpeg library with auto roll-back feature.',
+      'Communicated with clients and front-end developers to deliver 100% customized backend system.',
+      ' Optimized the company’s whole backend system (including servers) which resulted in decreasing the LOOPos backend api response time from 4sec to 1/4th of a second.',
+      ' Reduced the server cost of LOOPos product by 15%.',
+      ' Optimized LOOPos backend docker image size and build time from 2GB and 4 minutes to 650MB and 2 minutes.',
+    ],
   },
   {
     companyLogo: CreativeLogo,
     tags: [
       {
-        labelName: 'Company Name',
+        labelName: 'Company/Organization Name',
         content: 'Creative Line International Private Limited',
       },
       {
@@ -365,16 +364,22 @@ export const experience = [
         content: 'Nov 2023',
       },
       { labelName: 'To', content: 'Mar 2024' },
+      { labelName: 'Type', content: 'Private' },
     ],
     description:
       'I have worked here as a full stack developer 4 months. During this period, i have developed the inventory and stock management website from scratch by myself only. Apart from this I have setup and maintained the linux server from scratch.',
-    responsibilities: ['Monitored and setup the whole server for my full-stack application from scratch.', 'Integrated my backend with existing mssql database.', 'Utilized Nginx and IIS web-servers to host my full-stack app built in ReactJs and NodeJs.', 'Installed SSL certificates from scratch on Nginx web-server to protect my app and hence build trust among company clients.']
+    responsibilities: [
+      'Monitored and setup the whole server for my full-stack application from scratch.',
+      'Integrated my backend with existing mssql database.',
+      'Utilized Nginx and IIS web-servers to host my full-stack app built in ReactJs and NodeJs.',
+      'Installed SSL certificates from scratch on Nginx web-server to protect my app and hence build trust among company clients.',
+    ],
   },
   {
     companyLogo: DigiLogo,
     tags: [
       {
-        labelName: 'Company Name',
+        labelName: 'Company/Organization Name',
         content: 'Digimantra Labs',
       },
       {
@@ -390,10 +395,16 @@ export const experience = [
         content: 'Aug 2022',
       },
       { labelName: 'To', content: 'Nov 2023' },
+      { labelName: 'Type', content: 'Private' },
     ],
     description:
       'I have worked here as a backend developer for more that a year. During this, i have worked upon more than 2 projects. I have also worked on a live project called EarthLink.',
-    responsibilities: ['Utilized microservices architecture to reduce the server load by 5%.', 'Developed test cases of APIs that reduced the error rates of an API by 2%.', 'Integrated PayTM payment gateway to deliver 100% secure payment solutions.']
+    responsibilities: [
+      'Worked on their live project called EarthLink for an year as a node.js backend developer.',
+      'Utilized microservices architecture to reduce the server load by 5%.',
+      'Developed test cases of APIs that reduced the error rates of an API by 2%.',
+      'Integrated PayTM payment gateway to deliver 100% secure payment solutions.',
+    ],
   },
 ];
 

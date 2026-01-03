@@ -20,8 +20,9 @@ function Support({ lastModifiedDate }: Readonly<ISupport>): ReactNode {
         </p>
       </div>
 
-      <div className='flex justify-end p-1'>
-        <p className='font-roboto text-xs'>Last modified at : {new Date(lastModifiedDate).toLocaleString('hi-In')}</p>
+      <div className='flex flex-col items-end p-1'>
+        <p className='font-roboto text-xs'>Last updated : {new Date(lastModifiedDate).toLocaleDateString('hi-In')}</p>
+        <p className='font-roboto text-xs'>App version: {import.meta.env.VITE_APP_VERSION}</p>
       </div>
     </div>
   );

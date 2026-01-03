@@ -10,10 +10,13 @@ import Captcha from '../components/Captcha';
 import { getAppToastConfig } from '../config';
 import SimpleHeading from '../components/SimpleHeading';
 import Divider from '../components/Divider';
+import useAppHelperFn from '../hooks/AppHelperFn';
 
 function Contact(): ReactNode {
+  const { loadCaptchaAudio } = useAppHelperFn();
   const [captchaData, setCaptchaData] = useState<string>();
   const [captchaId, setCaptchaId] = useState();
+  const [captchaAudioUrl, setCaptchaAudioUrl] = useState<string>();
   const [contractDetails, setContractDetails] = useState<IContract>({
     first_name: '',
     last_name: '',
@@ -41,19 +44,21 @@ function Contact(): ReactNode {
 
       const rawCaptchaResponse = await fetch(`${API_BASE_URL}/captcha`, {
         signal: controller.signal,
-        headers: getApiHeaders()
+        headers: getApiHeaders(),
       });
 
       const { data } = (await rawCaptchaResponse.json()) as IApiResponse;
       const rawCaptchaBlobResponse = await fetch(`${API_BASE_URL}${data.url}`, {
         signal: controller.signal,
-        headers: getApiHeaders()
+        headers: getApiHeaders(),
       });
       const blob = await rawCaptchaBlobResponse.blob();
 
       setCaptchaData(URL.createObjectURL(blob));
       setCaptchaId(data.captchaId);
       clearTimeout(timerId);
+
+      setCaptchaAudioUrl(await loadCaptchaAudio(data.captchaId));
     } catch {
       toast.warning('Failed to refresh the data', getAppToastConfig());
     } finally {
@@ -72,18 +77,20 @@ function Contact(): ReactNode {
 
       const rawCaptchaResponse = await fetch(`${API_BASE_URL}/ref-captcha?captchaId=${captchaId}`, {
         signal: controller.signal,
-        headers: getApiHeaders()
+        headers: getApiHeaders(),
       });
 
       const { data } = (await rawCaptchaResponse.json()) as IApiResponse;
       const rawCaptchaBlobResponse = await fetch(`${API_BASE_URL}${data.url}`, {
         signal: controller.signal,
-        headers: getApiHeaders()
+        headers: getApiHeaders(),
       });
       const blob = await rawCaptchaBlobResponse.blob();
 
       setCaptchaData(URL.createObjectURL(blob));
       clearTimeout(timerId);
+
+      setCaptchaAudioUrl(await loadCaptchaAudio(data.captchaId));
     } catch {
       toast.warning('Failed to refresh the data', getAppToastConfig());
     } finally {
@@ -140,8 +147,7 @@ function Contact(): ReactNode {
 
     if (contractApiResponse.status === ApiStatus.SUCCESS)
       toast.success(contractApiResponse.message, getAppToastConfig());
-    else
-      toast.error(contractApiResponse.message, getAppToastConfig());
+    else toast.error(contractApiResponse.message, getAppToastConfig());
 
     setContractDetails({
       first_name: '',
@@ -195,7 +201,6 @@ function Contact(): ReactNode {
     loadCaptcha();
   }, []);
 
-
   useEffect(() => {
     let id: NodeJS.Timeout;
 
@@ -204,8 +209,7 @@ function Contact(): ReactNode {
     }
 
     return function () {
-      if (id)
-        clearInterval(id);
+      if (id) clearInterval(id);
     };
   }, [isValidated]);
 
@@ -215,101 +219,98 @@ function Contact(): ReactNode {
 
       <div className='my-2'>
         <p className='text-sm lg:text-lg px-2 font-roboto text-justify'>
-          Feel free to reach out for collaboration, project inquiries, or any opportunities. I’m always open to connecting and discussing new ideas. You can contact me by filling up the form given below.
+          Feel free to reach out for collaboration, project inquiries, or any opportunities. I’m always open to
+          connecting and discussing new ideas. You can contact me by filling up the form given below.
         </p>
       </div>
 
       <Divider />
 
-
       <form
         className='px-4 py-2 mb-2 shadow-md shadow-gray-400 border-2 my-2 mx-2 border-dashed border-orange-400 rounded-md font-roboto'
         onSubmit={handleSubmit}
       >
-
-        <div className="my-2">
+        <div className='my-2'>
           <h1 className='text-center text-4xl font-bold underline underline-offset-4 decoration-dashed text-orange-500'>
             Contact Form
           </h1>
         </div>
 
-
         <div className='grid lg:grid-cols-2 gap-6 mb-4'>
-
-          <div className="relative w-full">
+          <div className='relative w-full'>
             <input
-              type="text"
-              id="first_name"
+              type='text'
+              id='first_name'
               value={contractDetails.first_name}
               required
-              placeholder=" "
-              className="peer h-10 w-full rounded-[4px] border border-gray-400 bg-white px-3 text-sm text-gray-900 placeholder-transparent focus:border-2 focus:border-blue-600 focus:outline-none disabled:bg-gray-100"
+              placeholder=' '
+              className='peer h-10 w-full rounded-[4px] border border-gray-400 bg-white px-3 text-sm text-gray-900 placeholder-transparent focus:border-2 focus:border-blue-600 focus:outline-none disabled:bg-gray-100'
               onChange={contractDetailsTextboxHandler}
               autoComplete='off'
               autoCapitalize='on'
               autoFocus
             />
             <label
-              htmlFor="first_name"
-              className="pointer-events-none absolute left-3 top-2 origin-[0] -translate-y-4 scale-75 transform bg-white px-1 text-sm text-gray-500 duration-200 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-2 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:text-blue-600 peer-focus:bg-white"
+              htmlFor='first_name'
+              className='pointer-events-none absolute left-3 top-2 origin-[0] -translate-y-4 scale-75 transform bg-white px-1 text-sm text-gray-500 duration-200 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-2 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:text-blue-600 peer-focus:bg-white'
             >
               First Name<sup className='text-red-500 text-xs'>*</sup>
             </label>
           </div>
 
-          <div className="relative w-full">
+          <div className='relative w-full'>
             <input
-              type="text"
-              id="last_name"
+              type='text'
+              id='last_name'
               value={contractDetails.last_name}
-              placeholder=" "
-              className="peer h-10 w-full rounded-[4px] border border-gray-400 bg-white px-3 text-sm text-gray-900 placeholder-transparent focus:border-2 focus:border-blue-600 focus:outline-none disabled:bg-gray-100"
+              placeholder=' '
+              className='peer h-10 w-full rounded-[4px] border border-gray-400 bg-white px-3 text-sm text-gray-900 placeholder-transparent focus:border-2 focus:border-blue-600 focus:outline-none disabled:bg-gray-100'
               onChange={contractDetailsTextboxHandler}
               autoComplete='off'
               autoCapitalize='on'
             />
             <label
-              htmlFor="last_name"
-              className="pointer-events-none absolute left-3 top-2 origin-[0] -translate-y-4 scale-75 transform bg-white px-1 text-sm text-gray-500 duration-200 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-2 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:text-blue-600 peer-focus:bg-white"
+              htmlFor='last_name'
+              className='pointer-events-none absolute left-3 top-2 origin-[0] -translate-y-4 scale-75 transform bg-white px-1 text-sm text-gray-500 duration-200 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-2 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:text-blue-600 peer-focus:bg-white'
             >
               Last Name
             </label>
           </div>
         </div>
 
-        <div className="relative w-full my-2">
+        <div className='relative w-full my-2'>
           <input
-            type="email"
-            id="email"
+            type='email'
+            id='email'
             value={contractDetails.email}
             required
-            placeholder=" "
-            className="peer h-10 w-full rounded-[4px] border border-gray-400 bg-white px-3 text-sm text-gray-900 placeholder-transparent focus:border-2 focus:border-blue-600 focus:outline-none disabled:bg-gray-100"
+            placeholder=' '
+            className='peer h-10 w-full rounded-[4px] border border-gray-400 bg-white px-3 text-sm text-gray-900 placeholder-transparent focus:border-2 focus:border-blue-600 focus:outline-none disabled:bg-gray-100'
             onChange={contractDetailsTextboxHandler}
             autoComplete='off'
             autoCapitalize='on'
           />
           <label
-            htmlFor="email"
-            className="pointer-events-none absolute left-3 top-2 origin-[0] -translate-y-4 scale-75 transform bg-white px-1 text-sm text-gray-500 duration-200 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-2 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:text-blue-600 peer-focus:bg-white"
+            htmlFor='email'
+            className='pointer-events-none absolute left-3 top-2 origin-[0] -translate-y-4 scale-75 transform bg-white px-1 text-sm text-gray-500 duration-200 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-2 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:text-blue-600 peer-focus:bg-white'
           >
             Email<sup className='text-red-500 text-xs'>*</sup>
           </label>
         </div>
 
-        <div className="relative w-full">
+        <div className='relative w-full'>
           <textarea
-            id="message"
+            id='message'
             value={contractDetails.message}
-            placeholder=" "
+            placeholder=' '
             rows={2}
-            className="peer p-2 min-h-10 w-full rounded-[4px] border border-gray-400 bg-white px-3 text-sm text-gray-900 placeholder-transparent focus:border-2 focus:border-blue-600 focus:outline-none disabled:bg-gray-100 resize-y"
+            className='peer p-2 min-h-10 w-full rounded-[4px] border border-gray-400 bg-white px-3 text-sm text-gray-900 placeholder-transparent focus:border-2 focus:border-blue-600 focus:outline-none disabled:bg-gray-100 resize-y'
             onChange={contractDetailsTextboxHandler}
             autoComplete='off'
           />
           <label
-            htmlFor="message"
-            className="pointer-events-none absolute left-3 top-2 origin-[0] -translate-y-4 scale-75 transform bg-white px-1 text-sm text-gray-500 duration-200 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-2 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:text-blue-600 peer-focus:bg-white"
+            htmlFor='message'
+            className='pointer-events-none absolute left-3 top-2 origin-[0] -translate-y-4 scale-75 transform bg-white px-1 text-sm text-gray-500 duration-200 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-2 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:text-blue-600 peer-focus:bg-white'
           >
             Message<sup className='text-red-500 text-xs'>*</sup>
           </label>
@@ -323,6 +324,7 @@ function Contact(): ReactNode {
           isLoading={isLoading}
           isValidated={isValidated}
           refreshCaptcha={refreshCaptcha}
+          captchaAudioUrl={captchaAudioUrl}
         />
 
         <div className='flex flex-col justify-center mb-4'>
@@ -338,9 +340,7 @@ function Contact(): ReactNode {
           <Notes note={<p className='text-xs text-justify'>Your message must be atleast 10 characters long.</p>} />
           <Notes
             note={
-              <p className='text-xs text-justify'>
-                You will be contacted within 48 hours after filling up this form.
-              </p>
+              <p className='text-xs text-justify'>You will be contacted within 48 hours after filling up this form.</p>
             }
           />
           <Notes
@@ -358,19 +358,17 @@ function Contact(): ReactNode {
             type='submit'
             className='min-w-28 transition-transform duration-500 mt-2 inline-flex items-center px-2 py-3.5 border-2 border-dashed border-blue-400 border-spacing-2 justify-center font-bold text-white bg-blue-800 rounded-lg ring-2 ring-offset-1 ring-blue-400 scale-95 focus:scale-100 outline-none text-sm lg:text-base shadow-md shadow-blue-800 disabled:bg-slate-700 disabled:border-slate-600 disabled:ring-slate-400'
           >
-            {
-              isLoading ? (
-                <>
-                  <Progress />
-                  <span>Loading, please wait...</span>
-                </>
-              ) : (
-                <>
-                  <Contact2 className='mx-2' />
-                  <span>Contact Me</span>
-                </>
-              )
-            }
+            {isLoading ? (
+              <>
+                <Progress />
+                <span>Loading, please wait...</span>
+              </>
+            ) : (
+              <>
+                <Contact2 className='mx-2' />
+                <span>Contact Me</span>
+              </>
+            )}
           </button>
         </div>
       </form>
