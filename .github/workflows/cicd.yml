@@ -99,7 +99,7 @@ jobs:
           caprover deploy \
           --host ${{ secrets.CAPROVER_HOST }} \
           -p ${{ secrets.CAPROVER_PWD }} \
-          --imageName ${{ secrets.DOCKER_USERNAME }}/portfolio:latest \
+          --imageName ${{ secrets.DOCKER_USERNAME }}/portfolio-dev-website:latest \
           --appName portfolio-dev-website
 
       - name: Deploying the code on production server
