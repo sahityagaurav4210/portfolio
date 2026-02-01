@@ -1,3 +1,5 @@
+export * from './hireme.data';
+
 import DigiLogo from '../assets/digilogo.webp';
 import CreativeLogo from '../assets/creativelogo.png';
 import CdacLogo from '../assets/cdac.webp';

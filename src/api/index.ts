@@ -11,17 +11,17 @@ export enum HTTP_VERBS {
 }
 
 export enum ApiStatus {
-  SUCCESS = "success",
-  ERROR = "error",
-  EXCEPTION = "exception",
-  VALIDATION = "validation",
-  CONFLICT = "already exists",
-  UNDEFINED = "not defined",
-  UNAUTHORISED = "unauthorised",
-  NOT_FOUND = "not found",
-  FORBIDDEN = "forbidden",
-  TIMEOUT = "api time out",
-  LOGOUT = "Logout",
+  SUCCESS = 'success',
+  ERROR = 'error',
+  EXCEPTION = 'exception',
+  VALIDATION = 'validation',
+  CONFLICT = 'already exists',
+  UNDEFINED = 'not defined',
+  UNAUTHORISED = 'unauthorised',
+  NOT_FOUND = 'not found',
+  FORBIDDEN = 'forbidden',
+  TIMEOUT = 'api time out',
+  LOGOUT = 'Logout',
 }
 
 export const API_BASE_URL = import.meta.env.VITE_BACKEND_BASE_URL || 'http://localhost:12318/api/v1';
@@ -38,12 +38,10 @@ export async function downloadMedia(url: string, signal?: AbortSignal) {
     if (media.ok) {
       const response = URL.createObjectURL(mediaApiResponse);
       return response;
-    }
-    else {
+    } else {
       return null;
     }
-  } catch (error: any) {
-    console.log(error);
+  } catch {
     return null;
   }
 }
@@ -54,17 +52,18 @@ export class ApiController {
       const controller = new AbortController();
       const headers = getApiHeaders();
 
-      setTimeout(() => {
-        controller.abort();
-      }, Number(import.meta.env.VITE_BACKEND_API_TIMEOUT) || 5000);
-
-      const rawReply = await fetch(`${import.meta.env.VITE_BACKEND_BASE_URL}/${url}`,
-        {
-          method: HTTP_VERBS.GET,
-          headers,
-          signal: controller.signal,
-        }
+      setTimeout(
+        () => {
+          controller.abort();
+        },
+        Number(import.meta.env.VITE_BACKEND_API_TIMEOUT) || 5000
       );
+
+      const rawReply = await fetch(`${import.meta.env.VITE_BACKEND_BASE_URL}/${url}`, {
+        method: HTTP_VERBS.GET,
+        headers,
+        signal: controller.signal,
+      });
 
       const reply = (await rawReply.json()) as IApiReply;
 
@@ -72,7 +71,7 @@ export class ApiController {
     } catch {
       const reply = {
         status: ApiStatus.TIMEOUT,
-        message: "Connection broked, please try again later",
+        message: 'Connection broked, please try again later',
       };
 
       return reply;
@@ -85,18 +84,19 @@ export class ApiController {
       const headers = { ...getApiHeaders(), 'Content-Type': 'application/json', Accept: 'application/json' };
       const stringifiedPayload = payload ? { body: JSON.stringify(payload) } : {};
 
-      setTimeout(() => {
-        controller.abort();
-      }, Number(import.meta.env.VITE_BACKEND_API_TIMEOUT) || 5000);
-
-      const rawReply = await fetch(`${import.meta.env.VITE_BACKEND_BASE_URL}/${url}`,
-        {
-          method: HTTP_VERBS.POST,
-          headers,
-          signal: controller.signal,
-          ...stringifiedPayload
-        }
+      setTimeout(
+        () => {
+          controller.abort();
+        },
+        Number(import.meta.env.VITE_BACKEND_API_TIMEOUT) || 5000
       );
+
+      const rawReply = await fetch(`${import.meta.env.VITE_BACKEND_BASE_URL}/${url}`, {
+        method: HTTP_VERBS.POST,
+        headers,
+        signal: controller.signal,
+        ...stringifiedPayload,
+      });
 
       const reply = (await rawReply.json()) as IApiReply;
 
@@ -104,7 +104,7 @@ export class ApiController {
     } catch {
       const reply = {
         status: ApiStatus.TIMEOUT,
-        message: "Connection broked, please try again later",
+        message: 'Connection broked, please try again later',
       };
 
       return reply;

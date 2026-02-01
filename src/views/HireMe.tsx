@@ -1,8 +1,8 @@
-import React, { ReactNode, useCallback, useEffect, useState } from 'react';
+import React, { ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
 import { IndianRupee } from 'lucide-react';
 import Notes from '../components/Notes';
 import { IHireme } from '../interfaces/IHireme';
-import { HiringType, IApiResponse } from '../interfaces';
+import { Currencies, HiringType, IApiResponse } from '../interfaces';
 import Progress from '../components/Progressbar';
 import { toast } from 'react-toastify';
 import { HIRING_FULL_TIME_MSG, HIRING_PART_TIME_MSG } from '../constants';
@@ -12,27 +12,21 @@ import { getAppToastConfig } from '../config';
 import SimpleHeading from '../components/SimpleHeading';
 import Divider from '../components/Divider';
 import useAppHelperFn from '../hooks/AppHelperFn';
+import { initialHireMeFormData } from '../data';
+import InputHelperTxt from '../components/InputHelperTxt';
 
 function HireMe(): ReactNode {
   const [captchaData, setCaptchaData] = useState<string>();
   const [captchaId, setCaptchaId] = useState();
   const { loadCaptchaAudio } = useAppHelperFn();
-  const [hiremeDetails, setHiremeDetails] = useState<IHireme>({
-    client_email: '',
-    client_name: '',
-    client_project_name: '',
-    tenure: 0,
-    budget: '',
-    hiring_type: HiringType.PART_TIME,
-    message: '',
-    currency_type: 'INR',
-    captcha: '',
-    project_desc: '',
-    terms: false,
-  });
+  const [hiremeDetails, setHiremeDetails] = useState<IHireme>(initialHireMeFormData);
   const [loading, setLoading] = useState<boolean>(false);
   const [isValidated, setIsValidated] = useState<boolean>(false);
   const [captchaAudioUrl, setCaptchaAudioUrl] = useState<string>('');
+  const projectDescCharRemaining = useMemo(
+    () => 254 - (hiremeDetails.project_desc ? hiremeDetails.project_desc.length : 0),
+    [hiremeDetails.project_desc]
+  );
 
   const handleInputOnChange = useCallback(function (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
     event.preventDefault();
@@ -48,9 +42,12 @@ function HireMe(): ReactNode {
 
     setLoading(true);
     try {
-      const timerId = setTimeout(() => {
-        controller.abort('Captcha api timeout');
-      }, Number.parseInt(import.meta.env.VITE_BACKEND_API_TIMEOUT) || 1000);
+      const timerId = setTimeout(
+        () => {
+          controller.abort('Captcha api timeout');
+        },
+        Number.parseInt(import.meta.env.VITE_BACKEND_API_TIMEOUT) || 1000
+      );
 
       const rawCaptchaResponse = await fetch(`${API_BASE_URL}/captcha`, {
         signal: controller.signal,
@@ -81,9 +78,12 @@ function HireMe(): ReactNode {
     setLoading(true);
 
     try {
-      const timerId = setTimeout(() => {
-        controller.abort('Captcha api timeout');
-      }, Number.parseInt(import.meta.env.VITE_BACKEND_API_TIMEOUT) || 1000);
+      const timerId = setTimeout(
+        () => {
+          controller.abort('Captcha api timeout');
+        },
+        Number.parseInt(import.meta.env.VITE_BACKEND_API_TIMEOUT) || 1000
+      );
 
       const rawCaptchaResponse = await fetch(`${API_BASE_URL}/ref-captcha?captchaId=${captchaId}`, {
         signal: controller.signal,
@@ -203,9 +203,12 @@ function HireMe(): ReactNode {
 
     setLoading(true);
     const abortController = new AbortController();
-    const timerId = setTimeout(() => {
-      abortController.abort('Timeout');
-    }, Number.parseInt(import.meta.env.VITE_BACKEND_API_TIMEOUT) || 1000);
+    const timerId = setTimeout(
+      () => {
+        abortController.abort('Timeout');
+      },
+      Number.parseInt(import.meta.env.VITE_BACKEND_API_TIMEOUT) || 1000
+    );
 
     try {
       const apiRawResponse = await fetch(`${API_BASE_URL}/baas/hiring/add`, {
@@ -228,19 +231,7 @@ function HireMe(): ReactNode {
     } finally {
       await loadCaptcha();
 
-      setHiremeDetails({
-        client_email: '',
-        client_name: '',
-        client_project_name: '',
-        budget: '',
-        hiring_type: HiringType.PART_TIME,
-        message: '',
-        tenure: 0,
-        currency_type: '',
-        captcha: '',
-        project_desc: '',
-        terms: false,
-      });
+      setHiremeDetails(initialHireMeFormData);
       setIsValidated(false);
       setLoading(false);
     }
@@ -346,6 +337,8 @@ function HireMe(): ReactNode {
                 >
                   Tenure (in months)
                 </label>
+
+                <InputHelperTxt text='Please enter the contract period in months.' />
               </div>
             </div>
           )}
@@ -368,10 +361,12 @@ function HireMe(): ReactNode {
                 />
                 <label
                   htmlFor='client_name'
-                  className='pointer-events-none absolute left-3 top-2 origin-[0] -translate-y-4 scale-75 transform bg-white px-1 text-sm text-gray-500 duration-200 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-2 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:text-blue-600 peer-focus:bg-white'
+                  className='pointer-events-none absolute left-3 top-2 origin-[0] -translate-y-4 scale-75 transform bg-white px-1 text-sm text-gray-500 duration-200 peer-placeholder-shown:top-1/3 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-2 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:text-blue-600 peer-focus:bg-white'
                 >
                   Client Name<sup className='text-red-500 text-xs'>*</sup>
                 </label>
+
+                <InputHelperTxt text='Only alphabets, spaces and punctuations like comma, period, dash, parenthesis and forward slash are allowed.' />
               </div>
             </div>
 
@@ -388,10 +383,12 @@ function HireMe(): ReactNode {
                 />
                 <label
                   htmlFor='client_name'
-                  className='pointer-events-none absolute left-3 top-2 origin-[0] -translate-y-4 scale-75 transform bg-white px-1 text-sm text-gray-500 duration-200 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-2 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:text-blue-600 peer-focus:bg-white'
+                  className='pointer-events-none absolute left-3 top-2 origin-[0] -translate-y-4 scale-75 transform bg-white px-1 text-sm text-gray-500 duration-200 peer-placeholder-shown:top-1/3 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-2 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:text-blue-600 peer-focus:bg-white'
                 >
                   Project Name<sup className='text-red-500 text-xs'>*</sup>
                 </label>
+
+                <InputHelperTxt text='Only alphabets, spaces and punctuations like comma, period, dash, parenthesis and forward slash are allowed.' />
               </div>
             </div>
           </div>
@@ -402,6 +399,7 @@ function HireMe(): ReactNode {
                 <input
                   type='email'
                   id='client_email'
+                  inputMode='email'
                   value={hiremeDetails.client_email}
                   placeholder=' '
                   className='peer h-10 w-full rounded-[4px] border border-gray-400 bg-white px-3 text-sm text-gray-900 placeholder-transparent focus:border-2 focus:border-blue-600 focus:outline-none disabled:bg-gray-100'
@@ -410,14 +408,16 @@ function HireMe(): ReactNode {
                 />
                 <label
                   htmlFor='client_email'
-                  className='pointer-events-none absolute left-3 top-2 origin-[0] -translate-y-4 scale-75 transform bg-white px-1 text-sm text-gray-500 duration-200 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-2 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:text-blue-600 peer-focus:bg-white'
+                  className='pointer-events-none absolute left-3 top-2 origin-[0] -translate-y-4 scale-75 transform bg-white px-1 text-sm text-gray-500 duration-200 peer-placeholder-shown:top-1/3 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-2 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:text-blue-600 peer-focus:bg-white'
                 >
                   Client Email<sup className='text-red-500 text-xs'>*</sup>
                 </label>
+
+                <InputHelperTxt text='Please enter a valid email address.' />
               </div>
             </div>
 
-            <div className='col-span-12 lg:col-span-6 flex'>
+            <div className='col-span-12 lg:col-span-6 flex items-center'>
               <div className='flex items-center'>
                 <select
                   className='p-2 bg-transparent outline-none m-2 min-w-5 border-2 border-dashed border-blue-800 text-align-center text-blue-800'
@@ -425,11 +425,11 @@ function HireMe(): ReactNode {
                   value={hiremeDetails.currency_type}
                   onChange={(event) => setHiremeDetails({ ...hiremeDetails, [event.target.id]: event.target.value })}
                 >
-                  <option value='INR'>INR (₹)</option>
-                  <option value='USD'>USD ($)</option>
-                  <option value='EUR'>EURO (€)</option>
-                  <option value='GBP'>GBP (£)</option>
-                  <option value='AUD'>AUD ($)</option>
+                  <option value={Currencies.INR}>INR (₹)</option>
+                  <option value={Currencies.USD}>USD ($)</option>
+                  <option value={Currencies.EUR}>EURO (€)</option>
+                  <option value={Currencies.GBP}>GBP (£)</option>
+                  <option value={Currencies.AUD}>AUD ($)</option>
                 </select>
               </div>
 
@@ -438,6 +438,7 @@ function HireMe(): ReactNode {
                   <input
                     type='number'
                     id='budget'
+                    inputMode='decimal'
                     value={hiremeDetails.budget}
                     placeholder=' '
                     className='peer h-10 w-full rounded-[4px] border border-gray-400 bg-white px-3 text-sm text-gray-900 placeholder-transparent focus:border-2 focus:border-blue-600 focus:outline-none disabled:bg-gray-100'
@@ -450,6 +451,8 @@ function HireMe(): ReactNode {
                   >
                     Budget<sup className='text-red-500 text-xs'>*</sup>
                   </label>
+
+                  <InputHelperTxt text='Please enter a valid budget amount.' />
                 </div>
               </div>
             </div>
@@ -469,10 +472,16 @@ function HireMe(): ReactNode {
                 />
                 <label
                   htmlFor='project_desc'
-                  className='pointer-events-none absolute left-3 top-2 origin-[0] -translate-y-4 scale-75 transform bg-white px-1 text-sm text-gray-500 duration-200 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-2 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:text-blue-600 peer-focus:bg-white'
+                  className='pointer-events-none absolute left-3 top-2 origin-[0] -translate-y-4 scale-75 transform bg-white px-1 text-sm text-gray-500 duration-200 peer-placeholder-shown:top-1/3 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-2 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:text-blue-600 peer-focus:bg-white'
                 >
                   Project Description<sup className='text-red-500 text-xs'>*</sup>
                 </label>
+
+                <InputHelperTxt text='Please enter your project description. It can be of atmost 254 characters.' />
+              </div>
+
+              <div className='flex items-center justify-end'>
+                <p className='text-xs font-bold text-blue-400'>{projectDescCharRemaining} characters remaining</p>
               </div>
             </div>
           </div>
@@ -500,6 +509,10 @@ function HireMe(): ReactNode {
             upon prior to implementation.
           </li>
         </ol>
+
+        <p className='text-sm lg:text-base text-justify leading-10 uppercase text-blue-700 font-extrabold underline underline-offset-2 my-1'>
+          Please prove your identity
+        </p>
 
         <Captcha
           captchaData={captchaData}
@@ -557,7 +570,7 @@ function HireMe(): ReactNode {
           type='submit'
           className='w-28 transition-transform duration-500 mt-2 inline-flex items-center px-2 py-3.5 border-2 border-dashed border-blue-400 border-spacing-2 justify-center font-bold text-white bg-blue-800 rounded-lg ring-2 ring-offset-1 ring-blue-400 scale-95 focus:scale-100 outline-none text-sm lg:text-base shadow-md shadow-blue-800 disabled:bg-slate-700 disabled:border-slate-600 disabled:ring-slate-400'
           onClick={handleSubmit}
-          disabled={!isValidated || !hiremeDetails.terms || loading || !captchaId}
+          disabled={!isValidated || !hiremeDetails.terms || loading || !captchaId || projectDescCharRemaining < 0}
         >
           {loading ? (
             <>

@@ -8,7 +8,7 @@ export default {
         roboto: ['Roboto', 'sans-serif'],
         roman: ['Times New Roman'],
         arial: ['Arial'],
-        bookman: ["Bookman Old Style"]
+        bookman: ['Bookman Old Style'],
       },
     },
   },
