@@ -29,8 +29,8 @@ function Captcha({
 
   return (
     <div className='grid grid-cols-12 gap-2 min-h-20 mb-2'>
-      <div className='col-span-12 lg:col-span-4 rounded-md'>
-        <div className='w-full flex items-center justify-evenly lg:justify-center flex-wrap'>
+      <div className='col-span-12 lg:col-span-6 rounded-md'>
+        <div className='w-full flex flex-col lg:flex-row items-center justify-evenly lg:justify-center flex-wrap'>
           <img src={captchaData} alt='Captcha' className='lg:mx-2' />
 
           {isLoading ? (
@@ -38,7 +38,7 @@ function Captcha({
               <Progress />
             </div>
           ) : (
-            <>
+            <div className='mt-1 lg:mt-0'>
               <button
                 className='border transition-all p-2 rounded-md bg-orange-900 border-orange-500 border-spacing-2 ring-1 ring-offset-1 ring-orange-400 cursor-pointer focus:outline-dotted outline-orange-300 scale-95 focus-within:scale-100'
                 type='button'
@@ -56,12 +56,12 @@ function Captcha({
               >
                 <AudioWaveform className='text-white' />
               </button>
-            </>
+            </div>
           )}
         </div>
       </div>
 
-      <div className='col-span-8 lg:col-span-3'>
+      <div className='col-span-7 lg:col-span-3'>
         <fieldset className='border rounded-sm border-blue-400 outline-none px-2 text-sm lg:text-lg ring-2 ring-offset-1 ring-blue-200 transistion-all scale-95 focus-within:scale-100 min-w-full'>
           <legend className='px-2 text-blue-800 bg-white font-bold'>
             Captcha <span className='text-red-500'>*</span>
@@ -82,26 +82,28 @@ function Captcha({
         </fieldset>
       </div>
 
-      <div className='col-span-4 lg:col-span-3 flex items-center justify-evenly lg:justify-center'>
-        {isLoading ? (
-          <Progress />
-        ) : (
-          <>
-            <div className='relative flex items-center justify-center'>
-              <input
-                type='checkbox'
-                id='validate'
-                className='appearance-none text-blue-500 transition-all border border-blue-500 border-spacing-4 ring-1 ring-offset-1 ring-blue-400 scale-95 rounded-md mx-2 h-8 w-8 checked:bg-blue-700 checked:scale-100 checked:before:content'
-                onChange={handleCheckBoxOnChange}
-              />
-              <CircleCheck className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-white' />
-            </div>
+      <div className='col-span-5 lg:col-span-3'>
+        <div className='flex items-center justify-evenly lg:justify-center h-full'>
+          {isLoading ? (
+            <Progress />
+          ) : (
+            <>
+              <div className='relative flex items-center justify-center'>
+                <input
+                  type='checkbox'
+                  id='validate'
+                  className='appearance-none text-blue-500 transition-all border border-blue-500 border-spacing-4 ring-1 ring-offset-1 ring-blue-400 scale-95 rounded-md mx-2 h-8 w-8 checked:bg-blue-700 checked:scale-100 checked:before:content'
+                  onChange={handleCheckBoxOnChange}
+                />
+                <CircleCheck className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-white' />
+              </div>
 
-            <label htmlFor='validate' className='cursor-pointer text-sm lg:text-lg font-bold font-roboto'>
-              I'm not a robot
-            </label>
-          </>
-        )}
+              <label htmlFor='validate' className='cursor-pointer text-sm lg:text-lg font-bold font-roboto'>
+                I'm not a robot
+              </label>
+            </>
+          )}
+        </div>
       </div>
     </div>
   );

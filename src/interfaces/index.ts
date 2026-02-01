@@ -7,9 +7,19 @@ export interface IHeadingProps {
 export interface IHeroProps {
   url?: string;
 }
+
 export enum HiringType {
   PART_TIME = 'part time',
   FULL_TIME = 'full time',
+}
+
+export enum Currencies {
+  USD = 'USD',
+  INR = 'INR',
+  EUR = 'EUR',
+  GBP = 'GBP',
+  AUD = 'AUD',
+  CAD = 'CAD',
 }
 
 export interface ITagsProps {
@@ -22,8 +32,8 @@ export interface IExperienceCardProps {
   tags: ITagsProps[];
   description?: string;
   isCurrent?: boolean;
-  responsibilities?: string[]
-  width?: string
+  responsibilities?: string[];
+  width?: string;
 }
 
 export interface IAnalytics {
@@ -44,7 +54,7 @@ export interface IApisResponse {
   pingApi: boolean;
   updateWebsiteViewsApi: boolean;
   getWebsiteUpdateDetailsApi: boolean;
-  getPhotoUrl: boolean
+  getPhotoUrl: boolean;
 }
 
 export interface ISupport {

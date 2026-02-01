@@ -24,10 +24,9 @@ function HomePage(): ReactNode {
     getPhotoUrl: false,
   });
   const [photoUrl, setPhotoUrl] = useState<string>('');
-
   const navigate = useNavigate();
 
-  useEffect(() => {
+  async function loadApis() {
     const controller = new AbortController();
     const timeOut = Number.parseInt(import.meta.env.VITE_BACKEND_API_TIMEOUT) || 1000;
 
@@ -42,8 +41,6 @@ function HomePage(): ReactNode {
           headers: getApiHeaders(),
           method: HTTP_VERBS.POST,
         });
-
-        if (timerId) clearTimeout(timerId);
 
         if (rawWebsiteViewsResponse.ok) {
           setApiSignal(true);
@@ -65,7 +62,6 @@ function HomePage(): ReactNode {
           headers: getApiHeaders(),
         });
 
-        if (timerId) clearTimeout(timerId);
         const pingResponse = await rawPingResponse.json();
 
         if (rawPingResponse.ok && pingResponse.message === 'Pong') {
@@ -76,6 +72,7 @@ function HomePage(): ReactNode {
           setApiResponses({ ...apiResponses, pingApi: true });
         }
       } catch {
+        console.log('Error in ping api.');
         setIsLoaded(false);
         setApiSignal(false);
         setApiResponses((prev) => ({ ...prev, pingApi: true }));
@@ -94,7 +91,7 @@ function HomePage(): ReactNode {
           setApiResponses({ ...apiResponses, getWebsiteUpdateDetailsApi: false });
         } else {
           setLastModifiedDate(Date.now());
-          setApiResponses({ ...apiResponses, getWebsiteUpdateDetailsApi: true });
+          setApiResponses((prev) => ({ ...prev, getWebsiteUpdateDetailsApi: true }));
         }
       } catch {
         setLastModifiedDate(Date.now());
@@ -119,7 +116,11 @@ function HomePage(): ReactNode {
       }
     }
 
-    Promise.allSettled([ping(), getWebsiteUpdateDetails(), getPhotoUrl(), updateWebsiteViews()]);
+    await Promise.allSettled([ping(), getWebsiteUpdateDetails(), getPhotoUrl(), updateWebsiteViews()]);
+  }
+
+  useEffect(() => {
+    loadApis();
   }, []);
 
   if (!isLoaded && apiSignal === null) return <Loader />;

@@ -1,5 +1,5 @@
 import { Contact2 } from 'lucide-react';
-import React, { ReactNode, useEffect, useState } from 'react';
+import React, { ReactNode, useEffect, useMemo, useState } from 'react';
 import { IContract } from '../interfaces/IContact';
 import { toast } from 'react-toastify';
 import Notes from '../components/Notes';
@@ -11,6 +11,7 @@ import { getAppToastConfig } from '../config';
 import SimpleHeading from '../components/SimpleHeading';
 import Divider from '../components/Divider';
 import useAppHelperFn from '../hooks/AppHelperFn';
+import InputHelperTxt from '../components/InputHelperTxt';
 
 function Contact(): ReactNode {
   const { loadCaptchaAudio } = useAppHelperFn();
@@ -26,6 +27,7 @@ function Contact(): ReactNode {
   });
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isValidated, setIsValidated] = useState<boolean>(false);
+  const charsLeft = useMemo(() => 254 - contractDetails.message.length, [contractDetails]);
 
   function contractDetailsTextboxHandler(
     event: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>
@@ -38,9 +40,12 @@ function Contact(): ReactNode {
 
     setIsLoading(true);
     try {
-      const timerId = setTimeout(() => {
-        controller.abort('Captcha api timeout');
-      }, Number.parseInt(import.meta.env.VITE_BACKEND_API_TIMEOUT) || 1000);
+      const timerId = setTimeout(
+        () => {
+          controller.abort('Captcha api timeout');
+        },
+        Number.parseInt(import.meta.env.VITE_BACKEND_API_TIMEOUT) || 1000
+      );
 
       const rawCaptchaResponse = await fetch(`${API_BASE_URL}/captcha`, {
         signal: controller.signal,
@@ -71,9 +76,12 @@ function Contact(): ReactNode {
     setIsLoading(true);
 
     try {
-      const timerId = setTimeout(() => {
-        controller.abort('Captcha api timeout');
-      }, Number.parseInt(import.meta.env.VITE_BACKEND_API_TIMEOUT) || 1000);
+      const timerId = setTimeout(
+        () => {
+          controller.abort('Captcha api timeout');
+        },
+        Number.parseInt(import.meta.env.VITE_BACKEND_API_TIMEOUT) || 1000
+      );
 
       const rawCaptchaResponse = await fetch(`${API_BASE_URL}/ref-captcha?captchaId=${captchaId}`, {
         signal: controller.signal,
@@ -252,10 +260,12 @@ function Contact(): ReactNode {
             />
             <label
               htmlFor='first_name'
-              className='pointer-events-none absolute left-3 top-2 origin-[0] -translate-y-4 scale-75 transform bg-white px-1 text-sm text-gray-500 duration-200 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-2 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:text-blue-600 peer-focus:bg-white'
+              className='pointer-events-none absolute left-3 top-2 origin-[0] -translate-y-4 scale-75 transform bg-white px-1 text-sm text-gray-500 duration-200 peer-placeholder-shown:top-1/3 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-2 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:text-blue-600 peer-focus:bg-white'
             >
               First Name<sup className='text-red-500 text-xs'>*</sup>
             </label>
+
+            <InputHelperTxt text='Only alphabets are allowed.' />
           </div>
 
           <div className='relative w-full'>
@@ -271,10 +281,11 @@ function Contact(): ReactNode {
             />
             <label
               htmlFor='last_name'
-              className='pointer-events-none absolute left-3 top-2 origin-[0] -translate-y-4 scale-75 transform bg-white px-1 text-sm text-gray-500 duration-200 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-2 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:text-blue-600 peer-focus:bg-white'
+              className='pointer-events-none absolute left-3 top-2 origin-[0] -translate-y-4 scale-75 transform bg-white px-1 text-sm text-gray-500 duration-200 peer-placeholder-shown:top-1/3 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-2 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:text-blue-600 peer-focus:bg-white'
             >
               Last Name
             </label>
+            <InputHelperTxt text='Only alphabets are allowed.' />
           </div>
         </div>
 
@@ -292,10 +303,12 @@ function Contact(): ReactNode {
           />
           <label
             htmlFor='email'
-            className='pointer-events-none absolute left-3 top-2 origin-[0] -translate-y-4 scale-75 transform bg-white px-1 text-sm text-gray-500 duration-200 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-2 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:text-blue-600 peer-focus:bg-white'
+            className='pointer-events-none absolute left-3 top-2 origin-[0] -translate-y-4 scale-75 transform bg-white px-1 text-sm text-gray-500 duration-200 peer-placeholder-shown:top-1/3 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-2 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:text-blue-600 peer-focus:bg-white'
           >
             Email<sup className='text-red-500 text-xs'>*</sup>
           </label>
+
+          <InputHelperTxt text='Please enter a valid email address.' />
         </div>
 
         <div className='relative w-full'>
@@ -310,11 +323,21 @@ function Contact(): ReactNode {
           />
           <label
             htmlFor='message'
-            className='pointer-events-none absolute left-3 top-2 origin-[0] -translate-y-4 scale-75 transform bg-white px-1 text-sm text-gray-500 duration-200 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-2 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:text-blue-600 peer-focus:bg-white'
+            className='pointer-events-none absolute left-3 top-2 origin-[0] -translate-y-4 scale-75 transform bg-white px-1 text-sm text-gray-500 duration-200 peer-placeholder-shown:top-1/3 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-2 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:text-blue-600 peer-focus:bg-white'
           >
             Message<sup className='text-red-500 text-xs'>*</sup>
           </label>
+
+          <InputHelperTxt text='Please enter your message. It should be atleast of 10 characters and can be of atmost 254 characters.' />
         </div>
+
+        <div className='flex items-center justify-end'>
+          <p className='text-caption text-blue-400 font-bold'>{charsLeft} characters left</p>
+        </div>
+
+        <p className='text-sm lg:text-base text-justify leading-10 uppercase text-blue-700 font-extrabold underline underline-offset-2 my-1'>
+          Please prove your identity
+        </p>
 
         <Captcha
           captchaData={captchaData}
@@ -354,7 +377,7 @@ function Contact(): ReactNode {
 
         <div className='flex items-center mt-4'>
           <button
-            disabled={isLoading || !isValidated || !captchaId}
+            disabled={isLoading || !isValidated || !captchaId || charsLeft < 0 || contractDetails.message.length < 10}
             type='submit'
             className='min-w-28 transition-transform duration-500 mt-2 inline-flex items-center px-2 py-3.5 border-2 border-dashed border-blue-400 border-spacing-2 justify-center font-bold text-white bg-blue-800 rounded-lg ring-2 ring-offset-1 ring-blue-400 scale-95 focus:scale-100 outline-none text-sm lg:text-base shadow-md shadow-blue-800 disabled:bg-slate-700 disabled:border-slate-600 disabled:ring-slate-400'
           >
