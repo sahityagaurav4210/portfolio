@@ -8,13 +8,13 @@ import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
 import ComponentLoader from './ComponentLoader';
 import CodingProfileBanner from './CodingProfileBanner';
+import { profile } from '../data';
 
 function Hero({ url }: Readonly<IHeroProps>): ReactNode {
   const nameRef = useRef<HTMLHeadingElement | null>(null);
   const [isPhotoLoaded, setIsPhotoLoaded] = useState<boolean>(false);
   const [fallBackImgUrl, setFallBackImgUrl] = useState<string | null>();
   const [counter, setCounter] = useState<number>(0);
-  const { contextSafe } = useGSAP({ scope: nameRef });
   const [analytics, setAnalytics] = useState<IAnalytics>({
     totalGithubContributions: 0,
     questionSolved: 0,
@@ -22,23 +22,15 @@ function Hero({ url }: Readonly<IHeroProps>): ReactNode {
     projects: 0,
   });
 
-  const animateName = contextSafe(() => {
-    gsap.from('#name', { y: -1000, opacity: 0, delay: 0.218, duration: 1, stagger: 0.3 });
+  useGSAP(() => {
+    gsap.from(nameRef.current, { opacity: 0, delay: 0.218, duration: 5 });
+    gsap.from('.hand', { rotate: 60, delay: 0.218, duration: 1.56 });
   });
-
-  const animateHand = contextSafe(() => {
-    gsap.from('.hand', { rotate: 45, delay: 0.218, duration: 1 });
-  });
-
-  useEffect(() => {
-    animateName();
-    animateHand();
-  }, []);
 
   useEffect(() => {
     const intervalHandle = setInterval(() => {
       if (
-        analytics.experience <= 2 ||
+        analytics.experience <= 3 ||
         analytics.projects <= 5 ||
         analytics.questionSolved <= 300 ||
         analytics.totalGithubContributions <= 352
@@ -47,7 +39,7 @@ function Hero({ url }: Readonly<IHeroProps>): ReactNode {
           totalGithubContributions:
             previous.totalGithubContributions < 352 ? previous.totalGithubContributions + 1 : 352,
           questionSolved: previous.questionSolved < 300 ? previous.questionSolved + 1 : 300,
-          experience: previous.experience < 2 ? previous.experience + 1 : 2,
+          experience: previous.experience < 3 ? previous.experience + 1 : 3,
           projects: previous.projects < 5 ? previous.projects + 1 : 5,
         }));
       else clearInterval(intervalHandle);
@@ -76,8 +68,9 @@ function Hero({ url }: Readonly<IHeroProps>): ReactNode {
                 if (counter === 1) setIsPhotoLoaded(true);
                 setCounter((prev) => ++prev);
               }}
-              className={`rounded-full object-cover aspect-square mb-5 w-64 h-64 border-2 border-blue-400 ring-2 ring-offset-1 ring-blue-500 shadow-inner scale-95 hover:scale-105 ${isPhotoLoaded ? 'opacity-100' : 'opacity-60'
-                }`}
+              className={`rounded-full object-cover aspect-square mb-5 w-64 h-64 border-2 border-blue-400 ring-2 ring-offset-1 ring-blue-500 shadow-inner scale-95 hover:scale-105 ${
+                isPhotoLoaded ? 'opacity-100' : 'opacity-60'
+              }`}
             />
             {!isPhotoLoaded && (
               <div className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10'>
@@ -85,25 +78,38 @@ function Hero({ url }: Readonly<IHeroProps>): ReactNode {
               </div>
             )}
           </div>
-          <h1
-            className='text-3xl lg:text-6xl font-bold font-roboto text-black sm:text-6xl text-center lg:leading-relaxed leading-snug tracking-tighter'
-            ref={nameRef}
-          >
-            Hello <span className='hand inline-block'>👋</span> , I am <span className='text-blue-800 font-bold' id='name'>Gaurav Sahitya.</span>
+
+          <h1 className='text-3xl lg:text-6xl font-bold font-roboto text-black sm:text-6xl text-center lg:leading-relaxed leading-snug tracking-tighter'>
+            Hello <span className='hand inline-block'>👋</span> , I am{' '}
+            <span className='text-blue-800 font-bold' ref={nameRef} id='name'>
+              {profile.name}
+            </span>
           </h1>
-          <div className='flex justify-center text-lg lg:text-2xl my-2 font-roboto'>
+
+          <div className='w-full flex justify-center items-center'>
+            {profile.tags.map((tag: string) => (
+              <span
+                key={tag}
+                className='font-arial text-gray-800 shadow-sm shadow-black mb-2 mx-1 inline-block rounded-sm bg-neutral-200 p-1 text-sm font-semibold text-center max-w-40'
+              >
+                {tag}
+              </span>
+            ))}
+          </div>
+
+          <div className='flex justify-center text-lg lg:text-xl my-2 font-roboto font-bold'>
             <p>experienced in</p>
             <span className='mx-2 font-bold italic text-orange-600'>
               <Typewriter options={{ strings: SKILLS, autoStart: true, loop: true }} />
             </span>
           </div>
           <div className='mx-4'>
-            <p className='text-base font-arial text-center text-orange-600 font-bold underline underline-offset-4 decoration-dotted decoration-blue-600 italic'>
-              A highly motivated and detail-oriented software developer having more than 2.5 years of experience in designing, developing, and maintaining scalable software systems.
+            <p className='text-base font-arial text-justify lg:text-center text-orange-600 font-bold underline underline-offset-4 decoration-dotted decoration-blue-600 italic'>
+              {profile.introduction}
             </p>
           </div>
           <div className='flex items-center justify-center md:hidden'>
-            <CodingProfileBanner/>
+            <CodingProfileBanner />
           </div>
           <div className='mt-5 flex items-center justify-center gap-x-2 flex-wrap'>
             <a
@@ -125,7 +131,7 @@ function Hero({ url }: Readonly<IHeroProps>): ReactNode {
           <div className='flex gap-4 flex-wrap items-center justify-center w-full'>
             <div className='flex items-center'>
               <div className='min-h-16 min-w-10 border-2 border-dashed ring-1 ring-offset-2 ring-orange-400 p-4 bg-orange-800 rounded-xl shadow-md shadow-orange-500'>
-                <p className='text-center text-9xl font-roboto font-extrabold text-white'>{analytics.experience}+</p>
+                <p className='text-center text-9xl font-roboto font-extrabold text-white'>{analytics.experience}</p>
                 <p className='text-white font-bold font-roboto text-center'> years of experience</p>
               </div>
             </div>
@@ -159,7 +165,7 @@ function Hero({ url }: Readonly<IHeroProps>): ReactNode {
           </div>
 
           <div className='hidden lg:flex mt-4 items-center justify-center text-gray-700'>
-            <CodingProfileBanner/>
+            <CodingProfileBanner />
           </div>
         </div>
       </div>

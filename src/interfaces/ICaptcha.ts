@@ -8,5 +8,5 @@ export interface ICaptchaProps {
     event: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>
   ): void;
   handleCheckBoxOnChange(event: React.ChangeEvent<HTMLInputElement>): Promise<void>;
-  captchaAudioUrl?: string;
+  handleCaptchaAudioBtnClick?: () => Promise<string | null>;
 }

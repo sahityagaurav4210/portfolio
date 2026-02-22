@@ -53,7 +53,7 @@ const Projects: React.FC<IProjectsProps> = ({ projects, personal_projects }) => 
         <div className='flex items-center p-4 gap-2'>
           <BriefcaseBusiness size={48} className='text-orange-600' />
           <h1 className='text-4xl lg:text-5xl text-blue-800 sm:text-center lg:text-start font-roboto'>
-            Personal <span className='text-blue-800/95 font-bold'>PROJECT</span>
+            Personal <span className='text-blue-800/95 font-bold'>PROJECTS</span>
           </h1>
         </div>
 
