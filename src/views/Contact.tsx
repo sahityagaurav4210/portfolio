@@ -17,7 +17,6 @@ function Contact(): ReactNode {
   const { loadCaptchaAudio } = useAppHelperFn();
   const [captchaData, setCaptchaData] = useState<string>();
   const [captchaId, setCaptchaId] = useState();
-  const [captchaAudioUrl, setCaptchaAudioUrl] = useState<string>();
   const [contractDetails, setContractDetails] = useState<IContract>({
     first_name: '',
     last_name: '',
@@ -58,12 +57,10 @@ function Contact(): ReactNode {
         headers: getApiHeaders(),
       });
       const blob = await rawCaptchaBlobResponse.blob();
+      clearTimeout(timerId);
 
       setCaptchaData(URL.createObjectURL(blob));
       setCaptchaId(data.captchaId);
-      clearTimeout(timerId);
-
-      setCaptchaAudioUrl(await loadCaptchaAudio(data.captchaId));
     } catch {
       toast.warning('Failed to refresh the data', getAppToastConfig());
     } finally {
@@ -72,18 +69,19 @@ function Contact(): ReactNode {
   }
 
   async function reloadCaptcha() {
+    if (!captchaId) {
+      toast.error('Captcha ID is missing. Please try again later.', getAppToastConfig());
+      return;
+    }
+
     const controller = new AbortController();
+    const timeout = Number.parseInt(import.meta.env.VITE_BACKEND_API_TIMEOUT, 10) || 1000;
+    const refreshCaptchaUri = `${API_BASE_URL}/ref-captcha?captchaId=${captchaId}`;
     setIsLoading(true);
 
     try {
-      const timerId = setTimeout(
-        () => {
-          controller.abort('Captcha api timeout');
-        },
-        Number.parseInt(import.meta.env.VITE_BACKEND_API_TIMEOUT) || 1000
-      );
-
-      const rawCaptchaResponse = await fetch(`${API_BASE_URL}/ref-captcha?captchaId=${captchaId}`, {
+      const timerId = setTimeout(() => controller.abort('Captcha api timeout'), timeout);
+      const rawCaptchaResponse = await fetch(refreshCaptchaUri, {
         signal: controller.signal,
         headers: getApiHeaders(),
       });
@@ -94,11 +92,9 @@ function Contact(): ReactNode {
         headers: getApiHeaders(),
       });
       const blob = await rawCaptchaBlobResponse.blob();
-
-      setCaptchaData(URL.createObjectURL(blob));
       clearTimeout(timerId);
 
-      setCaptchaAudioUrl(await loadCaptchaAudio(data.captchaId));
+      setCaptchaData(URL.createObjectURL(blob));
     } catch {
       toast.warning('Failed to refresh the data', getAppToastConfig());
     } finally {
@@ -197,6 +193,26 @@ function Contact(): ReactNode {
     toast.error(captchaValidateResponse.message, getAppToastConfig());
   }
 
+  async function handleCaptchaAudioBtnClick() {
+    if (isLoading) return null;
+
+    if (!captchaId) {
+      toast.error('Captcha ID is missing. Please try again later.', getAppToastConfig());
+      return null;
+    }
+
+    try {
+      setIsLoading(true);
+      const audioUrl = await loadCaptchaAudio(captchaId);
+      return audioUrl;
+    } catch {
+      toast.error('Failed to load audio for the captcha', getAppToastConfig());
+      return null;
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
   async function refreshCaptcha() {
     await reloadCaptcha();
   }
@@ -219,7 +235,7 @@ function Contact(): ReactNode {
     return function () {
       if (id) clearInterval(id);
     };
-  }, [isValidated]);
+  }, [isValidated, captchaId, captchaData]);
 
   return (
     <div className='container mx-auto min-h-96'>
@@ -347,7 +363,7 @@ function Contact(): ReactNode {
           isLoading={isLoading}
           isValidated={isValidated}
           refreshCaptcha={refreshCaptcha}
-          captchaAudioUrl={captchaAudioUrl}
+          handleCaptchaAudioBtnClick={handleCaptchaAudioBtnClick}
         />
 
         <div className='flex flex-col justify-center mb-4'>

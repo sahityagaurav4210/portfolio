@@ -34,12 +34,12 @@ export const projects = [
   {
     name: 'Census Management and Monitoring System (CMMS)',
     disabled: false,
-    text: 'The Census Management and Monitoring System is a digital platform designed to streamline census operations, including data collection, verification, and analysis. It enhances accuracy, transparency, and efficiency by enabling real-time monitoring of field activities, ensuring reliable demographic insights for informed decision-making and effective government planning.',
+    text: 'The Census Management and Monitoring System is a digital platform designed to streamline census operations, including data collection, verification, and analysis. It enhances accuracy, transparency, and efficiency by enabling real-time monitoring of field activities, ensuring reliable demographic insights for informed decision-making and effective government planning. It is available in 16 indian languages. I am working on it as a frontend developer.',
     tech_stack: [],
     ongoing: true,
     showDivider: true,
     cardImage: '/cmms.png',
-    liveLink: 'https://test.census.gov.in/se',
+    liveLink: 'https://census.gov.in',
   },
   {
     name: 'EarthLink',
@@ -478,3 +478,9 @@ export const education = [
     ],
   },
 ];
+
+export const profile = {
+  introduction: `Driven software developer with nearly 3 years of experience in creating scalable, high-performance systems. My expertise lies in bridging the gap between complex functionality and high-level security; I have a demonstrated ability to build platforms that meet all standards set by VAPT auditors, ensuring data integrity and system resilience in government sector.`,
+  name: 'Gaurav Sahitya.',
+  tags: ['Project Engineer @ C-DAC', `Building India's first digital census`],
+};

@@ -3,6 +3,8 @@ import Progress from './Progressbar';
 import Validated from './Validated';
 import { ICaptchaProps } from '../interfaces/ICaptcha';
 import { AudioWaveform, CircleCheck, RefreshCcw } from 'lucide-react';
+import { toast } from 'react-toastify';
+import { getAppToastConfig } from '../config';
 
 function Captcha({
   captchaData,
@@ -12,17 +14,22 @@ function Captcha({
   contractDetails,
   contractDetailsTextboxHandler,
   handleCheckBoxOnChange,
-  captchaAudioUrl,
+  handleCaptchaAudioBtnClick,
 }: Readonly<ICaptchaProps>): ReactNode {
   const playCaptchaAudio = useCallback(
-    function () {
-      if (!captchaAudioUrl) return;
+    async function () {
+      const audioUri = await handleCaptchaAudioBtnClick?.();
+
+      if (!audioUri) {
+        toast.error('Unable to fetch captcha audio. Please try again later.', getAppToastConfig());
+        return;
+      }
 
       const audio = new Audio();
-      audio.src = captchaAudioUrl;
+      audio.src = audioUri;
       audio.play();
     },
-    [captchaAudioUrl]
+    [handleCaptchaAudioBtnClick]
   );
 
   if (isValidated) return <Validated />;

@@ -1,7 +1,7 @@
 import { ReactNode } from 'react';
 import { IHeadingProps } from '../interfaces';
 
-function Heading({ headingName, className = '' }: IHeadingProps): ReactNode {
+function Heading({ headingName, className = '' }: Readonly<IHeadingProps>): ReactNode {
   return (
     <div className={`grid lg:grid-cols-3 place-items-center mx-2 ${className}`}>
       <div className='hidden lg:block lg:w-full h-2 bg-orange-500'></div>

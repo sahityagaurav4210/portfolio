@@ -22,7 +22,6 @@ function HireMe(): ReactNode {
   const [hiremeDetails, setHiremeDetails] = useState<IHireme>(initialHireMeFormData);
   const [loading, setLoading] = useState<boolean>(false);
   const [isValidated, setIsValidated] = useState<boolean>(false);
-  const [captchaAudioUrl, setCaptchaAudioUrl] = useState<string>('');
   const projectDescCharRemaining = useMemo(
     () => 254 - (hiremeDetails.project_desc ? hiremeDetails.project_desc.length : 0),
     [hiremeDetails.project_desc]
@@ -60,12 +59,10 @@ function HireMe(): ReactNode {
         headers: getApiHeaders(),
       });
       const blob = await rawCaptchaBlobResponse.blob();
+      clearTimeout(timerId);
 
       setCaptchaData(URL.createObjectURL(blob));
       setCaptchaId(data.captchaId);
-      clearTimeout(timerId);
-
-      setCaptchaAudioUrl(await loadCaptchaAudio(data.captchaId));
     } catch {
       toast.warning('Failed to refresh the data', getAppToastConfig());
     } finally {
@@ -96,11 +93,9 @@ function HireMe(): ReactNode {
         headers: getApiHeaders(),
       });
       const blob = await rawCaptchaBlobResponse.blob();
-
-      setCaptchaData(URL.createObjectURL(blob));
       clearTimeout(timerId);
 
-      setCaptchaAudioUrl(await loadCaptchaAudio(data.captchaId));
+      setCaptchaData(URL.createObjectURL(blob));
     } catch {
       toast.warning('Failed to refresh the data', getAppToastConfig());
     } finally {
@@ -269,6 +264,26 @@ function HireMe(): ReactNode {
     event: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>
   ) {
     setHiremeDetails({ ...hiremeDetails, [event.target.id]: event.target.value });
+  }
+
+  async function handleCaptchaAudioBtnClick() {
+    if (loading) return null;
+
+    if (!captchaId) {
+      toast.error('Captcha ID is missing. Please try again later.', getAppToastConfig());
+      return null;
+    }
+
+    try {
+      setLoading(true);
+      const audioUrl = await loadCaptchaAudio(captchaId);
+      return audioUrl;
+    } catch {
+      toast.error('Failed to load audio for the captcha', getAppToastConfig());
+      return null;
+    } finally {
+      setLoading(false);
+    }
   }
 
   useEffect(() => {
@@ -522,7 +537,7 @@ function HireMe(): ReactNode {
           isLoading={loading}
           isValidated={isValidated}
           refreshCaptcha={refreshCaptcha}
-          captchaAudioUrl={captchaAudioUrl}
+          handleCaptchaAudioBtnClick={handleCaptchaAudioBtnClick}
         />
 
         <label className='flex items-center cursor-pointer my-2 flex-wrap'>
@@ -575,7 +590,7 @@ function HireMe(): ReactNode {
           {loading ? (
             <>
               <Progress />
-              <span>Submitting...</span>
+              <span>Loading...</span>
             </>
           ) : (
             <>
