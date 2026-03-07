@@ -60,11 +60,7 @@ function HireMePage(): ReactNode {
   else
     return (
       <>
-        <Navbar
-          menuItems={menuItems}
-          url={`${import.meta.env.VITE_BACKEND_BASE_URL}/baas/files/download-cv`}
-          disabled={true}
-        />
+        <Navbar menuItems={menuItems} />
 
         <HireMe />
 
