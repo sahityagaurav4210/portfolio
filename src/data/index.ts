@@ -10,15 +10,15 @@ import SchoolLogo from '../assets/uspclogo.png';
 export const menuItems = [
   {
     name: 'HOME',
-    href: '#home',
+    href: '/#home',
   },
   {
     name: 'PROJECTS',
-    href: '#projects',
+    href: '/#projects',
   },
   {
     name: 'EXPERIENCE',
-    href: '#experience',
+    href: '/#experience',
   },
   {
     name: 'SKILLS',
@@ -26,7 +26,7 @@ export const menuItems = [
   },
   {
     name: 'EDUCATION',
-    href: '#education',
+    href: '/#education',
   },
 ];
 
@@ -483,4 +483,5 @@ export const profile = {
   introduction: `Driven software developer with nearly 3 years of experience in creating scalable, high-performance systems. My expertise lies in bridging the gap between complex functionality and high-level security; I have a demonstrated ability to build platforms that meet all standards set by VAPT auditors, ensuring data integrity and system resilience in government sector.`,
   name: 'Gaurav Sahitya.',
   tags: ['Project Engineer @ C-DAC', `Building India's first digital census`],
+  greetings: ['Hello', 'नमस्ते', 'ਸਤ ਸ੍ਰੀ ਅਕਾਲ', 'হ্যালো', 'ஹலோ', 'Hola', 'Bonjour', 'Olá', 'Привет', 'سلام', 'مرحبا'],
 };

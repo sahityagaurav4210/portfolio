@@ -5,8 +5,6 @@ export interface INavbar {
 
 export interface INavbarProps {
   menuItems: INavbar[];
-  url: string;
-  disabled?: boolean;
 }
 
 export interface ILogo {
