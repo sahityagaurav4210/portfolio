@@ -25,13 +25,20 @@ export enum ApiStatus {
 }
 
 export const API_BASE_URL = import.meta.env.VITE_BACKEND_BASE_URL || 'http://localhost:12318/api/v1';
-export function getApiHeaders(): HeadersInit {
-  return { 'x-api-key': import.meta.env.VITE_BACKEND_TOKEN, 'x-user-id': UserAgent };
+export function getApiHeaders(contenType = 'application/json'): HeadersInit {
+  return { 'x-api-key': import.meta.env.VITE_BACKEND_TOKEN, 'x-user-id': UserAgent, 'Content-Type': contenType };
 }
 
-export async function downloadMedia(url: string, signal?: AbortSignal) {
+export async function downloadMedia(
+  url: string,
+  signal?: AbortSignal,
+  body?: Record<string, any>
+): Promise<string | null> {
   try {
-    const apiOptions = signal ? { signal, headers: getApiHeaders() } : { headers: getApiHeaders() };
+    const payload = body ? { body: JSON.stringify(body), method: HTTP_VERBS.POST } : {};
+    const apiOptions = signal
+      ? { signal, headers: getApiHeaders(), ...payload }
+      : { headers: getApiHeaders(), ...payload };
     const media = await fetch(url, apiOptions);
     const mediaApiResponse = await media.blob();
 
@@ -109,5 +116,17 @@ export class ApiController {
 
       return reply;
     }
+  }
+
+  public async download(url: string) {
+    const controller = new AbortController();
+    const timeOut = Number.parseInt(import.meta.env.VITE_BACKEND_API_TIMEOUT, 10) || 1000;
+
+    setTimeout(() => {
+      controller.abort('Download media api timeout');
+    }, timeOut);
+
+    const mediaUrl = await downloadMedia(url, controller.signal, { website: 'https://www.sgaurav.me' });
+    return mediaUrl;
   }
 }
