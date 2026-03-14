@@ -52,7 +52,7 @@ jobs:
           VITE_PBADMIN_URL: ${{ secrets.VITE_DEV_PBADMIN_URL }}
           VITE_CAPTCHA_TIMEOUT: ${{ secrets.VITE_CAPTCHA_TIMEOUT }}
           VITE_APP_VERSION: ${{secrets.VITE_APP_VERSION}}
-          VITE_APP_ENV: 'development'
+          VITE_APP_ENV: ${{ vars.VITE_APP_DEV_ENV }}
         run: |
           docker build --build-arg VITE_BACKEND_BASE_URL=${VITE_BACKEND_BASE_URL} --build-arg VITE_BACKEND_API_TIMEOUT=${VITE_BACKEND_API_TIMEOUT} --build-arg VITE_BACKEND_TOKEN=${VITE_BACKEND_TOKEN} --build-arg VITE_LINKEDIN_URL=${VITE_LINKEDIN_URL}  --build-arg VITE_INSTAGRAM_URL=${VITE_INSTAGRAM_URL} --build-arg VITE_TWITTER_URL=${VITE_TWITTER_URL} --build-arg VITE_LIVE_URL=${VITE_LIVE_URL} --build-arg VITE_PBADMIN_URL=${VITE_PBADMIN_URL} --build-arg VITE_CAPTCHA_TIMEOUT=${VITE_CAPTCHA_TIMEOUT} --build-arg VITE_APP_VERSION=${VITE_APP_VERSION} --build-arg VITE_APP_ENV=${VITE_APP_ENV} -t portfolio-dev-website .
           docker tag portfolio-dev-website ${DOCKER_USERNAME}/portfolio-dev-website:latest
@@ -71,7 +71,7 @@ jobs:
           VITE_PBADMIN_URL: ${{ secrets.VITE_PBADMIN_URL }}
           VITE_CAPTCHA_TIMEOUT: ${{ secrets.VITE_CAPTCHA_TIMEOUT }}
           VITE_APP_VERSION: ${{secrets.VITE_APP_VERSION}}
-          VITE_APP_ENV: 'production'
+          VITE_APP_ENV: ${{ vars.VITE_APP_PROD_ENV }}
         run: |
           docker build --build-arg VITE_BACKEND_BASE_URL=${VITE_BACKEND_BASE_URL} --build-arg VITE_BACKEND_API_TIMEOUT=${VITE_BACKEND_API_TIMEOUT} --build-arg VITE_BACKEND_TOKEN=${VITE_BACKEND_TOKEN} --build-arg VITE_LINKEDIN_URL=${VITE_LINKEDIN_URL}  --build-arg VITE_INSTAGRAM_URL=${VITE_INSTAGRAM_URL} --build-arg VITE_TWITTER_URL=${VITE_TWITTER_URL} --build-arg VITE_LIVE_URL=${VITE_LIVE_URL} --build-arg VITE_PBADMIN_URL=${VITE_PBADMIN_URL} --build-arg VITE_CAPTCHA_TIMEOUT=${VITE_CAPTCHA_TIMEOUT} --build-arg VITE_APP_VERSION=${VITE_APP_VERSION} --build-arg VITE_APP_ENV=${VITE_APP_ENV} -t portfolio .
           docker tag portfolio ${DOCKER_USERNAME}/portfolio:latest
