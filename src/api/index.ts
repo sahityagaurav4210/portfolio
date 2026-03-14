@@ -116,6 +116,7 @@ export class ApiController {
   public async download(url: string) {
     const controller = new AbortController();
     const appEnv = import.meta.env.VITE_APP_ENV || 'local';
+    console.log(appEnv, 'appEnv');
     const website = appEnv === ENVIRONMENT.LOCAL ? 'https://www.sgaurav.me' : globalThis.location.origin;
     const timeOut = Number.parseInt(import.meta.env.VITE_BACKEND_API_TIMEOUT, 10) || 1000;
 
