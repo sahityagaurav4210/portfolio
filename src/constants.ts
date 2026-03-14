@@ -11,3 +11,8 @@ export const HIRING_PART_TIME_MSG =
 
 export const SKILLS = ['backend development.', 'frontend development.', 'server management.'];
 export const UserAgent = 'PortfolioWebApp/v1';
+export enum ENVIRONMENT {
+  PRODUCTION = 'production',
+  DEVELOPMENT = 'development',
+  LOCAL = 'local',
+}

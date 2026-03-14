@@ -1,4 +1,4 @@
-import { UserAgent } from '../constants';
+import { ENVIRONMENT, UserAgent } from '../constants';
 import { IApiReply } from '../interfaces/IApi';
 
 export enum HTTP_VERBS {
@@ -29,28 +29,23 @@ export function getApiHeaders(contenType = 'application/json'): HeadersInit {
   return { 'x-api-key': import.meta.env.VITE_BACKEND_TOKEN, 'x-user-id': UserAgent, 'Content-Type': contenType };
 }
 
-export async function downloadMedia(
-  url: string,
-  signal?: AbortSignal,
-  body?: Record<string, any>
-): Promise<string | null> {
+export async function downloadMedia(url: string, signal?: AbortSignal, body?: Record<string, any>): Promise<string> {
+  let mediaUrl: string = '';
+  const payload = body ? { body: JSON.stringify(body), method: HTTP_VERBS.POST } : {};
+  const apiOptions: RequestInit = signal
+    ? { signal, headers: getApiHeaders(), ...payload, keepalive: true, priority: 'high' }
+    : { headers: getApiHeaders(), ...payload };
+
   try {
-    const payload = body ? { body: JSON.stringify(body), method: HTTP_VERBS.POST } : {};
-    const apiOptions = signal
-      ? { signal, headers: getApiHeaders(), ...payload }
-      : { headers: getApiHeaders(), ...payload };
     const media = await fetch(url, apiOptions);
-    const mediaApiResponse = await media.blob();
 
     if (media.ok) {
-      const response = URL.createObjectURL(mediaApiResponse);
-      return response;
-    } else {
-      return null;
+      const mediaApiResponse = await media.blob();
+      mediaUrl = URL.createObjectURL(mediaApiResponse);
     }
-  } catch {
-    return null;
-  }
+  } catch {}
+
+  return mediaUrl;
 }
 
 export class ApiController {
@@ -120,13 +115,15 @@ export class ApiController {
 
   public async download(url: string) {
     const controller = new AbortController();
+    const appEnv = import.meta.env.VITE_APP_ENV || 'local';
+    const website = appEnv === ENVIRONMENT.LOCAL ? 'https://www.sgaurav.me' : globalThis.location.origin;
     const timeOut = Number.parseInt(import.meta.env.VITE_BACKEND_API_TIMEOUT, 10) || 1000;
 
     setTimeout(() => {
       controller.abort('Download media api timeout');
     }, timeOut);
 
-    const mediaUrl = await downloadMedia(url, controller.signal, { website: 'https://www.sgaurav.me' });
+    const mediaUrl = await downloadMedia(url, controller.signal, { website });
     return mediaUrl;
   }
 }
