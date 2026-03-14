@@ -12,6 +12,7 @@ import { profile } from '../data';
 
 function Hero({ url }: Readonly<IHeroProps>): ReactNode {
   const nameRef = useRef<HTMLHeadingElement | null>(null);
+  const secondaryHeadingRef = useRef<HTMLHeadingElement | null>(null);
   const [isPhotoLoaded, setIsPhotoLoaded] = useState<boolean>(false);
   const [fallBackImgUrl, setFallBackImgUrl] = useState<string | null>();
   const [counter, setCounter] = useState<number>(0);
@@ -24,7 +25,7 @@ function Hero({ url }: Readonly<IHeroProps>): ReactNode {
 
   useGSAP(() => {
     gsap.from(nameRef.current, { opacity: 0, delay: 0.218, duration: 5 });
-    gsap.from('.hand', { rotate: 60, delay: 0.218, duration: 1.56 });
+    gsap.from(secondaryHeadingRef.current, { x: -1200, delay: 0.4, duration: 5 });
   });
 
   useEffect(() => {
@@ -68,7 +69,7 @@ function Hero({ url }: Readonly<IHeroProps>): ReactNode {
                 if (counter === 1) setIsPhotoLoaded(true);
                 setCounter((prev) => ++prev);
               }}
-              className={`rounded-full object-cover aspect-square mb-5 w-64 h-64 border-2 border-blue-400 ring-2 ring-offset-1 ring-blue-500 shadow-inner scale-95 hover:scale-105 ${
+              className={`rounded-full object-cover aspect-square transition-all duration-300 mb-5 w-64 h-64 border-2 border-blue-400 ring-2 ring-offset-1 ring-blue-500 shadow-inner scale-95 hover:scale-105 ${
                 isPhotoLoaded ? 'opacity-100' : 'opacity-60'
               }`}
             />
@@ -80,7 +81,14 @@ function Hero({ url }: Readonly<IHeroProps>): ReactNode {
           </div>
 
           <h1 className='text-3xl lg:text-6xl font-bold font-roboto text-black sm:text-6xl text-center lg:leading-relaxed leading-snug tracking-tighter'>
-            Hello <span className='hand inline-block'>👋</span> , I am{' '}
+            <Typewriter options={{ strings: profile.greetings, autoStart: true, loop: true }} />{' '}
+          </h1>
+
+          <h1
+            className='text-2xl lg:text-5xl font-bold font-roboto text-black sm:text-5xl text-center lg:leading-relaxed leading-snug tracking-tighter'
+            ref={secondaryHeadingRef}
+          >
+            My name is{' '}
             <span className='text-blue-800 font-bold' ref={nameRef} id='name'>
               {profile.name}
             </span>
