@@ -275,8 +275,7 @@ export const skills = [
     name: 'PostgreSQL',
     text: 'Postgres, is a free and open-source relational database management system (RDBMS) emphasizing extensibility and SQL compliance. I have 1 year of experience in it.',
     experience: '1 year',
-    picture:
-      'https://assets.website-files.com/61b7127e64746d558d27873a/63989d2be9bf53daaa03eea9_Blog_PostgreSQL%20CDC.png',
+    picture: 'https://assets.website-files.com/61b7127e64746d558d27873a/63989d2be9bf53daaa03eea9_Blog_PostgreSQL%20CDC.png',
   },
 ];
 
@@ -482,6 +481,24 @@ export const education = [
 export const profile = {
   introduction: `Driven software developer with nearly 3 years of experience in creating scalable, high-performance systems. My expertise lies in bridging the gap between complex functionality and high-level security; I have a demonstrated ability to build platforms that meet all standards set by VAPT auditors, ensuring data integrity and system resilience in government sector.`,
   name: 'Gaurav Sahitya.',
-  tags: ['Project Engineer @ C-DAC', `Building India's first digital census`],
-  greetings: ['Hello', 'नमस्ते', 'ਸਤ ਸ੍ਰੀ ਅਕਾਲ', 'হ্যালো', 'ஹலோ', 'Hola', 'Bonjour', 'Olá', 'Привет', 'سلام', 'مرحبا'],
+  tags: ['Project Engineer @ C-DAC Delhi, GoI', `Building India's first digital census`, `Silver medalist in Java @ IIT Kharagpur`],
+  greetings: [
+    'Hello World',
+    'हैलो वर्ल्ड',
+    'ਸਤਿ ਸ੍ਰੀ ਅਕਾਲ ਦੁਨਿਆ',
+    'হ্যালো বিশ্ব',
+    'வணக்கம் உலகம்',
+    'Hola Mundo',
+    'Bonjour le monde',
+    'Olá, mundo!',
+    'Привет, мир',
+    'ہیلو دنیا',
+    'مرحبا بالعالم',
+    'ନମସ୍କାର ବିଶ୍ୱ',
+    'ഹലോ വേൾഡ്',
+    'ꯍꯦꯂꯣ ꯃꯥꯂꯦꯝ꯫',
+    'হেল্ল জগত',
+    '你好世界',
+    'こんにちは世界',
+  ],
 };
