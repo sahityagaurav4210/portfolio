@@ -39,7 +39,7 @@ export const projects = [
     ongoing: true,
     showDivider: true,
     cardImage: '/cmms.png',
-    liveLink: 'https://census.gov.in',
+    liveLink: 'https://censusindia.gov.in',
   },
   {
     name: 'EarthLink',
