@@ -1,4 +1,6 @@
+import { useCallback } from 'react';
 import { API_BASE_URL, getApiHeaders } from '../api';
+import SkillImage from '../assets/skill.avif';
 
 function useAppHelperFn() {
   async function loadCaptchaAudio(captchaId: string): Promise<string> {
@@ -11,7 +13,11 @@ function useAppHelperFn() {
     return URL.createObjectURL(blob);
   }
 
-  return { loadCaptchaAudio };
+  const getResourceUrl = useCallback(function (relativeUrl: string | undefined | null) {
+    return relativeUrl ? `${import.meta.env.VITE_BACKEND_BASE_URL}${relativeUrl}` : SkillImage;
+  }, []);
+
+  return { loadCaptchaAudio, getResourceUrl };
 }
 
 export default useAppHelperFn;

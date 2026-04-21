@@ -18,9 +18,9 @@ const SkillsCards: React.FC<ISkills> = ({ name, text, picture, experience }) => 
           </span>
         </div>
 
-        <div className="my-2 h-[1px] bg-blue-800"></div>
+        <div className='my-2 h-[1px] bg-blue-800'></div>
 
-        <p className='mt-3 text-sm text-gray-800 text-justify min-h-[100px] font-roboto'>{text}</p>
+        <div className='mt-3 text-sm text-gray-800 text-justify min-h-[100px] font-roboto' dangerouslySetInnerHTML={{ __html: text }}></div>
       </div>
     </div>
   );
