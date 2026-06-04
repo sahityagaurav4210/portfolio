@@ -31,10 +31,17 @@ export function getApiHeaders(contenType = 'application/json'): HeadersInit {
 
 export async function downloadMedia(url: string, signal?: AbortSignal, body?: Record<string, any>): Promise<string> {
   let mediaUrl: string = '';
+  const token = import.meta.env.VITE_BACKEND_TOKEN;
   const payload = body ? { body: JSON.stringify(body), method: HTTP_VERBS.POST } : {};
   const apiOptions: RequestInit = signal
-    ? { signal, headers: getApiHeaders(), ...payload, keepalive: true, priority: 'high' }
-    : { headers: getApiHeaders(), ...payload };
+    ? {
+        signal,
+        headers: { ...getApiHeaders(), 'x-api-key': token },
+        ...payload,
+        keepalive: true,
+        priority: 'high',
+      }
+    : { headers: { ...getApiHeaders(), 'x-api-key': token }, ...payload };
 
   try {
     const media = await fetch(url, apiOptions);
