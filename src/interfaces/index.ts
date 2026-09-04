@@ -6,6 +6,7 @@ export interface IHeadingProps {
 }
 export interface IHeroProps {
   url?: string;
+  heroSection?: IHeroSectionPayload;
 }
 
 export enum HiringType {
@@ -55,6 +56,7 @@ export interface IApisResponse {
   updateWebsiteViewsApi: boolean;
   getWebsiteUpdateDetailsApi: boolean;
   getPhotoUrl: boolean;
+  heroSectionApi: boolean;
 }
 
 export interface ISupport {
@@ -62,4 +64,35 @@ export interface ISupport {
 }
 export interface IImageSuspenseProps {
   url: string;
+}
+
+export interface IHeroSectionPayload {
+  displayName: string;
+  about: string;
+  activeGithubContributions: number;
+  codingQuestionSolved: number;
+  designation: string;
+  experience: number;
+  hackerrankUrl?: string;
+  leetcodeUrl?: string;
+  linkedInUrl?: string;
+  projectsDelivered: number;
+  specialization: Array<string>;
+  twitterUrl?: string;
+  tags?: Array<string>;
+}
+
+export interface ILogo {
+  displayName?: string;
+  designation?: string;
+}
+
+export interface ICodingProfileBanner {
+  hackerrankUrl?: string;
+  linkedInUrl?: string;
+}
+
+export interface IBacktoTopButtonProp {
+  isVisible: boolean;
+  uri?: string;
 }
