@@ -5,6 +5,9 @@ import HomePage from './pages/HomePage';
 import HireMePage from './pages/HireMePage';
 import SkillsPage from './pages/SkillsPage';
 import ContactMePage from './pages/ContactMePage';
+import ProjectPage from './pages/ProjectPage';
+import ExperiencePage from './pages/ExperiencePage';
+import EducationPage from './pages/EducationPage';
 
 function App(): ReactNode {
   return (
@@ -12,6 +15,9 @@ function App(): ReactNode {
       <BrowserRouter>
         <Routes>
           <Route path='/' element={<HomePage />} />
+          <Route path='/projects' element={<ProjectPage />} />
+          <Route path='/experience' element={<ExperiencePage />} />
+          <Route path='/education' element={<EducationPage />} />
           <Route path='/offline' element={<OfflinePage />} />
           <Route path='/hiring' element={<HireMePage />} />
           <Route path='/skills' element={<SkillsPage />} />

@@ -10,9 +10,11 @@ export interface IProjects {
   note?: string;
   showDivider?: boolean;
   cardImage?: string;
+  type: string;
+  projectDomain?: string;
 }
 
 export interface IProjectsProps {
   projects: IProjects[];
-  personal_projects: IProjects[];
+  fetchProjects?: (type?: string | null) => Promise<void> | void;
 }

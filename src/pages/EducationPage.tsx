@@ -1,16 +1,16 @@
-import { memo, ReactNode, useEffect, useState } from 'react';
-import Contact from '../views/Contact';
-import Navbar from '../components/Navbar';
-import { menuItems } from '../data';
-import Footer from '../components/Footer';
+import React, { ReactNode, useEffect, useState } from 'react';
+import { IHeroSectionPayload } from '../interfaces';
 import { useNavigate } from 'react-router-dom';
 import { ApiController, ApiStatus } from '../api';
 import Loader from '../components/Loader';
-import { IHeroSectionPayload } from '../interfaces';
+import Navbar from '../components/Navbar';
+import { education, menuItems } from '../data';
+import Footer from '../components/Footer';
+import Education from '../components/Education';
 import { useInView } from 'react-intersection-observer';
 import BackToTopButton from '../components/core/BackToTopButton';
 
-function ContactMePage(): ReactNode {
+function EducationPage(): ReactNode {
   const { ref, inView } = useInView({ threshold: 0.4 });
   const [apiSignal, setApiSignal] = useState<boolean | null>(null);
   const [apiResponses, setApiResponses] = useState({
@@ -80,15 +80,15 @@ function ContactMePage(): ReactNode {
       <>
         <Navbar menuItems={menuItems} heroSection={heroSection} />
 
-        <Contact />
+        <Education education={education} />
 
-        <div ref={ref}>
+        <div ref={ref} className='w-full'>
           <Footer />
         </div>
 
-        <BackToTopButton isVisible={inView} uri='/contact-me' />
+        <BackToTopButton isVisible={inView} uri='/education' />
       </>
     );
 }
 
-export default memo(ContactMePage);
+export default React.memo(EducationPage);

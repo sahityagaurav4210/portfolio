@@ -4,8 +4,11 @@ import { menuItems } from '../data';
 import Socket from '../assets/socket.webp';
 import { useNavigate } from 'react-router-dom';
 import Footer from '../components/Footer';
+import { useInView } from 'react-intersection-observer';
+import BackToTopButton from '../components/core/BackToTopButton';
 
 function OfflinePage(): ReactNode {
+  const { ref, inView } = useInView({ threshold: 0.4 });
   const navigate = useNavigate();
   return (
     <div className='min-h-screen flex flex-col bg-gray-100 text-gray-800'>
@@ -36,7 +39,11 @@ function OfflinePage(): ReactNode {
         </div>
       </div>
 
-      <Footer />
+      <div ref={ref}>
+        <Footer />
+      </div>
+
+      <BackToTopButton isVisible={inView} uri='/offline' />
     </div>
   );
 }

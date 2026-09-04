@@ -1,24 +1,27 @@
-import { memo, ReactNode, useEffect, useState } from 'react';
-import Contact from '../views/Contact';
-import Navbar from '../components/Navbar';
-import { menuItems } from '../data';
-import Footer from '../components/Footer';
+import React, { ReactNode, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ApiController, ApiStatus } from '../api';
 import Loader from '../components/Loader';
+import Navbar from '../components/Navbar';
+import { menuItems } from '../data';
+import Footer from '../components/Footer';
+import Projects from '../components/Projects';
 import { IHeroSectionPayload } from '../interfaces';
+import { IProjects } from '../interfaces/IProjects';
 import { useInView } from 'react-intersection-observer';
 import BackToTopButton from '../components/core/BackToTopButton';
 
-function ContactMePage(): ReactNode {
+function ProjectPage(): ReactNode {
   const { ref, inView } = useInView({ threshold: 0.4 });
   const [apiSignal, setApiSignal] = useState<boolean | null>(null);
   const [apiResponses, setApiResponses] = useState({
     pingApi: false,
     updateWebsiteViewsApi: false,
     heroSectionApi: false,
+    projectsApi: false,
   });
   const [heroSection, setHeroSection] = useState<IHeroSectionPayload>();
+  const [project, setProject] = useState<Array<IProjects>>([]);
   const navigate = useNavigate();
 
   async function updateWebsiteViews() {
@@ -69,8 +72,22 @@ function ContactMePage(): ReactNode {
     }
   }
 
+  async function fetchProjects(type?: string | null) {
+    try {
+      const controller = new ApiController();
+      const endpoint = type ? `baas/projects/list?type=${type}` : `baas/projects/list`;
+      const projectResponse = await controller.GET(endpoint);
+      console.log(projectResponse.data, 'projects');
+
+      setProject(projectResponse.data);
+      setApiResponses((prev) => ({ ...prev, projectsApi: false }));
+    } catch {
+      setApiResponses((prev) => ({ ...prev, projectsApi: true }));
+    }
+  }
+
   useEffect(() => {
-    Promise.all([ping(), updateWebsiteViews(), fetchHeroSection()]);
+    Promise.all([ping(), updateWebsiteViews(), fetchHeroSection(), fetchProjects()]);
   }, []);
 
   if (apiSignal === null) return <Loader />;
@@ -80,15 +97,15 @@ function ContactMePage(): ReactNode {
       <>
         <Navbar menuItems={menuItems} heroSection={heroSection} />
 
-        <Contact />
+        <Projects projects={project} fetchProjects={fetchProjects} />
 
-        <div ref={ref}>
+        <div ref={ref} className='w-full'>
           <Footer />
         </div>
 
-        <BackToTopButton isVisible={inView} uri='/contact-me' />
+        <BackToTopButton isVisible={inView} uri='/projects' />
       </>
     );
 }
 
-export default memo(ContactMePage);
+export default React.memo(ProjectPage);

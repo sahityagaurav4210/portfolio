@@ -10,7 +10,7 @@ export default defineConfig({
   build: {
     sourcemap: false,
   },
-  esbuild: {
-    drop: ['console', 'debugger'],
-  },
+  // esbuild: {
+  //   drop: ['console', 'debugger'],
+  // },
 });
