@@ -10,7 +10,7 @@ import ComponentLoader from './ComponentLoader';
 import CodingProfileBanner from './CodingProfileBanner';
 import { profile } from '../data';
 
-function Hero({ url }: Readonly<IHeroProps>): ReactNode {
+function Hero({ url, heroSection }: Readonly<IHeroProps>): ReactNode {
   const nameRef = useRef<HTMLHeadingElement | null>(null);
   const secondaryHeadingRef = useRef<HTMLHeadingElement | null>(null);
   const [isPhotoLoaded, setIsPhotoLoaded] = useState<boolean>(false);
@@ -37,8 +37,7 @@ function Hero({ url }: Readonly<IHeroProps>): ReactNode {
         analytics.totalGithubContributions <= 352
       )
         setAnalytics((previous) => ({
-          totalGithubContributions:
-            previous.totalGithubContributions < 352 ? previous.totalGithubContributions + 1 : 352,
+          totalGithubContributions: previous.totalGithubContributions < 352 ? previous.totalGithubContributions + 1 : 352,
           questionSolved: previous.questionSolved < 300 ? previous.questionSolved + 1 : 300,
           experience: previous.experience < 3 ? previous.experience + 1 : 3,
           projects: previous.projects < 5 ? previous.projects + 1 : 5,
@@ -90,12 +89,12 @@ function Hero({ url }: Readonly<IHeroProps>): ReactNode {
           >
             My name is{' '}
             <span className='text-blue-800 font-bold' ref={nameRef} id='name'>
-              {profile.name}
+              {heroSection?.displayName ?? profile.name}
             </span>
           </h1>
 
-          <div className='w-full flex justify-center items-center'>
-            {profile.tags.map((tag: string) => (
+          <div className='w-full flex justify-center items-center flex-wrap'>
+            {heroSection?.tags?.map((tag: string) => (
               <span
                 key={tag}
                 className='font-arial text-gray-800 shadow-sm shadow-black mb-2 mx-1 inline-block rounded-sm bg-neutral-200 p-1 text-sm font-semibold text-center max-w-40'
@@ -108,12 +107,12 @@ function Hero({ url }: Readonly<IHeroProps>): ReactNode {
           <div className='flex justify-center text-lg lg:text-xl my-2 font-roboto font-bold'>
             <p>experienced in</p>
             <span className='mx-2 font-bold italic text-orange-600'>
-              <Typewriter options={{ strings: SKILLS, autoStart: true, loop: true }} />
+              <Typewriter options={{ strings: heroSection?.specialization ?? SKILLS, autoStart: true, loop: true }} />
             </span>
           </div>
           <div className='mx-4'>
             <p className='text-base font-arial text-justify lg:text-center text-orange-600 font-bold underline underline-offset-4 decoration-dotted decoration-blue-600 italic'>
-              {profile.introduction}
+              {heroSection?.about ?? profile.introduction}
             </p>
           </div>
           <div className='flex items-center justify-center md:hidden'>
@@ -127,7 +126,7 @@ function Hero({ url }: Readonly<IHeroProps>): ReactNode {
               <BookUser className='mx-1' /> Contact Me
             </a>
             <a
-              href='#projects'
+              href='/projects'
               className='inline-flex rounded-md transition-all bg-orange-100 p-4 text-md font-semibold text-orange-800 shadow-sm shadow-orange-400 ring-2 ring-offset-1 ring-orange-400 focus-within:scale-95 hover:bg-orange-800 hover:text-white scale-95 hover:scale-105 mb-4 min-w-30 lg:min-w-44 justify-center border-2 border-dashed border-orange-400 font-roboto'
             >
               <BriefcaseBusiness className='mx-1' /> View my work
@@ -139,7 +138,9 @@ function Hero({ url }: Readonly<IHeroProps>): ReactNode {
           <div className='flex gap-4 flex-wrap items-center justify-center w-full'>
             <div className='flex items-center'>
               <div className='min-h-16 min-w-10 border-2 border-dashed ring-1 ring-offset-2 ring-orange-400 p-4 bg-orange-800 rounded-xl shadow-md shadow-orange-500'>
-                <p className='text-center text-9xl font-roboto font-extrabold text-white'>{analytics.experience}</p>
+                <p className='text-center text-9xl font-roboto font-extrabold text-white'>
+                  {heroSection?.experience ?? analytics.experience}
+                </p>
                 <p className='text-white font-bold font-roboto text-center'> years of experience</p>
               </div>
             </div>
@@ -147,7 +148,7 @@ function Hero({ url }: Readonly<IHeroProps>): ReactNode {
             <div className='flex items-center flex-wrap'>
               <div className='min-h-16 min-w-10 border-2 border-dashed ring-1 ring-offset-2 ring-orange-400 p-4 bg-orange-800 rounded-xl shadow-md shadow-orange-500'>
                 <p className='text-center text-9xl font-roboto font-extrabold text-white'>
-                  {analytics.projects === 5 ? '5+' : analytics.projects}
+                  {heroSection?.projectsDelivered ?? analytics.projects}
                 </p>
                 <p className='text-white font-bold font-roboto text-center'> projects delivered</p>
               </div>
@@ -156,7 +157,7 @@ function Hero({ url }: Readonly<IHeroProps>): ReactNode {
             <div className='flex items-center'>
               <div className='min-h-16 min-w-10 border-2 border-dashed ring-1 ring-offset-2 ring-orange-400 p-4 bg-orange-800 rounded-xl shadow-md shadow-orange-500'>
                 <p className='text-center text-9xl font-roboto font-extrabold text-white'>
-                  {analytics.questionSolved === 300 ? '300+' : analytics.questionSolved}
+                  {heroSection?.codingQuestionSolved ?? analytics.questionSolved}
                 </p>
                 <p className='text-white font-bold font-roboto text-center'> coding questions solved</p>
               </div>
@@ -165,7 +166,7 @@ function Hero({ url }: Readonly<IHeroProps>): ReactNode {
             <div className='flex items-center'>
               <div className='min-h-16 min-w-10 border-2 border-dashed ring-1 ring-offset-2 ring-orange-400 p-4 bg-orange-800 rounded-xl shadow-md shadow-orange-500'>
                 <p className='text-center text-9xl font-roboto font-extrabold text-white'>
-                  {analytics.totalGithubContributions}
+                  {heroSection?.activeGithubContributions ?? analytics.totalGithubContributions}
                 </p>
                 <p className='text-white font-bold font-roboto text-center'> active github contributions</p>
               </div>
@@ -173,7 +174,7 @@ function Hero({ url }: Readonly<IHeroProps>): ReactNode {
           </div>
 
           <div className='hidden lg:flex mt-4 items-center justify-center text-gray-700'>
-            <CodingProfileBanner />
+            <CodingProfileBanner hackerrankUrl={heroSection?.hackerrankUrl ?? ''} linkedInUrl={heroSection?.linkedInUrl ?? ''} />
           </div>
         </div>
       </div>

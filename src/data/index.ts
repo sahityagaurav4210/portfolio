@@ -10,15 +10,15 @@ import SchoolLogo from '../assets/uspclogo.png';
 export const menuItems = [
   {
     name: 'HOME',
-    href: '/#home',
+    href: '/',
   },
   {
     name: 'PROJECTS',
-    href: '/#projects',
+    href: '/projects',
   },
   {
     name: 'EXPERIENCE',
-    href: '/#experience',
+    href: '/experience',
   },
   {
     name: 'SKILLS',
@@ -26,7 +26,7 @@ export const menuItems = [
   },
   {
     name: 'EDUCATION',
-    href: '/#education',
+    href: '/education',
   },
 ];
 
@@ -40,6 +40,8 @@ export const projects = [
     showDivider: true,
     cardImage: '/cmms.png',
     liveLink: 'https://censusindia.gov.in',
+    type: 'professional',
+    projectDomain: 'Government',
   },
   {
     name: 'EarthLink',
@@ -66,6 +68,8 @@ export const projects = [
     liveLink: 'https://www.earthlink.net',
     showDivider: true,
     cardImage: '/earthlink.webp',
+    type: 'professional',
+    projectDomain: 'Telecommunication',
   },
   {
     name: 'LOOPos',
@@ -90,6 +94,8 @@ export const projects = [
     liveLink: 'https://www.loopos.ca',
     showDivider: true,
     cardImage: '/loopos.webp',
+    type: 'professional',
+    projectDomain: 'Corporate',
   },
   {
     name: 'Fastrack',
@@ -99,6 +105,8 @@ export const projects = [
     ongoing: false,
     showDivider: false,
     cardImage: '/fastrack.jpg',
+    type: 'professional',
+    projectDomain: 'Corporate',
   },
   {
     name: 'Real Estate Property Listing Website',
@@ -120,6 +128,44 @@ export const projects = [
       'AWS S3 Bucket',
     ],
     ongoing: false,
+    type: 'professional',
+    projectDomain: 'Corporate',
+  },
+  {
+    name: 'Clipboard',
+    disabled: false,
+    liveLink: 'https://www.npmjs.com/package/@book-junction/clipboard',
+    codeLink: 'https://github.com/sahityagaurav4210/book-junction-clipboard',
+    documentation_link: 'https://sahityagaurav4210.github.io/book-junction-clipboard/',
+    text: `It's an npm package that automatically pastes content onto the system's clipboard.`,
+    tech_stack: ['Node.js', 'Typescript', 'Unit testing', 'Git', 'GitHub', 'GitHub Actions', 'Powershell'],
+    showDivider: true,
+    type: 'personal',
+    projectDomain: 'Others',
+  },
+  {
+    name: 'ENV Loader',
+    text: "It is an npm package that helps developers load their environment variables from a given list of files. It can also load all the variables into a custom variable provided or add them to Node's global variables, among other capabilities.",
+    tech_stack: ['Nodejs', 'Git', 'GitHub', 'Agile development'],
+    liveLink: 'https://www.npmjs.com/package/@book-junction/env-loader',
+    codeLink: 'https://github.com/sahityagaurav4210/env-loader',
+    documentation_link: 'https://env-loader-docs.netlify.app/',
+    disabled: false,
+    showDivider: true,
+    type: 'personal',
+    projectDomain: 'Others',
+  },
+  {
+    name: 'Job Notifier',
+    text: 'It is a web portal wherein aspirants and job seekers can find job opportunities on daily basis. Here aspirants or job seekers can find both government and private job. Currently, this project has an average of 40 real users and this project is also being used by different consultancy services firm based out of different metropoliton cities of India.',
+    tech_stack: ['React.js', 'Node.js', 'Springboot', 'Java', 'Redis', 'Git', 'GitHub', 'Powershell Scripting'],
+    liveLink: 'https://www.thejobnotifier.in',
+    codeLink: 'https://github.com/works-ac/jnotifier-frontend',
+    showDivider: true,
+    cardImage: 'https://www.thejobnotifier.in/logo.png',
+    ongoing: true,
+    type: 'personal',
+    projectDomain: 'Others',
   },
 ];
 
@@ -143,6 +189,16 @@ export const personal_projects = [
     documentation_link: 'https://env-loader-docs.netlify.app/',
     disabled: false,
     showDivider: true,
+  },
+  {
+    name: 'Job Notifier',
+    text: 'It is a web portal wherein aspirants and job seekers can find job opportunities on daily basis. Here aspirants or job seekers can find both government and private job. Currently, this project has an average of 40 real users and this project is also being used by different consultancy services firm based out of different metropoliton cities of India.',
+    tech_stack: ['React.js', 'Node.js', 'Springboot', 'Java', 'Redis', 'Git', 'GitHub', 'Powershell Scripting'],
+    liveLink: 'https://www.thejobnotifier.in',
+    codeLink: 'https://github.com/works-ac/jnotifier-frontend',
+    showDivider: true,
+    cardImage: 'https://www.thejobnotifier.in/logo.png',
+    ongoing: true,
   },
 ];
 
@@ -430,7 +486,13 @@ export const education = [
         labelName: 'Score',
         content: '7.38 CGPA',
       },
+      {
+        labelName: 'Board/ University Name',
+        content: 'I.K. Gujral Punjab Technical University, Jalandhar',
+      },
     ],
+    description:
+      'As depicted above I have completed my bachelors in Electronics and Communication Engineering from Punjab Technical University. Throughout my degree I have gained practical experience on tools like MATLAB etc. I have also done a course on PCB designing during my degree. I have also worked on projects like smart traffic management system during my course.',
   },
   {
     id: 2,
@@ -442,7 +504,7 @@ export const education = [
       },
       {
         labelName: 'Course Name',
-        content: 'All India Senior School Secondary Examination (12th) from CBSE',
+        content: 'All India Senior School Secondary Examination (12th)',
       },
       {
         labelName: 'Passing Year',
@@ -452,7 +514,13 @@ export const education = [
         labelName: 'Score',
         content: '63.4%',
       },
+      {
+        labelName: 'Board/ University Name',
+        content: 'Central Board of Secondary Education (CBSE), Delhi',
+      },
     ],
+    description:
+      'As depicted above, I have completed my 12th class from CBSE board in Non-medical (i.e., Physics, Chemistry, Mathematics) stream in the year 2018. I have also made a project called employee management desktop application in C++ during my course.',
   },
   {
     id: 3,
@@ -464,7 +532,7 @@ export const education = [
       },
       {
         labelName: 'Course Name',
-        content: 'Senior School Examination (10th) from CBSE',
+        content: 'Senior School Examination (10th)',
       },
       {
         labelName: 'Passing Year',
@@ -474,7 +542,13 @@ export const education = [
         labelName: 'Score',
         content: '8.60 CGPA',
       },
+      {
+        labelName: 'Board/ University Name',
+        content: 'Central Board of Secondary Education (CBSE), Delhi',
+      },
     ],
+    description:
+      'As depicted above, I have done my matriculation i.e., 10th class from CBSE board in the year 2016. I have studied English, Hindi, Punjabi, Mathematics, Social Science and Science as main subjects in my matriculation.',
   },
 ];
 

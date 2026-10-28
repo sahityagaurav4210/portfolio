@@ -6,7 +6,7 @@ import { ApiController } from '../api';
 import { toast } from 'react-toastify';
 import { getAppToastConfig } from '../config';
 
-const Navbar: React.FC<INavbarProps> = ({ menuItems }) => {
+const Navbar: React.FC<INavbarProps> = ({ menuItems, heroSection }) => {
   const [isMenuOpen, setIsMenuOpen] = React.useState<boolean>(false);
   const [isDownloading, setIsDownloading] = React.useState<boolean>(false);
 
@@ -39,7 +39,7 @@ const Navbar: React.FC<INavbarProps> = ({ menuItems }) => {
   return (
     <div className='sticky top-0 left-0 z-20 w-full bg-zinc-50/55 backdrop-blur-md backdrop-brightness-100 border-b-2 border-dashed border-blue-200'>
       <div className='mx-auto flex container lg:max-w-screen-lg xl:max-w-screen-xl 2xl:max-w-screen-2xl items-center justify-between py-4 px-4 xl:px-1'>
-        <Logo />
+        <Logo designation={heroSection?.designation} displayName={heroSection?.displayName} />
         <div className='hidden lg:block'>
           <ul className='inline-flex space-x-2'>
             {menuItems.map((item) => (
