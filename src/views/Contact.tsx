@@ -1,22 +1,31 @@
 import { Contact2 } from 'lucide-react';
-import React, { ReactNode, useEffect, useMemo, useState } from 'react';
+import React, { ReactNode, useMemo, useState } from 'react';
 import { IContract } from '../interfaces/IContact';
 import { toast } from 'react-toastify';
-import Notes from '../components/Notes';
-import Progress from '../components/Progressbar';
-import { API_BASE_URL, ApiController, ApiStatus, getApiHeaders } from '../api';
-import { IApiResponse } from '../interfaces';
-import Captcha from '../components/Captcha';
+import { ApiController, ApiStatus } from '../api';
 import { getAppToastConfig } from '../config';
 import SimpleHeading from '../components/SimpleHeading';
 import Divider from '../components/Divider';
-import useAppHelperFn from '../hooks/AppHelperFn';
-import InputHelperTxt from '../components/InputHelperTxt';
+import useCaptcha from '../hooks/useCaptcha';
+import { FloatingInput, FloatingTextarea } from '../components/FloatingInput';
+import FormNotes from '../components/FormNotes';
+import CaptchaSection from '../components/CaptchaSection';
+import FormSubmitButton from '../components/FormSubmitButton';
 
 function Contact(): ReactNode {
-  const { loadCaptchaAudio } = useAppHelperFn();
-  const [captchaData, setCaptchaData] = useState<string>();
-  const [captchaId, setCaptchaId] = useState();
+  const {
+    captchaData,
+    captchaId,
+    isLoading,
+    setIsLoading,
+    isValidated,
+    setIsValidated,
+    loadCaptcha,
+    refreshCaptcha,
+    handleCaptchaAudioBtnClick,
+    handleCheckBoxOnChange,
+  } = useCaptcha();
+
   const [contractDetails, setContractDetails] = useState<IContract>({
     first_name: '',
     last_name: '',
@@ -24,8 +33,7 @@ function Contact(): ReactNode {
     message: '',
     captcha: '',
   });
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [isValidated, setIsValidated] = useState<boolean>(false);
+
   const charsLeft = useMemo(() => 254 - contractDetails.message.length, [contractDetails]);
 
   function contractDetailsTextboxHandler(
@@ -34,73 +42,9 @@ function Contact(): ReactNode {
     setContractDetails({ ...contractDetails, [event.target.id]: event.target.value });
   }
 
-  async function loadCaptcha() {
-    const controller = new AbortController();
-
-    setIsLoading(true);
-    try {
-      const timerId = setTimeout(
-        () => {
-          controller.abort('Captcha api timeout');
-        },
-        Number.parseInt(import.meta.env.VITE_BACKEND_API_TIMEOUT) || 1000
-      );
-
-      const rawCaptchaResponse = await fetch(`${API_BASE_URL}/captcha`, {
-        signal: controller.signal,
-        headers: getApiHeaders(),
-      });
-
-      const { data } = (await rawCaptchaResponse.json()) as IApiResponse;
-      const rawCaptchaBlobResponse = await fetch(`${API_BASE_URL}${data.url}`, {
-        signal: controller.signal,
-        headers: getApiHeaders(),
-      });
-      const blob = await rawCaptchaBlobResponse.blob();
-      clearTimeout(timerId);
-
-      setCaptchaData(URL.createObjectURL(blob));
-      setCaptchaId(data.captchaId);
-    } catch {
-      toast.warning('Failed to refresh the data', getAppToastConfig());
-    } finally {
-      setIsLoading(false);
-    }
-  }
-
-  async function reloadCaptcha() {
-    if (!captchaId) {
-      toast.error('Captcha ID is missing. Please try again later.', getAppToastConfig());
-      return;
-    }
-
-    const controller = new AbortController();
-    const timeout = Number.parseInt(import.meta.env.VITE_BACKEND_API_TIMEOUT, 10) || 1000;
-    const refreshCaptchaUri = `${API_BASE_URL}/ref-captcha?captchaId=${captchaId}`;
-    setIsLoading(true);
-
-    try {
-      const timerId = setTimeout(() => controller.abort('Captcha api timeout'), timeout);
-      const rawCaptchaResponse = await fetch(refreshCaptchaUri, {
-        signal: controller.signal,
-        headers: getApiHeaders(),
-      });
-
-      const { data } = (await rawCaptchaResponse.json()) as IApiResponse;
-      const rawCaptchaBlobResponse = await fetch(`${API_BASE_URL}${data.url}`, {
-        signal: controller.signal,
-        headers: getApiHeaders(),
-      });
-      const blob = await rawCaptchaBlobResponse.blob();
-      clearTimeout(timerId);
-
-      setCaptchaData(URL.createObjectURL(blob));
-    } catch {
-      toast.warning('Failed to refresh the data', getAppToastConfig());
-    } finally {
-      setIsLoading(false);
-    }
-  }
+  const onCaptchaCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    return handleCheckBoxOnChange(contractDetails.captcha, event);
+  };
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -166,77 +110,6 @@ function Contact(): ReactNode {
     await loadCaptcha();
   }
 
-  async function handleCheckBoxOnChange(event: React.ChangeEvent<HTMLInputElement>) {
-    event.preventDefault();
-
-    if (isLoading || !event.isTrusted || isValidated || !captchaId) return;
-
-    const captcha = contractDetails.captcha;
-    const controller = new ApiController();
-
-    setIsLoading(true);
-
-    const captchaValidateResponse = await controller.GET(`captcha-validate?captcha=${captcha}&captchaId=${captchaId}`);
-
-    if (captchaValidateResponse.status === ApiStatus.SUCCESS && captchaValidateResponse.message == 'Captcha verified') {
-      setIsLoading(false);
-      setIsValidated(true);
-      toast.success(captchaValidateResponse.message, getAppToastConfig());
-      return;
-    }
-
-    if (captchaValidateResponse.status === ApiStatus.ERROR || captchaValidateResponse.status === ApiStatus.EXCEPTION) {
-      await loadCaptcha();
-    }
-
-    setIsLoading(false);
-    toast.error(captchaValidateResponse.message, getAppToastConfig());
-  }
-
-  async function handleCaptchaAudioBtnClick() {
-    if (isLoading) return null;
-
-    if (!captchaId) {
-      toast.error('Captcha ID is missing. Please try again later.', getAppToastConfig());
-      return null;
-    }
-
-    try {
-      setIsLoading(true);
-      const audioUrl = await loadCaptchaAudio(captchaId);
-      return audioUrl;
-    } catch {
-      toast.error('Failed to load audio for the captcha', getAppToastConfig());
-      return null;
-    } finally {
-      setIsLoading(false);
-    }
-  }
-
-  async function refreshCaptcha() {
-    await reloadCaptcha();
-  }
-
-  function intervalHandler(): void {
-    reloadCaptcha();
-  }
-
-  useEffect(() => {
-    loadCaptcha();
-  }, []);
-
-  useEffect(() => {
-    let id: NodeJS.Timeout;
-
-    if (!isValidated) {
-      id = setInterval(intervalHandler, Number(import.meta.env.VITE_CAPTCHA_TIMEOUT) * 60 * 1000);
-    }
-
-    return function () {
-      if (id) clearInterval(id);
-    };
-  }, [isValidated, captchaId, captchaData]);
-
   return (
     <div className='container mx-auto min-h-96'>
       <SimpleHeading headingName='Contact Me' />
@@ -261,158 +134,98 @@ function Contact(): ReactNode {
         </div>
 
         <div className='grid lg:grid-cols-2 gap-6 mb-4'>
-          <div className='relative w-full'>
-            <input
-              type='text'
-              id='first_name'
-              value={contractDetails.first_name}
-              required
-              placeholder=' '
-              className='peer h-10 w-full rounded-[4px] border border-gray-400 bg-white px-3 text-sm text-gray-900 placeholder-transparent focus:border-2 focus:border-blue-600 focus:outline-none disabled:bg-gray-100'
-              onChange={contractDetailsTextboxHandler}
-              autoComplete='off'
-              autoCapitalize='on'
-              autoFocus
-            />
-            <label
-              htmlFor='first_name'
-              className='pointer-events-none absolute left-3 top-2 origin-[0] -translate-y-4 scale-75 transform bg-white px-1 text-sm text-gray-500 duration-200 peer-placeholder-shown:top-1/3 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-2 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:text-blue-600 peer-focus:bg-white'
-            >
-              First Name<sup className='text-red-500 text-xs'>*</sup>
-            </label>
-
-            <InputHelperTxt text='Only alphabets are allowed.' />
-          </div>
-
-          <div className='relative w-full'>
-            <input
-              type='text'
-              id='last_name'
-              value={contractDetails.last_name}
-              placeholder=' '
-              className='peer h-10 w-full rounded-[4px] border border-gray-400 bg-white px-3 text-sm text-gray-900 placeholder-transparent focus:border-2 focus:border-blue-600 focus:outline-none disabled:bg-gray-100'
-              onChange={contractDetailsTextboxHandler}
-              autoComplete='off'
-              autoCapitalize='on'
-            />
-            <label
-              htmlFor='last_name'
-              className='pointer-events-none absolute left-3 top-2 origin-[0] -translate-y-4 scale-75 transform bg-white px-1 text-sm text-gray-500 duration-200 peer-placeholder-shown:top-1/3 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-2 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:text-blue-600 peer-focus:bg-white'
-            >
-              Last Name
-            </label>
-            <InputHelperTxt text='Only alphabets are allowed.' />
-          </div>
-        </div>
-
-        <div className='relative w-full my-2'>
-          <input
-            type='email'
-            id='email'
-            value={contractDetails.email}
+          <FloatingInput
+            type='text'
+            id='first_name'
+            value={contractDetails.first_name}
+            isRequired
             required
-            placeholder=' '
-            className='peer h-10 w-full rounded-[4px] border border-gray-400 bg-white px-3 text-sm text-gray-900 placeholder-transparent focus:border-2 focus:border-blue-600 focus:outline-none disabled:bg-gray-100'
             onChange={contractDetailsTextboxHandler}
             autoComplete='off'
             autoCapitalize='on'
+            autoFocus
+            label='First Name'
+            helperText='Only alphabets are allowed.'
           />
-          <label
-            htmlFor='email'
-            className='pointer-events-none absolute left-3 top-2 origin-[0] -translate-y-4 scale-75 transform bg-white px-1 text-sm text-gray-500 duration-200 peer-placeholder-shown:top-1/3 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-2 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:text-blue-600 peer-focus:bg-white'
-          >
-            Email<sup className='text-red-500 text-xs'>*</sup>
-          </label>
 
-          <InputHelperTxt text='Please enter a valid email address.' />
-        </div>
-
-        <div className='relative w-full'>
-          <textarea
-            id='message'
-            value={contractDetails.message}
-            placeholder=' '
-            rows={2}
-            className='peer p-2 min-h-10 w-full rounded-[4px] border border-gray-400 bg-white px-3 text-sm text-gray-900 placeholder-transparent focus:border-2 focus:border-blue-600 focus:outline-none disabled:bg-gray-100 resize-y'
+          <FloatingInput
+            type='text'
+            id='last_name'
+            value={contractDetails.last_name}
             onChange={contractDetailsTextboxHandler}
             autoComplete='off'
+            autoCapitalize='on'
+            label='Last Name'
+            helperText='Only alphabets are allowed.'
           />
-          <label
-            htmlFor='message'
-            className='pointer-events-none absolute left-3 top-2 origin-[0] -translate-y-4 scale-75 transform bg-white px-1 text-sm text-gray-500 duration-200 peer-placeholder-shown:top-1/3 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-2 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:text-blue-600 peer-focus:bg-white'
-          >
-            Message<sup className='text-red-500 text-xs'>*</sup>
-          </label>
-
-          <InputHelperTxt text='Please enter your message. It should be atleast of 10 characters and can be of atmost 254 characters.' />
         </div>
+
+        <div className='my-2'>
+          <FloatingInput
+            type='email'
+            id='email'
+            value={contractDetails.email}
+            isRequired
+            required
+            onChange={contractDetailsTextboxHandler}
+            autoComplete='off'
+            autoCapitalize='on'
+            label='Email'
+            helperText='Please enter a valid email address.'
+          />
+        </div>
+
+        <FloatingTextarea
+          id='message'
+          value={contractDetails.message}
+          rows={2}
+          onChange={contractDetailsTextboxHandler}
+          autoComplete='off'
+          label='Message'
+          isRequired
+          helperText='Please enter your message. It should be atleast of 10 characters and can be of atmost 254 characters.'
+        />
 
         <div className='flex items-center justify-end'>
           <p className='text-caption text-blue-400 font-bold'>{charsLeft} characters left</p>
         </div>
 
-        <p className='text-sm lg:text-base text-justify leading-10 uppercase text-blue-700 font-extrabold underline underline-offset-2 my-1'>
-          Please prove your identity
-        </p>
-
-        <Captcha
+        <CaptchaSection
           captchaData={captchaData}
           contractDetails={contractDetails}
           contractDetailsTextboxHandler={contractDetailsTextboxHandler}
-          handleCheckBoxOnChange={handleCheckBoxOnChange}
+          handleCheckBoxOnChange={onCaptchaCheckboxChange}
           isLoading={isLoading}
           isValidated={isValidated}
           refreshCaptcha={refreshCaptcha}
           handleCaptchaAudioBtnClick={handleCaptchaAudioBtnClick}
         />
 
-        <div className='flex flex-col justify-center mb-4'>
-          <Notes
-            note={
-              <p className='text-xs text-justify'>
-                All fields marked with asterik <span className='text-red-500 font-bold'>(*)</span> are mandatory to
-                fill.
-              </p>
-            }
-          />
-          <Notes note={<p className='text-xs text-justify'>Please do not send unnecessary and clumsy messages.</p>} />
-          <Notes note={<p className='text-xs text-justify'>Your message must be atleast 10 characters long.</p>} />
-          <Notes
-            note={
-              <p className='text-xs text-justify'>You will be contacted within 48 hours after filling up this form.</p>
-            }
-          />
-          <Notes
-            note={
-              <p className='text-xs text-justify'>
-                Please provide a valid email address as it would be used for further communication purposes.
-              </p>
-            }
-          />
-        </div>
+        <FormNotes
+          customNotes={[
+            <p key='note-clumsy' className='text-xs text-justify'>
+              Please do not send unnecessary and clumsy messages.
+            </p>,
+            <p key='note-length' className='text-xs text-justify'>
+              Your message must be atleast 10 characters long.
+            </p>,
+          ]}
+        />
 
         <div className='flex items-center mt-4'>
-          <button
+          <FormSubmitButton
             disabled={isLoading || !isValidated || !captchaId || charsLeft < 0 || contractDetails.message.length < 10}
-            type='submit'
-            className='min-w-28 transition-transform duration-500 mt-2 inline-flex items-center px-2 py-3.5 border-2 border-dashed border-blue-400 border-spacing-2 justify-center font-bold text-white bg-blue-800 rounded-lg ring-2 ring-offset-1 ring-blue-400 scale-95 focus:scale-100 outline-none text-sm lg:text-base shadow-md shadow-blue-800 disabled:bg-slate-700 disabled:border-slate-600 disabled:ring-slate-400'
+            isLoading={isLoading}
+            loadingText='Loading, please wait...'
+            icon={<Contact2 className='mx-2' />}
           >
-            {isLoading ? (
-              <>
-                <Progress />
-                <span>Loading, please wait...</span>
-              </>
-            ) : (
-              <>
-                <Contact2 className='mx-2' />
-                <span>Contact Me</span>
-              </>
-            )}
-          </button>
+            Contact Me
+          </FormSubmitButton>
         </div>
       </form>
     </div>
   );
 }
 
-export default React.memo(Contact);
+const MemoizedContact = React.memo(Contact);
+export default MemoizedContact;

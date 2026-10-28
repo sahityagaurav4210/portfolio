@@ -1,33 +1,45 @@
-import React, { ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
+import React, { ReactNode, useCallback, useMemo, useState } from 'react';
 import { IndianRupee } from 'lucide-react';
-import Notes from '../components/Notes';
 import { IHireme } from '../interfaces/IHireme';
-import { Currencies, HiringType, IApiResponse } from '../interfaces';
-import Progress from '../components/Progressbar';
+import { Currencies, HiringType } from '../interfaces';
 import { toast } from 'react-toastify';
 import { HIRING_FULL_TIME_MSG, HIRING_PART_TIME_MSG } from '../constants';
-import { API_BASE_URL, ApiController, ApiStatus, getApiHeaders, HTTP_VERBS } from '../api';
-import Captcha from '../components/Captcha';
+import { API_BASE_URL, getApiHeaders, HTTP_VERBS } from '../api';
 import { getAppToastConfig } from '../config';
 import SimpleHeading from '../components/SimpleHeading';
 import Divider from '../components/Divider';
-import useAppHelperFn from '../hooks/AppHelperFn';
 import { initialHireMeFormData } from '../data';
+import useCaptcha from '../hooks/useCaptcha';
+import { FloatingInput, FloatingTextarea } from '../components/FloatingInput';
+import FormNotes from '../components/FormNotes';
+import CaptchaSection from '../components/CaptchaSection';
+import FormSubmitButton from '../components/FormSubmitButton';
 import InputHelperTxt from '../components/InputHelperTxt';
 
 function HireMe(): ReactNode {
-  const [captchaData, setCaptchaData] = useState<string>();
-  const [captchaId, setCaptchaId] = useState();
-  const { loadCaptchaAudio } = useAppHelperFn();
+  const {
+    captchaData,
+    captchaId,
+    isLoading,
+    setIsLoading,
+    isValidated,
+    setIsValidated,
+    loadCaptcha,
+    refreshCaptcha,
+    handleCaptchaAudioBtnClick,
+    handleCheckBoxOnChange,
+  } = useCaptcha();
+
   const [hiremeDetails, setHiremeDetails] = useState<IHireme>(initialHireMeFormData);
-  const [loading, setLoading] = useState<boolean>(false);
-  const [isValidated, setIsValidated] = useState<boolean>(false);
+
   const projectDescCharRemaining = useMemo(
     () => 254 - (hiremeDetails.project_desc ? hiremeDetails.project_desc.length : 0),
     [hiremeDetails.project_desc]
   );
 
-  const handleInputOnChange = useCallback(function (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
+  const handleInputOnChange = useCallback(function (
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) {
     event.preventDefault();
     setHiremeDetails((prev) => ({ ...prev, [event.target.id]: event.target.value }));
   }, []);
@@ -36,80 +48,18 @@ function HireMe(): ReactNode {
     setHiremeDetails((prev) => ({ ...prev, [event.target.id]: event.target.checked }));
   }, []);
 
-  async function loadCaptcha() {
-    const controller = new AbortController();
+  const contractDetailsTextboxHandler = useCallback(function (
+    event: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>
+  ) {
+    setHiremeDetails((prev) => ({ ...prev, [event.target.id]: event.target.value }));
+  }, []);
 
-    setLoading(true);
-    try {
-      const timerId = setTimeout(
-        () => {
-          controller.abort('Captcha api timeout');
-        },
-        Number.parseInt(import.meta.env.VITE_BACKEND_API_TIMEOUT) || 1000
-      );
-
-      const rawCaptchaResponse = await fetch(`${API_BASE_URL}/captcha`, {
-        signal: controller.signal,
-        headers: getApiHeaders(),
-      });
-
-      const { data } = (await rawCaptchaResponse.json()) as IApiResponse;
-      const rawCaptchaBlobResponse = await fetch(`${API_BASE_URL}${data.url}`, {
-        signal: controller.signal,
-        headers: getApiHeaders(),
-      });
-      const blob = await rawCaptchaBlobResponse.blob();
-      clearTimeout(timerId);
-
-      setCaptchaData(URL.createObjectURL(blob));
-      setCaptchaId(data.captchaId);
-    } catch {
-      toast.warning('Failed to refresh the data', getAppToastConfig());
-    } finally {
-      setLoading(false);
-    }
-  }
-
-  async function reloadCaptcha() {
-    const controller = new AbortController();
-    setLoading(true);
-
-    try {
-      const timerId = setTimeout(
-        () => {
-          controller.abort('Captcha api timeout');
-        },
-        Number.parseInt(import.meta.env.VITE_BACKEND_API_TIMEOUT) || 1000
-      );
-
-      const rawCaptchaResponse = await fetch(`${API_BASE_URL}/ref-captcha?captchaId=${captchaId}`, {
-        signal: controller.signal,
-        headers: getApiHeaders(),
-      });
-
-      const { data } = (await rawCaptchaResponse.json()) as IApiResponse;
-      const rawCaptchaBlobResponse = await fetch(`${API_BASE_URL}${data.url}`, {
-        signal: controller.signal,
-        headers: getApiHeaders(),
-      });
-      const blob = await rawCaptchaBlobResponse.blob();
-      clearTimeout(timerId);
-
-      setCaptchaData(URL.createObjectURL(blob));
-    } catch {
-      toast.warning('Failed to refresh the data', getAppToastConfig());
-    } finally {
-      setLoading(false);
-    }
-  }
-
-  async function refreshCaptcha() {
-    await reloadCaptcha();
-  }
-
-  function intervalHandler(): void {
-    reloadCaptcha();
-  }
+  const onCaptchaCheckboxChange = useCallback(
+    function (event: React.ChangeEvent<HTMLInputElement>) {
+      return handleCheckBoxOnChange(hiremeDetails.captcha, event);
+    },
+    [handleCheckBoxOnChange, hiremeDetails.captcha]
+  );
 
   async function handleSubmit(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
     event.preventDefault();
@@ -137,7 +87,6 @@ function HireMe(): ReactNode {
     let message = '';
 
     if (hiremeDetails.hiring_type === HiringType.FULL_TIME) {
-      // eslint-disable-next-line prefer-string-replace-all
       message = HIRING_FULL_TIME_MSG.replace(/:client-name/gi, hiremeDetails.client_name);
       message = message.replace(/:client-email/, hiremeDetails.client_email);
       message = message.replace(/:client-project-name/, hiremeDetails.client_project_name);
@@ -145,7 +94,6 @@ function HireMe(): ReactNode {
       message = message.replace(/:hiring-type/, hiremeDetails.hiring_type);
       message = message.replace(/:currency/, hiremeDetails.currency_type);
     } else {
-      // eslint-disable-next-line prefer-string-replace-all
       message = HIRING_PART_TIME_MSG.replace(/:client-name/gi, hiremeDetails.client_name);
       message = message.replace(/:client-email/, hiremeDetails.client_email);
       message = message.replace(/:client-project-name/, hiremeDetails.client_project_name);
@@ -155,7 +103,7 @@ function HireMe(): ReactNode {
       message = message.replace(/:currency/, hiremeDetails.currency_type);
     }
 
-    let payload = {
+    const payload = {
       ...hiremeDetails,
       message,
       budget: `${hiremeDetails.currency_type} ${hiremeDetails.budget}/-`,
@@ -196,7 +144,7 @@ function HireMe(): ReactNode {
       return;
     }
 
-    setLoading(true);
+    setIsLoading(true);
     const abortController = new AbortController();
     const timerId = setTimeout(
       () => {
@@ -221,86 +169,15 @@ function HireMe(): ReactNode {
       } else {
         toast.error(response.message, getAppToastConfig());
       }
-    } catch (error: any) {
-      toast.error(error?.message || 'An error occured', getAppToastConfig());
+    } catch (error: unknown) {
+      toast.error((error as Error)?.message || 'An error occured', getAppToastConfig());
     } finally {
       await loadCaptcha();
-
       setHiremeDetails(initialHireMeFormData);
       setIsValidated(false);
-      setLoading(false);
+      setIsLoading(false);
     }
   }
-
-  async function handleCheckBoxOnChange(event: React.ChangeEvent<HTMLInputElement>) {
-    event.preventDefault();
-
-    if (isValidated || !event.isTrusted || loading || !captchaId) return;
-
-    const captcha = hiremeDetails.captcha;
-    const controller = new ApiController();
-
-    setLoading(true);
-
-    const captchaValidateResponse = await controller.GET(`captcha-validate?captcha=${captcha}&captchaId=${captchaId}`);
-
-    if (captchaValidateResponse.status === ApiStatus.SUCCESS && captchaValidateResponse.message == 'Captcha verified') {
-      setLoading(false);
-      setIsValidated(true);
-
-      toast.success(captchaValidateResponse.message, getAppToastConfig());
-      return;
-    }
-
-    if (captchaValidateResponse.status === ApiStatus.ERROR || captchaValidateResponse.status === ApiStatus.EXCEPTION) {
-      await loadCaptcha();
-    }
-
-    setLoading(false);
-    toast.error(captchaValidateResponse.message, getAppToastConfig());
-  }
-
-  function contractDetailsTextboxHandler(
-    event: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>
-  ) {
-    setHiremeDetails({ ...hiremeDetails, [event.target.id]: event.target.value });
-  }
-
-  async function handleCaptchaAudioBtnClick() {
-    if (loading) return null;
-
-    if (!captchaId) {
-      toast.error('Captcha ID is missing. Please try again later.', getAppToastConfig());
-      return null;
-    }
-
-    try {
-      setLoading(true);
-      const audioUrl = await loadCaptchaAudio(captchaId);
-      return audioUrl;
-    } catch {
-      toast.error('Failed to load audio for the captcha', getAppToastConfig());
-      return null;
-    } finally {
-      setLoading(false);
-    }
-  }
-
-  useEffect(() => {
-    loadCaptcha();
-  }, []);
-
-  useEffect(() => {
-    let id: NodeJS.Timeout;
-
-    if (!isValidated) {
-      id = setInterval(intervalHandler, Number(import.meta.env.VITE_CAPTCHA_TIMEOUT) * 60 * 1000);
-    }
-
-    return function () {
-      if (id) clearInterval(id);
-    };
-  }, [isValidated]);
 
   return (
     <div className='container mx-auto'>
@@ -336,25 +213,15 @@ function HireMe(): ReactNode {
 
           {hiremeDetails.hiring_type === HiringType.PART_TIME && (
             <div className='col-span-12 lg:col-span-5 flex items-center'>
-              <div className='relative w-full'>
-                <input
-                  type='number'
-                  id='tenure'
-                  value={hiremeDetails.tenure}
-                  placeholder=' '
-                  className='peer h-10 w-full rounded-[4px] border border-gray-400 bg-white px-3 text-sm text-gray-900 placeholder-transparent focus:border-2 focus:border-blue-600 focus:outline-none disabled:bg-gray-100'
-                  onChange={handleInputOnChange}
-                  autoComplete='off'
-                />
-                <label
-                  htmlFor='tenure'
-                  className='pointer-events-none absolute left-3 top-2 origin-[0] -translate-y-4 scale-75 transform bg-white px-1 text-sm text-gray-500 duration-200 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-2 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:text-blue-600 peer-focus:bg-white'
-                >
-                  Tenure (in months)
-                </label>
-
-                <InputHelperTxt text='Please enter the contract period in months.' />
-              </div>
+              <FloatingInput
+                type='number'
+                id='tenure'
+                value={hiremeDetails.tenure}
+                onChange={handleInputOnChange}
+                autoComplete='off'
+                label='Tenure (in months)'
+                helperText='Please enter the contract period in months.'
+              />
             </div>
           )}
         </div>
@@ -362,74 +229,47 @@ function HireMe(): ReactNode {
         <div className='my-2'>
           <div className='grid grid-cols-12 gap-2 mb-2'>
             <div className='col-span-12 lg:col-span-6'>
-              <div className='relative w-full'>
-                <input
-                  type='text'
-                  id='client_name'
-                  value={hiremeDetails.client_name}
-                  required
-                  placeholder=' '
-                  className='peer h-10 w-full rounded-[4px] border border-gray-400 bg-white px-3 text-sm text-gray-900 placeholder-transparent focus:border-2 focus:border-blue-600 focus:outline-none disabled:bg-gray-100'
-                  onChange={handleInputOnChange}
-                  autoComplete='off'
-                  autoCapitalize='on'
-                />
-                <label
-                  htmlFor='client_name'
-                  className='pointer-events-none absolute left-3 top-2 origin-[0] -translate-y-4 scale-75 transform bg-white px-1 text-sm text-gray-500 duration-200 peer-placeholder-shown:top-1/3 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-2 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:text-blue-600 peer-focus:bg-white'
-                >
-                  Client Name<sup className='text-red-500 text-xs'>*</sup>
-                </label>
-
-                <InputHelperTxt text='Only alphabets, spaces and punctuations like comma, period, dash, parenthesis and forward slash are allowed.' />
-              </div>
+              <FloatingInput
+                type='text'
+                id='client_name'
+                value={hiremeDetails.client_name}
+                isRequired
+                required
+                onChange={handleInputOnChange}
+                autoComplete='off'
+                autoCapitalize='on'
+                label='Client Name'
+                helperText='Only alphabets, spaces and punctuations like comma, period, dash, parenthesis and forward slash are allowed.'
+              />
             </div>
 
             <div className='col-span-12 lg:col-span-6'>
-              <div className='relative w-full'>
-                <input
-                  type='text'
-                  id='client_project_name'
-                  value={hiremeDetails.client_project_name}
-                  placeholder=' '
-                  className='peer h-10 w-full rounded-[4px] border border-gray-400 bg-white px-3 text-sm text-gray-900 placeholder-transparent focus:border-2 focus:border-blue-600 focus:outline-none disabled:bg-gray-100'
-                  onChange={handleInputOnChange}
-                  autoComplete='off'
-                />
-                <label
-                  htmlFor='client_name'
-                  className='pointer-events-none absolute left-3 top-2 origin-[0] -translate-y-4 scale-75 transform bg-white px-1 text-sm text-gray-500 duration-200 peer-placeholder-shown:top-1/3 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-2 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:text-blue-600 peer-focus:bg-white'
-                >
-                  Project Name<sup className='text-red-500 text-xs'>*</sup>
-                </label>
-
-                <InputHelperTxt text='Only alphabets, spaces and punctuations like comma, period, dash, parenthesis and forward slash are allowed.' />
-              </div>
+              <FloatingInput
+                type='text'
+                id='client_project_name'
+                value={hiremeDetails.client_project_name}
+                isRequired
+                onChange={handleInputOnChange}
+                autoComplete='off'
+                label='Project Name'
+                helperText='Only alphabets, spaces and punctuations like comma, period, dash, parenthesis and forward slash are allowed.'
+              />
             </div>
           </div>
 
           <div className='grid grid-cols-12 gap-2 mb-2'>
             <div className='col-span-12 lg:col-span-6 flex items-center'>
-              <div className='relative w-full'>
-                <input
-                  type='email'
-                  id='client_email'
-                  inputMode='email'
-                  value={hiremeDetails.client_email}
-                  placeholder=' '
-                  className='peer h-10 w-full rounded-[4px] border border-gray-400 bg-white px-3 text-sm text-gray-900 placeholder-transparent focus:border-2 focus:border-blue-600 focus:outline-none disabled:bg-gray-100'
-                  onChange={handleInputOnChange}
-                  autoComplete='off'
-                />
-                <label
-                  htmlFor='client_email'
-                  className='pointer-events-none absolute left-3 top-2 origin-[0] -translate-y-4 scale-75 transform bg-white px-1 text-sm text-gray-500 duration-200 peer-placeholder-shown:top-1/3 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-2 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:text-blue-600 peer-focus:bg-white'
-                >
-                  Client Email<sup className='text-red-500 text-xs'>*</sup>
-                </label>
-
-                <InputHelperTxt text='Please enter a valid email address.' />
-              </div>
+              <FloatingInput
+                type='email'
+                id='client_email'
+                inputMode='email'
+                value={hiremeDetails.client_email}
+                isRequired
+                onChange={handleInputOnChange}
+                autoComplete='off'
+                label='Client Email'
+                helperText='Please enter a valid email address.'
+              />
             </div>
 
             <div className='col-span-12 lg:col-span-6 flex items-center'>
@@ -448,8 +288,8 @@ function HireMe(): ReactNode {
                 </select>
               </div>
 
-              <div className='flex items-center'>
-                <div className='relative'>
+              <div className='flex items-center w-full'>
+                <div className='relative w-full'>
                   <input
                     type='number'
                     id='budget'
@@ -475,25 +315,16 @@ function HireMe(): ReactNode {
 
           <div className='grid grid-cols-12'>
             <div className='col-span-12'>
-              <div className='relative w-full'>
-                <textarea
-                  id='project_desc'
-                  value={hiremeDetails.project_desc}
-                  placeholder=' '
-                  rows={2}
-                  className='peer p-2 min-h-10 w-full rounded-[4px] border border-gray-400 bg-white px-3 text-sm text-gray-900 placeholder-transparent focus:border-2 focus:border-blue-600 focus:outline-none disabled:bg-gray-100 resize-y'
-                  onChange={handleInputOnChange}
-                  autoComplete='off'
-                />
-                <label
-                  htmlFor='project_desc'
-                  className='pointer-events-none absolute left-3 top-2 origin-[0] -translate-y-4 scale-75 transform bg-white px-1 text-sm text-gray-500 duration-200 peer-placeholder-shown:top-1/3 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-2 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:text-blue-600 peer-focus:bg-white'
-                >
-                  Project Description<sup className='text-red-500 text-xs'>*</sup>
-                </label>
-
-                <InputHelperTxt text='Please enter your project description. It can be of atmost 254 characters.' />
-              </div>
+              <FloatingTextarea
+                id='project_desc'
+                value={hiremeDetails.project_desc}
+                rows={2}
+                onChange={handleInputOnChange}
+                autoComplete='off'
+                label='Project Description'
+                isRequired
+                helperText='Please enter your project description. It can be of atmost 254 characters.'
+              />
 
               <div className='flex items-center justify-end'>
                 <p className='text-xs font-bold text-blue-400'>{projectDescCharRemaining} characters remaining</p>
@@ -525,16 +356,12 @@ function HireMe(): ReactNode {
           </li>
         </ol>
 
-        <p className='text-sm lg:text-base text-justify leading-10 uppercase text-blue-700 font-extrabold underline underline-offset-2 my-1'>
-          Please prove your identity
-        </p>
-
-        <Captcha
+        <CaptchaSection
           captchaData={captchaData}
           contractDetails={hiremeDetails}
           contractDetailsTextboxHandler={contractDetailsTextboxHandler}
-          handleCheckBoxOnChange={handleCheckBoxOnChange}
-          isLoading={loading}
+          handleCheckBoxOnChange={onCaptchaCheckboxChange}
+          isLoading={isLoading}
           isValidated={isValidated}
           refreshCaptcha={refreshCaptcha}
           handleCaptchaAudioBtnClick={handleCaptchaAudioBtnClick}
@@ -556,51 +383,29 @@ function HireMe(): ReactNode {
           </span>
         </label>
 
-        <Notes
-          note={
-            <p className='text-xs text-justify'>
-              All fields marked with asterik <span className='text-red-500'>(*)</span> are mandatory to fill.
-            </p>
-          }
-        />
-        <Notes note={<p className='text-xs text-justify'>Project name must be atleast 2 characters long.</p>} />
-
-        <Notes
-          note={
-            <p className='text-xs text-justify'>
-              Please provide a valid email address as it would be used for further communication purposes.
-            </p>
-          }
+        <FormNotes
+          customNotes={[
+            <p key='note-project' className='text-xs text-justify'>
+              Project name must be atleast 2 characters long.
+            </p>,
+            <p key='note-captcha' className='text-xs text-justify'>
+              Captcha is mandatory to fill.
+            </p>,
+          ]}
         />
 
-        <Notes
-          note={
-            <p className='text-xs text-justify'>You will be contacted within 48 hours after filling up this form.</p>
-          }
-        />
-
-        <Notes note={<p className='text-xs text-justify'>Captcha is mandatory to fill.</p>} />
-
-        <button
-          type='submit'
-          className='w-28 transition-transform duration-500 mt-2 inline-flex items-center px-2 py-3.5 border-2 border-dashed border-blue-400 border-spacing-2 justify-center font-bold text-white bg-blue-800 rounded-lg ring-2 ring-offset-1 ring-blue-400 scale-95 focus:scale-100 outline-none text-sm lg:text-base shadow-md shadow-blue-800 disabled:bg-slate-700 disabled:border-slate-600 disabled:ring-slate-400'
+        <FormSubmitButton
+          isLoading={isLoading}
+          disabled={!isValidated || !hiremeDetails.terms || isLoading || !captchaId || projectDescCharRemaining < 0}
           onClick={handleSubmit}
-          disabled={!isValidated || !hiremeDetails.terms || loading || !captchaId || projectDescCharRemaining < 0}
+          icon={<IndianRupee size={16} absoluteStrokeWidth className='mr-1' />}
         >
-          {loading ? (
-            <>
-              <Progress />
-              <span>Loading...</span>
-            </>
-          ) : (
-            <>
-              <IndianRupee size={16} absoluteStrokeWidth />
-              <span>Hire Me</span>
-            </>
-          )}
-        </button>
+          Hire Me
+        </FormSubmitButton>
       </form>
     </div>
   );
 }
-export default React.memo(HireMe);
+
+const MemoizedHireMe = React.memo(HireMe);
+export default MemoizedHireMe;

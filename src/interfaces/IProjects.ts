@@ -1,3 +1,6 @@
+import { UseStateFunction } from '../types';
+import { ISkillsPageState } from './ISkills';
+
 export interface IProjects {
   name: string;
   text: string;
@@ -16,5 +19,11 @@ export interface IProjects {
 
 export interface IProjectsProps {
   projects: IProjects[];
-  fetchProjects?: (type?: string | null) => Promise<void> | void;
+  fetchProjects?: (
+    setApiResponses: UseStateFunction<ISkillsPageState> | undefined,
+    setProjects: UseStateFunction<Array<IProjects>> | undefined,
+    type?: string | null
+  ) => Promise<void> | void;
+  setProjects?: UseStateFunction<Array<IProjects>>;
+  setApiResponses?: UseStateFunction<ISkillsPageState>;
 }

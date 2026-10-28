@@ -6,16 +6,17 @@ import { SquareArrowOutUpRight } from 'lucide-react';
 import TextContainer from './TextContainer';
 import SimpleHeading from './SimpleHeading';
 
-const Projects: React.FC<IProjectsProps> = ({ projects, fetchProjects }) => {
+const Projects: React.FC<IProjectsProps> = ({ projects, setApiResponses, setProjects, fetchProjects }) => {
   const [selectedType, setSelectedType] = useState<string>('all');
 
   const handleTypeChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const value = event.target.value;
     setSelectedType(value);
+
     if (value === 'all') {
-      fetchProjects?.(null);
+      fetchProjects?.(setApiResponses, setProjects);
     } else {
-      fetchProjects?.(value);
+      fetchProjects?.(setApiResponses, setProjects, value);
     }
   };
 
